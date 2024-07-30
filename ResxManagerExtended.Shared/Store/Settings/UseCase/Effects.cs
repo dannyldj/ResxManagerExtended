@@ -9,6 +9,7 @@ public class Effects(IFileSystemAccessService fileSystemAccessService)
     public async Task HandleGetRootAction(IDispatcher dispatcher)
     {
         var handler = await fileSystemAccessService.GetRootDirectoryHandler();
-        dispatcher.Dispatch(new GetRootResultAction(handler));
+        dispatcher.Dispatch(new GetRootResultAction(handler,
+            handler is null ? null : fileSystemAccessService.GetHandlerName(handler)));
     }
 }

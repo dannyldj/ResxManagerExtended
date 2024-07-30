@@ -1,8 +1,12 @@
-using Microsoft.JSInterop;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace ResxManagerExtended.Shared.Interfaces;
 
 public interface IFileSystemAccessService
 {
-    Task<IJSObjectReference> GetRootDirectoryHandler();
+    Task<JSObject?> GetRootDirectoryHandler();
+
+    string GetHandlerName(JSObject handler);
+
+    Task<JSObject?> GetResourceHandlers(JSObject handler);
 }

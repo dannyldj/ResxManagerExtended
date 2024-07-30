@@ -1,6 +1,5 @@
-using Microsoft.JSInterop;
-using ResxManagerExtended.Shared.Store.Settings.UseCase;
+using System.Runtime.InteropServices.JavaScript;
 
 namespace ResxManagerExtended.Shared.Store.Settings;
 
-public record GetRootResultAction(IJSObjectReference Handler);
+public record GetRootResultAction(JSObject? Handler, string? Name);

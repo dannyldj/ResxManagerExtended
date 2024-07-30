@@ -1,14 +1,25 @@
-using Microsoft.JSInterop;
-using ResxManagerExtended.Shared.Extensions;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.InteropServices.JavaScript;
+using ResxManagerExtended.Shared.Components;
 using ResxManagerExtended.Shared.Interfaces;
 
 namespace ResxManagerExtended.Shared.Services;
 
-public class FileSystemAccessService(IJSRuntime jsRuntime) : IFileSystemAccessService
+[SuppressMessage("Interoperability", "CA1416:Validate platform compatibility")]
+public class FileSystemAccessService : IFileSystemAccessService
 {
-    public async Task<IJSObjectReference> GetRootDirectoryHandler()
+    public async Task<JSObject?> GetRootDirectoryHandler()
     {
-        var module = await jsRuntime.GetJsModule();
-        return await module.InvokeAsync<IJSObjectReference>("getRootDirectory");
+        return await Routes.GetRootDirectory();
+    }
+
+    public string GetHandlerName(JSObject handler)
+    {
+        return Routes.GetHandlerName(handler);
+    }
+
+    public Task<JSObject?> GetResourceHandlers(JSObject handler)
+    {
+        return Routes.GetResourceFiles(handler);
     }
 }

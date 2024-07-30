@@ -1,7 +1,13 @@
 ﻿@page "/settings"
+@inherits FluxorComponent
 
 <PageTitle>Settings</PageTitle>
 
-<h2>대상 선택</h2>
+<FluentStack Orientation="Orientation.Vertical" VerticalGap="10">
+    <FluentLabel Typo="Typography.PaneHeader">Settings</FluentLabel>
 
-<FluentButton OnClick="@GetRootDirectory">폴더 열기</FluentButton>
+    <FluentStack Orientation="Orientation.Vertical" VerticalGap="0">
+        <FluentLabel>Root Directory</FluentLabel>
+        <FluentButton OnClick="@GetRootDirectory">@(DirectoryState.Value.DirectoryName ?? "폴더 열기")</FluentButton>
+    </FluentStack>
+</FluentStack>

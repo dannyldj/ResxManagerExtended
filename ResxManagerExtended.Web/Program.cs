@@ -4,7 +4,9 @@ using ResxManagerExtended.Shared.Components;
 using ResxManagerExtended.Shared.Extensions;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
+#pragma warning disable CA1416
 builder.RootComponents.Add<Routes>("#app");
+#pragma warning restore CA1416
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
