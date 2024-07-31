@@ -22,6 +22,12 @@ public static class Bootstrapper
                 options.UseReduxDevTools(middlewareOptions => { middlewareOptions.Name = "ResxManagerExtended"; });
         });
 
-        collection.AddScoped<IFileSystemAccessService, FileSystemAccessService>();
+        if (OperatingSystem.IsBrowser())
+            collection.AddScoped<IFileSystemAccessService, FileSystemAccessServiceByApi>();
+        else
+        {
+            // Todo: Writing service that work in environments other than WASM
+            // https://learn.microsoft.com/en-us/aspnet/core/blazor/javascript-interoperability/call-javascript-from-dotnet?view=aspnetcore-8.0
+        }
     }
 }

@@ -1,10 +1,11 @@
 using System.Runtime.InteropServices.JavaScript;
 using System.Runtime.Versioning;
+using Microsoft.AspNetCore.Components;
 
 namespace ResxManagerExtended.Shared.Components;
 
 [SupportedOSPlatform("browser")]
-public partial class Routes
+public partial class JsInteropInitializer : ComponentBase
 {
     protected override async Task OnInitializedAsync()
     {
