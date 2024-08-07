@@ -11,6 +11,8 @@
     <FluentStack Orientation="Orientation.Vertical" VerticalGap="0">
         <FluentLabel>Root Directory</FluentLabel>
         <FluentButton
-            OnClick="@GetRootDirectory">@(DirectoryState.Value.DirectoryName ?? Loc["OpenDirectory"])</FluentButton>
+            OnClick="@GetRootDirectory">
+            @(DirectoryState.Value.DirectoryName ?? Loc["SelectDirectory"])
+        </FluentButton>
     </FluentStack>
 </FluentStack>
