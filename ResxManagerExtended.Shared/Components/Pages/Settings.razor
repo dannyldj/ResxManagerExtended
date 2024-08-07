@@ -1,13 +1,16 @@
 ﻿@page "/settings"
 @inherits FluxorComponent
 
-<PageTitle>Settings</PageTitle>
+<PageTitle>@Loc["Settings"]</PageTitle>
 
 <FluentStack Orientation="Orientation.Vertical" VerticalGap="10">
-    <FluentLabel Typo="Typography.PaneHeader">Settings</FluentLabel>
+    <FluentLabel Typo="Typography.PaneHeader" MarginBlock="0 10px">
+        @Loc["Settings"]
+    </FluentLabel>
 
     <FluentStack Orientation="Orientation.Vertical" VerticalGap="0">
         <FluentLabel>Root Directory</FluentLabel>
-        <FluentButton OnClick="@GetRootDirectory">@(DirectoryState.Value.DirectoryName ?? "폴더 열기")</FluentButton>
+        <FluentButton
+            OnClick="@GetRootDirectory">@(DirectoryState.Value.DirectoryName ?? Loc["OpenDirectory"])</FluentButton>
     </FluentStack>
 </FluentStack>

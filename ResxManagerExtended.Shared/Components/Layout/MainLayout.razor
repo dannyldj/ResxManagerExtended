@@ -17,8 +17,12 @@
     </ErrorBoundary>
     </Body>
     <NavMenuContent>
-        <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Home</FluentNavLink>
-        <FluentNavLink Href="resx-manager" Icon="@(new Icons.Regular.Size20.NumberSymbolSquare())" IconColor="Color.Accent">Resx Manager</FluentNavLink>
-        <FluentNavLink Href="settings" Icon="@(new Icons.Regular.Size20.WeatherPartlyCloudyDay())" IconColor="Color.Accent">Settings</FluentNavLink>
+        <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())"
+                       IconColor="Color.Accent">@Loc["Home"]</FluentNavLink>
+        <FluentNavLink Href="resx-manager" Icon="@(new Icons.Regular.Size20.NumberSymbolSquare())"
+                       IconColor="Color.Accent">@Loc["ResxManager"]
+        </FluentNavLink>
+        <FluentNavLink Href="settings" Icon="@(new Icons.Regular.Size20.WeatherPartlyClou
+                      dyDay())" IconColor="Color.Accent">@Loc["Settings"]</FluentNavLink>
     </NavMenuContent>
 </FluentMainLayout>
