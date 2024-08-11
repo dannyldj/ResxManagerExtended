@@ -1,15 +1,15 @@
 using Fluxor;
-using ResxManagerExtended.Shared.Interfaces;
+using KristofferStrube.Blazor.FileSystemAccess;
 
 namespace ResxManagerExtended.Shared.Store.Settings.UseCase;
 
-public class Effects(IFileSystemAccessService fileSystemAccessService)
+public class Effects(IFileSystemAccessServiceInProcess fileSystemAccessService)
 {
     [EffectMethod(typeof(GetRootAction))]
     public async Task HandleGetRootAction(IDispatcher dispatcher)
     {
-        var handler = await fileSystemAccessService.GetRootDirectoryHandler();
-        dispatcher.Dispatch(new GetRootResultAction(handler,
-            handler is null ? null : fileSystemAccessService.GetHandlerName(handler)));
+        var handle = await fileSystemAccessService.ShowDirectoryPickerAsync();
+        var directoryName = await handle.GetNameAsync();
+        dispatcher.Dispatch(new GetRootResultAction(handle, directoryName));
     }
 }

@@ -13,6 +13,6 @@ public static class Reducers
     [ReducerMethod]
     public static RootDirectoryState ReduceGetRootResultAction(RootDirectoryState state, GetRootResultAction action)
     {
-        return new RootDirectoryState { DirectoryHandler = action.Handler, DirectoryName = action.Name };
+        return new RootDirectoryState { DirectoryHandle = action.Handle, DirectoryName = action.Name };
     }
 }

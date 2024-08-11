@@ -1,5 +1,5 @@
-using System.Runtime.InteropServices.JavaScript;
+using KristofferStrube.Blazor.FileSystem;
 
 namespace ResxManagerExtended.Shared.Store.Settings;
 
-public record GetRootResultAction(JSObject? Handler, string? Name);
+public record GetRootResultAction(FileSystemDirectoryHandleInProcess Handle, string? Name);

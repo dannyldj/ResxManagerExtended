@@ -16,6 +16,7 @@
         <PackageReference Include="Fluxor" Version="6.0.0"/>
         <PackageReference Include="Fluxor.Blazor.Web" Version="6.0.0"/>
         <PackageReference Include="Fluxor.Blazor.Web.ReduxDevTools" Version="6.0.0"/>
+        <PackageReference Include="KristofferStrube.Blazor.FileSystemAccess" Version="3.2.2"/>
         <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="8.0.7"/>
         <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.7"/>
         <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.9.3"/>
@@ -42,6 +43,10 @@
             <AutoGen>True</AutoGen>
             <DependentUpon>Resources.resx</DependentUpon>
         </Compile>
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="wwwroot\script\index.js"/>
     </ItemGroup>
 
 </Project>

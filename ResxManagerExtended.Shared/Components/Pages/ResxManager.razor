@@ -1,7 +1,11 @@
 ﻿@page "/resx-manager"
+@inherits FluxorComponent
 
 <PageTitle>@Loc["ResxManager"]</PageTitle>
 
 <h1>Resx Manager</h1>
 
-<p>Implement features..</p>
+<FluentStack>
+    <FluentSelect Items="_handles" Multiple="true"
+                  OptionText="@(handle => handle.Name)"/>
+</FluentStack>
