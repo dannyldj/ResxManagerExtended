@@ -11,7 +11,7 @@ namespace ResxManagerExtended.Shared.Components.Pages;
 
 public partial class ResxManager : FluxorComponent
 {
-    private IEnumerable<IFileSystemHandleInProcess>? _handles;
+    private IEnumerable<FileSystemFileHandleInProcess>? _handles;
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
 
