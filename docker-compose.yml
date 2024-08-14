@@ -1,6 +1,0 @@
-﻿services:
-  resxmanagerextended.web:
-    image: resxmanagerextended.web
-    build:
-      context: .
-      dockerfile: ResxManagerExtended.Web/Dockerfile
