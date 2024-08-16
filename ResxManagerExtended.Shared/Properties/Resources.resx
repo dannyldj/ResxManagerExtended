@@ -124,19 +124,21 @@
         </value>
     </resheader>
     <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
-        <comment/>
-  </data>
+        <value>Settings</value>
+    </data>
     <data name="ResxManager" xml:space="preserve">
-    <value>Resx Manager</value>
-        <comment/>
-  </data>
+        <value>Resx Manager</value>
+    </data>
     <data name="Home" xml:space="preserve">
-    <value>Home</value>
-        <comment/>
-  </data>
+        <value>Home</value>
+    </data>
     <data name="SelectDirectory" xml:space="preserve">
-    <value>Select Directory</value>
-        <comment/>
-  </data>
+        <value>Select Directory</value>
+    </data>
+    <data name="DirectorySetupGuide" xml:space="preserve">
+        <value>No path specified, please specify a path.</value>
+    </data>
+    <data name="RootDirectory" xml:space="preserve">
+        <value>Root Directory</value>
+    </data>
 </root>

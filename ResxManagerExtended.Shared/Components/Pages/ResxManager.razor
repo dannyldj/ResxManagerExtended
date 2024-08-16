@@ -3,9 +3,28 @@
 
 <PageTitle>@Loc["ResxManager"]</PageTitle>
 
-<h1>Resx Manager</h1>
+<FluentLayout>
+    <FluentLabel Typo="Typography.PaneHeader" MarginBlock="0 20px">
+        @Loc["ResxManager"]
+    </FluentLabel>
 
-<FluentStack>
-    <FluentSelect Items="_handles" Multiple="true"
-                  OptionText="@(handle => handle.Name)"/>
-</FluentStack>
+    <FluentStack Style="height: 100%">
+        @if (_handles is null)
+        {
+            @if (DirectoryState.Value.DirectoryHandle is null)
+            {
+                <FluentLabel>@Loc["DirectorySetupGuide"]</FluentLabel>
+            }
+            else
+            {
+                <FluentProgressRing/>
+            }
+        }
+        else
+        {
+            <FluentSelect Items="_handles" Multiple="true"
+                          OptionText="@(handle => handle.Path)"
+                          @bind-SelectedOptions="@_selectedHandles"/>
+        }
+    </FluentStack>
+</FluentLayout>

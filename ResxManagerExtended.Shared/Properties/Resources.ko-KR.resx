@@ -124,19 +124,21 @@
         </value>
     </resheader>
     <data name="Settings" xml:space="preserve">
-    <value>설정</value>
-        <comment/>
-  </data>
+        <value>설정</value>
+    </data>
     <data name="ResxManager" xml:space="preserve">
-    <value>다국어 관리자</value>
-        <comment/>
-  </data>
+        <value>다국어 관리자</value>
+    </data>
     <data name="Home" xml:space="preserve">
-    <value>홈</value>
-        <comment/>
-  </data>
+        <value>홈</value>
+    </data>
     <data name="SelectDirectory" xml:space="preserve">
-    <value>폴더 선택</value>
-        <comment/>
-  </data>
+        <value>폴더 선택</value>
+    </data>
+    <data name="DirectorySetupGuide" xml:space="preserve">
+        <value>경로가 지정되지 않았습니다. 경로를 지정해주세요.</value>
+    </data>
+    <data name="RootDirectory" xml:space="preserve">
+        <value>최상위 폴더</value>
+    </data>
 </root>

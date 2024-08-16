@@ -68,5 +68,17 @@ namespace ResxManagerExtended.Shared.Properties {
                 return ResourceManager.GetString("SelectDirectory", resourceCulture);
             }
         }
+        
+        public static string DirectorySetupGuide {
+            get {
+                return ResourceManager.GetString("DirectorySetupGuide", resourceCulture);
+            }
+        }
+        
+        public static string RootDirectory {
+            get {
+                return ResourceManager.GetString("RootDirectory", resourceCulture);
+            }
+        }
     }
 }
