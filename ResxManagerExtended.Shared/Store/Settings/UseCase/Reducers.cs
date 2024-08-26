@@ -15,4 +15,10 @@ public static class Reducers
     {
         return new RootDirectoryState { DirectoryHandle = action.Handle, DirectoryName = action.Name };
     }
+
+    [ReducerMethod]
+    public static ResourceRegexState ReduceGetRegexResultAction(ResourceRegexState state, GetRegexResultAction action)
+    {
+        return new ResourceRegexState { Regex = action.Regex };
+    }
 }

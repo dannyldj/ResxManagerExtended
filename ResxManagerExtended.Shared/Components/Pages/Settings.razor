@@ -3,17 +3,27 @@
 
 <PageTitle>@Loc["Settings"]</PageTitle>
 
-<FluentLayout>
+<FluentLayout Style="max-width:600px">
     <FluentLabel Typo="Typography.PaneHeader" MarginBlock="0 20px">
         @Loc["Settings"]
     </FluentLabel>
 
-    <FluentStack Orientation="Orientation.Vertical">
+    <FluentStack Orientation="Orientation.Vertical" Style="margin-block-end:10px">
         <FluentLayout>
             <FluentLabel>@Loc["RootDirectory"]</FluentLabel>
             <FluentButton OnClick="@GetRootDirectory">
                 @(DirectoryState.Value.DirectoryName ?? Loc["SelectDirectory"])
             </FluentButton>
+        </FluentLayout>
+    </FluentStack>
+
+    <FluentStack Orientation="Orientation.Vertical">
+        <FluentLayout>
+            <FluentLabel>@Loc["ResourceRegex"]</FluentLabel>
+            <FluentTextField @bind-Value:get="ResourceRegexState.Value.Regex"
+                             @bind-Value:set="ResourceRegexChanged"
+                             @ondblclick="OnClickResourceRegex"
+                             ReadOnly="_isReadOnlyResourceRegex"/>
         </FluentLayout>
     </FluentStack>
 </FluentLayout>

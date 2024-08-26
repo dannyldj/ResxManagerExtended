@@ -9,20 +9,21 @@
 
 
     <ItemGroup>
-        <SupportedPlatform Include="browser"/>
+        <SupportedPlatform Include="browser" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Fluxor" Version="6.0.0"/>
-        <PackageReference Include="Fluxor.Blazor.Web" Version="6.0.0"/>
-        <PackageReference Include="KristofferStrube.Blazor.FileSystemAccess" Version="3.2.2"/>
-        <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.7"/>
-        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.9.3"/>
-        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.9.3"/>
+        <PackageReference Include="Blazored.LocalStorage" Version="4.5.0" />
+        <PackageReference Include="Fluxor" Version="6.0.0" />
+        <PackageReference Include="Fluxor.Blazor.Web" Version="6.0.0" />
+        <PackageReference Include="KristofferStrube.Blazor.FileSystemAccess" Version="3.2.2" />
+        <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.7" />
+        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.9.3" />
+        <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.9.3" />
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Store\ResxManager\UseCase\"/>
+        <Folder Include="Store\ResxManager\UseCase\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -44,7 +45,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <_ContentIncludedByDefault Remove="wwwroot\script\index.js"/>
+        <_ContentIncludedByDefault Remove="wwwroot\script\index.js" />
     </ItemGroup>
 
 </Project>

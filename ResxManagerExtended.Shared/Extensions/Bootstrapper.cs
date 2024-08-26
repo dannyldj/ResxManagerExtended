@@ -1,3 +1,4 @@
+using Blazored.LocalStorage;
 using KristofferStrube.Blazor.FileSystemAccess;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.FluentUI.AspNetCore.Components;
@@ -10,7 +11,7 @@ public static class Bootstrapper
     {
         collection.AddLocalization();
         collection.AddFluentUIComponents();
-
+        collection.AddBlazoredLocalStorage();
         collection.AddFileSystemAccessServiceInProcess();
     }
 }

@@ -61,6 +61,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to If you change that setting, Resx Manager might not work. Do you understand the features correctly?.
+        /// </summary>
+        public static string ConfirmEditSettings {
+            get {
+                return ResourceManager.GetString("ConfirmEditSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No path specified, please specify a path..
         /// </summary>
         public static string DirectorySetupGuide {
@@ -75,6 +84,24 @@ namespace ResxManagerExtended.Shared.Properties {
         public static string Home {
             get {
                 return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Resource Regex.
+        /// </summary>
+        public static string ResourceRegex {
+            get {
+                return ResourceManager.GetString("ResourceRegex", resourceCulture);
             }
         }
         
@@ -111,6 +138,24 @@ namespace ResxManagerExtended.Shared.Properties {
         public static string Settings {
             get {
                 return ResourceManager.GetString("Settings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to .
+        /// </summary>
+        public static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
     }
