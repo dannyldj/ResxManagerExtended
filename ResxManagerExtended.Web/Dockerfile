@@ -1,4 +1,4 @@
-﻿FROM nginx:stable AS base
+FROM nginx:stable AS base
 USER $APP_UID
 WORKDIR /app
 EXPOSE 80
