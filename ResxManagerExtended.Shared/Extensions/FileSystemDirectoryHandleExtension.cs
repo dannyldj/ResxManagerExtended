@@ -7,32 +7,43 @@ public static class FileSystemDirectoryHandleExtension
 {
     private static readonly IEnumerable<string> ResourceExtensions = [".resx"];
 
-    public static async Task<IEnumerable<Resource>> GetResourceFiles(
+    public static async Task<IEnumerable<ResourceTreeViewItem>> GetResourceFiles(
         this FileSystemDirectoryHandleInProcess handle)
     {
         return await GetResourcesRecursive(handle, handle.Name);
     }
 
-    private static async Task<IEnumerable<Resource>> GetResourcesRecursive(
+    private static async Task<IEnumerable<ResourceTreeViewItem>> GetResourcesRecursive(
         FileSystemDirectoryHandleInProcess handle, string path)
     {
-        List<Resource> directories = [];
-        List<FileSystemFileHandleInProcess> resources = [];
+        List<ResourceTreeViewItem> tree = [];
 
-        foreach (var entry in await handle.ValuesAsync())
+        await Parallel.ForEachAsync(await handle.ValuesAsync(), async (entry, token) =>
+        {
+            if (token.IsCancellationRequested) return;
+
             switch (entry.Kind)
             {
                 case FileSystemHandleKind.File when ResourceExtensions.Contains(Path.GetExtension(entry.Name)):
-                    resources.Add(await handle.GetFileHandleAsync(entry.Name));
+                    tree.Add(new ResourceTreeViewItem(entry.Name));
+                    break;
+                case FileSystemHandleKind.File:
+                    // Non-resource files
                     break;
                 case FileSystemHandleKind.Directory:
-                    directories.AddRange(await GetResourcesRecursive(await handle.GetDirectoryHandleAsync(entry.Name),
-                        $"{path}/{entry.Name}"));
-                    break;
-            }
+                    var directoryHandle = await handle.GetDirectoryHandleAsync(entry.Name);
+                    var children =
+                        await GetResourcesRecursive(directoryHandle, $"{path}/{entry.Name}") as
+                            List<ResourceTreeViewItem>;
 
-        return resources.Count != 0
-            ? [.. directories, new Resource(path, handle, resources)]
-            : directories;
+                    if (children?.Count > 0) tree.Add(new ResourceTreeViewItem(entry.Name, directoryHandle, children));
+
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(handle));
+            }
+        });
+
+        return tree;
     }
 }

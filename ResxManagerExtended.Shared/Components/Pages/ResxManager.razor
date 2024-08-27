@@ -8,23 +8,23 @@
         @Loc["ResxManager"]
     </FluentLabel>
 
-    <FluentStack Style="height: 100%">
-        @if (_handles is null)
+    @if (_resourceTree is null)
+    {
+        @if (DirectoryState.Value.DirectoryHandle is null)
         {
-            @if (DirectoryState.Value.DirectoryHandle is null)
-            {
-                <FluentLabel>@Loc["DirectorySetupGuide"]</FluentLabel>
-            }
-            else
-            {
-                <FluentProgressRing/>
-            }
+            <FluentLabel>@Loc["DirectorySetupGuide"]</FluentLabel>
         }
         else
         {
-            <FluentSelect Items="_handles" Multiple="true"
-                          OptionText="@(handle => handle.Path)"
-                          @bind-SelectedOptions="@_selectedHandles"/>
+            <FluentProgressRing/>
         }
-    </FluentStack>
+    }
+    else
+    {
+        <FluentSplitter Style="height:100%" Panel1MinSize="250px" Panel1Size="25%">
+            <Panel1>
+                <FluentTreeView Items="_resourceTree"/>
+            </Panel1>
+        </FluentSplitter>
+    }
 </FluentLayout>

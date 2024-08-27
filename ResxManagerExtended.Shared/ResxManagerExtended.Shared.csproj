@@ -7,6 +7,13 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     </PropertyGroup>
 
+    <ItemGroup>
+      <Compile Remove="Store\ResxManager\**" />
+      <Content Remove="Store\ResxManager\**" />
+      <EmbeddedResource Remove="Store\ResxManager\**" />
+      <None Remove="Store\ResxManager\**" />
+    </ItemGroup>
+
 
     <ItemGroup>
         <SupportedPlatform Include="browser" />
@@ -20,10 +27,6 @@
         <PackageReference Include="Microsoft.Extensions.Localization" Version="8.0.7" />
         <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.9.3" />
         <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.9.3" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="Store\ResxManager\UseCase\" />
     </ItemGroup>
 
     <ItemGroup>

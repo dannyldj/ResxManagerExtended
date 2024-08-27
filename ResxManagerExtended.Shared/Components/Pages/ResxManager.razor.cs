@@ -2,7 +2,7 @@ using Fluxor;
 using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
-using ResxManagerExtended.Shared.Data;
+using Microsoft.FluentUI.AspNetCore.Components;
 using ResxManagerExtended.Shared.Extensions;
 using ResxManagerExtended.Shared.Properties;
 using ResxManagerExtended.Shared.Store.Settings.UseCase;
@@ -11,8 +11,7 @@ namespace ResxManagerExtended.Shared.Components.Pages;
 
 public partial class ResxManager : FluxorComponent
 {
-    private IEnumerable<Resource>? _handles;
-    private IEnumerable<Resource>? _selectedHandles;
+    private IEnumerable<ITreeViewItem>? _resourceTree;
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
 
@@ -22,6 +21,6 @@ public partial class ResxManager : FluxorComponent
     {
         if (DirectoryState.Value.DirectoryHandle is null) return;
 
-        _handles = await DirectoryState.Value.DirectoryHandle.GetResourceFiles();
+        _resourceTree = await DirectoryState.Value.DirectoryHandle.GetResourceFiles();
     }
 }
