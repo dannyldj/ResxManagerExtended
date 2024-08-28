@@ -21,10 +21,14 @@
     }
     else
     {
-        <FluentSplitter Style="height:100%" Panel1MinSize="250px" Panel1Size="25%">
+        <FluentSplitter Panel1MinSize="250px" Panel1Size="25%"
+                        Style="height:-webkit-fill-available;overflow:auto">
             <Panel1>
                 <FluentTreeView Items="_resourceTree"/>
             </Panel1>
+            <Panel2>
+                <FluentCard/>
+            </Panel2>
         </FluentSplitter>
     }
 </FluentLayout>
