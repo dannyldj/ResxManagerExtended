@@ -142,7 +142,7 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to .
+        ///   Looks up a localized string similar to Warning.
         /// </summary>
         public static string Warning {
             get {
