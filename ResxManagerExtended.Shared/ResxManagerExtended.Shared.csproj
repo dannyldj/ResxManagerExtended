@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Razor">
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
 
     <PropertyGroup>
         <TargetFramework>net8.0</TargetFramework>
@@ -30,12 +30,12 @@
     </ItemGroup>
 
     <ItemGroup>
+        <EmbeddedResource Update="Properties\Resources.ko.resx">
+          <DependentUpon>Resources.resx</DependentUpon>
+        </EmbeddedResource>
         <EmbeddedResource Update="Properties\Resources.resx">
             <Generator>PublicResXFileCodeGenerator</Generator>
             <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-        </EmbeddedResource>
-        <EmbeddedResource Update="Properties\Resources.ko-KR.resx">
-            <DependentUpon>Resources.resx</DependentUpon>
         </EmbeddedResource>
     </ItemGroup>
 

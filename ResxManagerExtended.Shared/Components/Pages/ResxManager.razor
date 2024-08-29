@@ -10,7 +10,7 @@
 
     @if (_resourceTree is null)
     {
-        @if (DirectoryState.Value.DirectoryHandle is null)
+        @if (SettingState.Value.DirectoryHandle is null)
         {
             <FluentLabel>@Loc["DirectorySetupGuide"]</FluentLabel>
         }

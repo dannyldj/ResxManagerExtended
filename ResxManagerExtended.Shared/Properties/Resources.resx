@@ -156,4 +156,13 @@
     <data name="Warning" xml:space="preserve">
 	    <value>Warning</value>
     </data>
+    <data name="Language" xml:space="preserve">
+	    <value>Language</value>
+    </data>
+    <data name="en" xml:space="preserve">
+	    <value>English</value>
+    </data>
+    <data name="ko" xml:space="preserve">
+	    <value>Korean</value>
+    </data>
 </root>

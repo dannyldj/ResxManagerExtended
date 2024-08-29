@@ -15,12 +15,12 @@ public partial class ResxManager : FluxorComponent
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
 
-    [Inject] public required IState<RootDirectoryState> DirectoryState { private get; init; }
+    [Inject] public required IState<SettingState> SettingState { private get; init; }
 
     protected override async Task OnInitializedAsync()
     {
-        if (DirectoryState.Value.DirectoryHandle is null) return;
+        if (SettingState.Value.DirectoryHandle is null) return;
 
-        _resourceTree = await DirectoryState.Value.DirectoryHandle.GetResourceFiles();
+        _resourceTree = await SettingState.Value.DirectoryHandle.GetResourceFiles();
     }
 }

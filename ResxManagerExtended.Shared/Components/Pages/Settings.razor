@@ -1,29 +1,35 @@
 ﻿@page "/settings"
+@using ResxManagerExtended.Shared.Constants
 @inherits FluxorComponent
 
 <PageTitle>@Loc["Settings"]</PageTitle>
 
-<FluentLayout Style="max-width:600px">
+<FluentStack Orientation="Orientation.Vertical"
+             VerticalGap="10" Style="max-width:600px">
     <FluentLabel Typo="Typography.PaneHeader" MarginBlock="0 20px">
         @Loc["Settings"]
     </FluentLabel>
 
-    <FluentStack Orientation="Orientation.Vertical" Style="margin-block-end:10px">
-        <FluentLayout>
-            <FluentLabel>@Loc["RootDirectory"]</FluentLabel>
-            <FluentButton OnClick="@GetRootDirectory">
-                @(DirectoryState.Value.DirectoryName ?? Loc["SelectDirectory"])
-            </FluentButton>
-        </FluentLayout>
-    </FluentStack>
+    <FluentLayout>
+        <FluentLabel>@Loc["Language"]</FluentLabel>
+        <FluentSelect @bind-SelectedOption="_selectedCulture"
+                      @bind-SelectedOption:after="CultureChanged"
+                      Items="DefaultSettings.AvailableCultures"
+                      OptionText="@(option => Loc[option.Name])" />
+    </FluentLayout>
 
-    <FluentStack Orientation="Orientation.Vertical">
-        <FluentLayout>
-            <FluentLabel>@Loc["ResourceRegex"]</FluentLabel>
-            <FluentTextField @bind-Value:get="ResourceRegexState.Value.Regex"
-                             @bind-Value:set="ResourceRegexChanged"
-                             @ondblclick="OnClickResourceRegex"
-                             ReadOnly="_isReadOnlyResourceRegex"/>
-        </FluentLayout>
-    </FluentStack>
-</FluentLayout>
+    <FluentLayout>
+        <FluentLabel>@Loc["RootDirectory"]</FluentLabel>
+        <FluentButton OnClick="@GetRootDirectory">
+            @(SettingState.Value.DirectoryName ?? Loc["SelectDirectory"])
+        </FluentButton>
+    </FluentLayout>
+
+    <FluentLayout>
+        <FluentLabel>@Loc["ResourceRegex"]</FluentLabel>
+        <FluentTextField @bind-Value:get="SettingState.Value.Regex"
+                         @bind-Value:set="ResourceRegexChanged"
+                         @ondblclick="OnClickResourceRegex"
+                         ReadOnly="_isReadOnlyResourceRegex"/>
+    </FluentLayout>
+</FluentStack>

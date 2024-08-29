@@ -1,3 +1,3 @@
 ﻿namespace ResxManagerExtended.Shared.Store.Settings;
 
-public record GetRegexResultAction(string? Regex);
+public record RegexResultAction(string? Regex);

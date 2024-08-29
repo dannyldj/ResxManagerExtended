@@ -16,7 +16,7 @@ public class Effects(
         {
             var handle = await fileSystemAccessService.ShowDirectoryPickerAsync();
             var directoryName = await handle.GetNameAsync();
-            dispatcher.Dispatch(new GetRootResultAction(handle, directoryName));
+            dispatcher.Dispatch(new RootResultAction(handle, directoryName));
         }
         catch (Exception)
         {
@@ -28,7 +28,7 @@ public class Effects(
     public async Task HandleGetRegexAction(IDispatcher dispatcher)
     {
         var regex = await localStorageService.GetItemAsStringAsync(LocalStorageKeys.ResourceRegexKey);
-        dispatcher.Dispatch(new GetRegexResultAction(regex ?? DefaultSettings.DefaultResourceRegex));
+        dispatcher.Dispatch(new RegexResultAction(regex ?? DefaultSettings.DefaultResourceRegex));
     }
 
     [EffectMethod]
@@ -37,6 +37,6 @@ public class Effects(
         if (action.Regex is null) return;
 
         await localStorageService.SetItemAsStringAsync(LocalStorageKeys.ResourceRegexKey, action.Regex);
-        dispatcher.Dispatch(new GetRegexResultAction(action.Regex));
+        dispatcher.Dispatch(new RegexResultAction(action.Regex));
     }
 }

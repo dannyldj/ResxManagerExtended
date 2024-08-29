@@ -5,20 +5,20 @@ namespace ResxManagerExtended.Shared.Store.Settings.UseCase;
 public static class Reducers
 {
     [ReducerMethod(typeof(GetRootAction))]
-    public static RootDirectoryState ReduceGetRootAction(RootDirectoryState state)
+    public static SettingState ReduceGetRootAction(SettingState state)
     {
-        return new RootDirectoryState();
+        return state with { DirectoryHandle = null, DirectoryName = null };
     }
 
     [ReducerMethod]
-    public static RootDirectoryState ReduceGetRootResultAction(RootDirectoryState state, GetRootResultAction action)
+    public static SettingState ReduceRootResultAction(SettingState state, RootResultAction action)
     {
-        return new RootDirectoryState { DirectoryHandle = action.Handle, DirectoryName = action.Name };
+        return state with { DirectoryHandle = action.Handle, DirectoryName = action.Name };
     }
 
     [ReducerMethod]
-    public static ResourceRegexState ReduceGetRegexResultAction(ResourceRegexState state, GetRegexResultAction action)
+    public static SettingState ReduceRegexResultAction(SettingState state, RegexResultAction action)
     {
-        return new ResourceRegexState { Regex = action.Regex };
+        return state with { Regex = action.Regex };
     }
 }
