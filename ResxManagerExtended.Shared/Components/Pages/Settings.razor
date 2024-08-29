@@ -15,7 +15,7 @@
         <FluentSelect @bind-SelectedOption="_selectedCulture"
                       @bind-SelectedOption:after="CultureChanged"
                       Items="DefaultSettings.AvailableCultures"
-                      OptionText="@(option => Loc[option.Name])" />
+                      OptionText="@(option => option is null ? string.Empty : Loc[option.Name])"/>
     </FluentLayout>
 
     <FluentLayout>
