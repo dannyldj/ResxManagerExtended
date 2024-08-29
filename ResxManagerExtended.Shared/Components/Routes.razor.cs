@@ -1,6 +1,6 @@
 ﻿using Fluxor;
 using Microsoft.AspNetCore.Components;
-using ResxManagerExtended.Shared.Store.Settings;
+using ResxManagerExtended.Shared.Components.Pages;
 
 namespace ResxManagerExtended.Shared.Components;
 
@@ -10,7 +10,6 @@ public partial class Routes
 
     protected override void OnInitialized()
     {
-        base.OnInitialized();
-        Dispatcher.Dispatch(new GetRegexAction());
+        Settings.InitializeSettings(Dispatcher);
     }
 }

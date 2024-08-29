@@ -25,6 +25,11 @@ public partial class Settings : FluxorComponent
     [Inject] public required NavigationManager NavigationManager { private get; init; }
     [Inject] public required IState<SettingState> SettingState { private get; init; }
 
+    public static void InitializeSettings(IDispatcher dispatcher)
+    {
+        dispatcher.Dispatch(new GetRegexAction());
+    }
+
     protected override void OnInitialized()
     {
         base.OnInitialized();
