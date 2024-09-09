@@ -20,8 +20,9 @@
 
     <FluentLayout>
         <FluentLabel>@Loc["RootDirectory"]</FluentLabel>
-        <FluentButton OnClick="@GetRootDirectory">
-            @(SettingState.Value.DirectoryName ?? Loc["SelectDirectory"])
+        <FluentButton Loading="SettingState.Value.IsResourceLoading"
+                      OnClick="@GetRootDirectory">
+            @(SettingState.Value.TopNode?.Text ?? Loc["SelectDirectory"])
         </FluentButton>
     </FluentLayout>
 

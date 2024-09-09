@@ -1,33 +1,22 @@
-using Blazored.LocalStorage;
 using Fluxor;
-using KristofferStrube.Blazor.FileSystemAccess;
 using ResxManagerExtended.Shared.Constants;
+using ResxManagerExtended.Shared.Services;
 
 namespace ResxManagerExtended.Shared.Store.Settings.UseCase;
 
-public class Effects(
-    IFileSystemAccessServiceInProcess fileSystemAccessService,
-    ILocalStorageService localStorageService)
+public class Effects(IResourceService resourceService, ISettingService settingService)
 {
     [EffectMethod(typeof(GetRootAction))]
     public async Task HandleGetRootAction(IDispatcher dispatcher)
     {
-        try
-        {
-            var handle = await fileSystemAccessService.ShowDirectoryPickerAsync();
-            var directoryName = await handle.GetNameAsync();
-            dispatcher.Dispatch(new RootResultAction(handle, directoryName));
-        }
-        catch (Exception)
-        {
-            // Closing the DirectoryPicker throws an exception.
-        }
+        var topNode = await resourceService.SetTopNode();
+        dispatcher.Dispatch(new RootResultAction(topNode));
     }
 
     [EffectMethod(typeof(GetRegexAction))]
     public async Task HandleGetRegexAction(IDispatcher dispatcher)
     {
-        var regex = await localStorageService.GetItemAsStringAsync(LocalStorageKeys.ResourceRegexKey);
+        var regex = await settingService.GetOptionAsStringAsync(SettingKeys.ResourceRegexKey);
         dispatcher.Dispatch(new RegexResultAction(regex ?? DefaultSettings.DefaultResourceRegex));
     }
 
@@ -36,7 +25,7 @@ public class Effects(
     {
         if (action.Regex is null) return;
 
-        await localStorageService.SetItemAsStringAsync(LocalStorageKeys.ResourceRegexKey, action.Regex);
+        await settingService.SetOptionAsStringAsync(SettingKeys.ResourceRegexKey, action.Regex);
         dispatcher.Dispatch(new RegexResultAction(action.Regex));
     }
 }

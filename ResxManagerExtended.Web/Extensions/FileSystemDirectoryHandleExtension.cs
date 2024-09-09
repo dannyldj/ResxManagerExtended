@@ -1,16 +1,16 @@
 using KristofferStrube.Blazor.FileSystem;
-using Microsoft.FluentUI.AspNetCore.Components;
-using ResxManagerExtended.Shared.Data;
+using ResxManagerExtended.Web.Data;
 
-namespace ResxManagerExtended.Shared.Extensions;
+namespace ResxManagerExtended.Web.Extensions;
 
 public static class FileSystemDirectoryHandleExtension
 {
     private static readonly IEnumerable<string> ResourceExtensions = [".resx"];
 
-    public static async Task<IEnumerable<ITreeViewItem>> GetResourceFiles(
+    public static async Task<ResourceTreeViewItem?> GetResourceFiles(
         this FileSystemDirectoryHandleInProcess handle)
     {
+        var topNode = new ResourceTreeViewItem(await handle.GetNameAsync(), handle);
         var nodes = new List<ResourceTreeViewItem>();
         var procCount = Environment.ProcessorCount;
         var values = await handle.ValuesAsync();
@@ -28,11 +28,8 @@ public static class FileSystemDirectoryHandleExtension
                         break;
                     case FileSystemHandleKind.Directory:
                         var directoryHandle = await handle.GetDirectoryHandleAsync(entry.Name);
-                        var children = await directoryHandle.GetResourceFiles() as List<ResourceTreeViewItem>;
-
-                        if (children?.Count > 0)
-                            nodes.Add(new ResourceTreeViewItem(entry.Name, directoryHandle, children));
-
+                        var childNode = await directoryHandle.GetResourceFiles();
+                        if (childNode is not null) nodes.Add(childNode);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(handle));
@@ -53,17 +50,17 @@ public static class FileSystemDirectoryHandleExtension
                         break;
                     case FileSystemHandleKind.Directory:
                         var directoryHandle = await handle.GetDirectoryHandleAsync(entry.Name);
-                        var children = await directoryHandle.GetResourceFiles() as List<ResourceTreeViewItem>;
-
-                        if (children?.Count > 0)
-                            nodes.Add(new ResourceTreeViewItem(entry.Name, directoryHandle, children));
-
+                        var childNode = await directoryHandle.GetResourceFiles();
+                        if (childNode is not null) nodes.Add(childNode);
                         break;
                     default:
                         throw new ArgumentOutOfRangeException(nameof(handle));
                 }
             });
 
-        return nodes;
+        if (nodes.Count == 0) return null;
+
+        topNode.Items = nodes;
+        return topNode;
     }
 }

@@ -1,7 +1,7 @@
 ﻿using KristofferStrube.Blazor.FileSystem;
 using Microsoft.FluentUI.AspNetCore.Components;
 
-namespace ResxManagerExtended.Shared.Data;
+namespace ResxManagerExtended.Web.Data;
 
 public class ResourceTreeViewItem : ITreeViewItem
 {
@@ -18,7 +18,7 @@ public class ResourceTreeViewItem : ITreeViewItem
     /// <param name="text">Text of the tree item</param>
     /// <param name="handle">Directory handle of the tree item</param>
     /// <param name="items">Sub-items of the tree item.</param>
-    public ResourceTreeViewItem(string text, FileSystemDirectoryHandleInProcess? handle = null,
+    public ResourceTreeViewItem(string text, IFileSystemHandleInProcess? handle = null,
         IEnumerable<ITreeViewItem>? items = null)
     {
         Text = text;
@@ -37,13 +37,13 @@ public class ResourceTreeViewItem : ITreeViewItem
     /// </summary>
     public static IEnumerable<ResourceTreeViewItem> LoadingTreeViewItems =>
     [
-        new ResourceTreeViewItem { Text = FluentTreeView.LoadingMessage, Disabled = true }
+        new() { Text = FluentTreeView.LoadingMessage, Disabled = true }
     ];
 
     /// <summary>
     ///     Gets or sets the directory handle of the tree item.
     /// </summary>
-    public FileSystemDirectoryHandleInProcess? Handle { get; set; }
+    public IFileSystemHandleInProcess? Handle { get; set; }
 
     /// <summary>
     ///     Gets or sets the selectability of the tree item.
@@ -78,7 +78,7 @@ public class ResourceTreeViewItem : ITreeViewItem
     /// <summary>
     ///     <inheritdoc cref="ITreeViewItem.Disabled" />
     /// </summary>
-    public bool Disabled { get; set; } = false;
+    public bool Disabled { get; set; }
 
     /// <summary>
     ///     <inheritdoc cref="ITreeViewItem.Expanded" />

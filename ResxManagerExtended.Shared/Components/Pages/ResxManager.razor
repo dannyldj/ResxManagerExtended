@@ -8,15 +8,15 @@
         @Loc["ResxManager"]
     </FluentLabel>
 
-    @if (_resourceTree is null)
+    @if (SettingState.Value.TopNode is null)
     {
-        @if (SettingState.Value.DirectoryHandle is null)
+        @if (SettingState.Value.IsResourceLoading)
         {
-            <FluentLabel>@Loc["DirectorySetupGuide"]</FluentLabel>
+            <FluentProgressRing/>
         }
         else
         {
-            <FluentProgressRing/>
+            <FluentLabel>@Loc["DirectorySetupGuide"]</FluentLabel>
         }
     }
     else
@@ -24,7 +24,7 @@
         <FluentSplitter Panel1MinSize="250px" Panel1Size="25%"
                         Style="height:-webkit-fill-available;overflow:auto">
             <Panel1>
-                <FluentTreeView Items="_resourceTree"/>
+                <FluentTreeView Items="[SettingState.Value.TopNode]"/>
             </Panel1>
             <Panel2>
                 <FluentCard/>

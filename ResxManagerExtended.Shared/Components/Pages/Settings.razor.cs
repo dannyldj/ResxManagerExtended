@@ -1,5 +1,4 @@
 using System.Globalization;
-using Blazored.LocalStorage;
 using Fluxor;
 using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
@@ -8,6 +7,7 @@ using Microsoft.Extensions.Localization;
 using Microsoft.FluentUI.AspNetCore.Components;
 using ResxManagerExtended.Shared.Constants;
 using ResxManagerExtended.Shared.Properties;
+using ResxManagerExtended.Shared.Services;
 using ResxManagerExtended.Shared.Store.Settings;
 using ResxManagerExtended.Shared.Store.Settings.UseCase;
 
@@ -21,7 +21,7 @@ public partial class Settings : FluxorComponent
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
     [Inject] public required IDialogService DialogService { private get; init; }
     [Inject] public required IDispatcher Dispatcher { private get; init; }
-    [Inject] public required ILocalStorageService LocalStorageService { private get; init; }
+    [Inject] public required ISettingService SettingService { private get; init; }
     [Inject] public required NavigationManager NavigationManager { private get; init; }
     [Inject] public required IState<SettingState> SettingState { private get; init; }
 
@@ -40,7 +40,7 @@ public partial class Settings : FluxorComponent
     {
         if (_selectedCulture is null || Equals(CultureInfo.CurrentCulture, _selectedCulture)) return;
 
-        await LocalStorageService.SetItemAsStringAsync(LocalStorageKeys.CultureKey, _selectedCulture.Name);
+        await SettingService.SetOptionAsStringAsync(SettingKeys.CultureKey, _selectedCulture.Name);
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
     }
 

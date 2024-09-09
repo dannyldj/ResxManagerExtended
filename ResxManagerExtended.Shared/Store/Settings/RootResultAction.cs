@@ -1,5 +1,5 @@
-using KristofferStrube.Blazor.FileSystem;
+using Microsoft.FluentUI.AspNetCore.Components;
 
 namespace ResxManagerExtended.Shared.Store.Settings;
 
-public record RootResultAction(FileSystemDirectoryHandleInProcess Handle, string? Name);
+public record RootResultAction(ITreeViewItem? TopNode);

@@ -1,14 +1,14 @@
 using Fluxor;
-using KristofferStrube.Blazor.FileSystem;
+using Microsoft.FluentUI.AspNetCore.Components;
 
 namespace ResxManagerExtended.Shared.Store.Settings.UseCase;
 
 [FeatureState]
 public record SettingState
 {
-    public FileSystemDirectoryHandleInProcess? DirectoryHandle { get; init; }
+    public ITreeViewItem? TopNode { get; init; }
 
-    public string? DirectoryName { get; init; }
+    public bool IsResourceLoading { get; init; }
 
     public string? Regex { get; init; }
 }
