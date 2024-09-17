@@ -165,4 +165,10 @@
     <data name="ko" xml:space="preserve">
 	    <value>Korean</value>
     </data>
+    <data name="NeuturalValue" xml:space="preserve">
+	    <value>Neutural Value</value>
+    </data>
+    <data name="NothingHere" xml:space="preserve">
+	    <value>Nothing to see here. Carry on!</value>
+    </data>
 </root>

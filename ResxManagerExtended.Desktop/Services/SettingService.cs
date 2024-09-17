@@ -7,14 +7,15 @@ internal class SettingService : ISettingService
 {
     public Task<string?> GetOptionAsStringAsync(string key)
     {
-        return Task.FromResult(Settings.Default[key]?.ToString());
+        var value = Settings.Default[key].ToString();
+        return string.IsNullOrEmpty(value) ? Task.FromResult<string?>(null) : Task.FromResult<string?>(value);
     }
 
     public Task SetOptionAsStringAsync(string key, string value)
     {
-        if (Settings.Default[key] is null)
+        if (Settings.Default.SettingsKey.Contains(key) is false)
             // Not support setting key
-            return Task.CompletedTask;
+            throw new ArgumentOutOfRangeException(nameof(key));
 
         Settings.Default[key] = value;
         Settings.Default.Save();

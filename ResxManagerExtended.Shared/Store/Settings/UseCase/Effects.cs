@@ -17,7 +17,7 @@ public class Effects(IResourceService resourceService, ISettingService settingSe
     public async Task HandleGetRegexAction(IDispatcher dispatcher)
     {
         var regex = await settingService.GetOptionAsStringAsync(SettingKeys.ResourceRegexKey);
-        dispatcher.Dispatch(new RegexResultAction(regex ?? DefaultSettings.DefaultResourceRegex));
+        dispatcher.Dispatch(new RegexResultAction(regex ?? DefaultSettings.DefaultResxRegex));
     }
 
     [EffectMethod]

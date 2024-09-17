@@ -1,4 +1,5 @@
 ﻿@page "/resx-manager"
+@using ResxManagerExtended.Shared.Data
 @inherits FluxorComponent
 
 <PageTitle>@Loc["ResxManager"]</PageTitle>
@@ -24,10 +25,31 @@
         <FluentSplitter Panel1MinSize="250px" Panel1Size="25%"
                         Style="height:-webkit-fill-available;overflow:auto">
             <Panel1>
-                <FluentTreeView Items="[SettingState.Value.TopNode]"/>
+                <FluentTreeView Items="[SettingState.Value.TopNode]" SelectedItemChanged="OnSelectedItemChanged"/>
             </Panel1>
             <Panel2>
-                <FluentCard/>
+                <FluentDataGrid @ref="_grid" Items="@_items"
+                                ShowHover="true" Virtualize="true" ResizableColumns="true"
+                                GenerateHeader="GenerateHeaderOption.Sticky" ItemSize="30">
+                    <ChildContent>
+                        <PropertyColumn Property="@(c => c.Key)" Sortable="true"/>
+                        <PropertyColumn Title="@Loc["NeuturalValue"]" Property="@(c => c.DefaultValue)"/>
+
+                        @foreach (var culture in _cultures)
+                        {
+                            <PropertyColumn Title="@culture.Name" Property="@(c => c.AdditionalColumns.GetValueOrDefault(culture))"/>
+                        }
+                    </ChildContent>
+                    <EmptyContent>
+                        <FluentIcon Value="@(new Icons.Filled.Size24.Crown())" Color="@Color.Accent"/>&nbsp; @Loc["NothingHere"]
+                    </EmptyContent>
+                    <LoadingContent>
+                        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                            Loading...<br/>
+                            <FluentProgress Width="240px"/>
+                        </FluentStack>
+                    </LoadingContent>
+                </FluentDataGrid>
             </Panel2>
         </FluentSplitter>
     }

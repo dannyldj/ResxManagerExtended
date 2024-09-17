@@ -53,4 +53,10 @@
 	<data name="ko" xml:space="preserve">
 		<value>한국어</value>
 	</data>
+	<data name="NeuturalValue" xml:space="preserve">
+		<value>기본값</value>
+	</data>
+	<data name="NothingHere" xml:space="preserve">
+		<value>아무것도 없습니다. 다른 것을 선택해보세요!</value>
+	</data>
 </root>

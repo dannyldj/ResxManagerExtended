@@ -115,11 +115,29 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Neutural Value.
+        /// </summary>
+        public static string NeuturalValue {
+            get {
+                return ResourceManager.GetString("NeuturalValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No.
         /// </summary>
         public static string No {
             get {
                 return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nothing to see here. Carry on!.
+        /// </summary>
+        public static string NothingHere {
+            get {
+                return ResourceManager.GetString("NothingHere", resourceCulture);
             }
         }
         

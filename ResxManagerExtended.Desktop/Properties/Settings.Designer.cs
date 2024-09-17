@@ -37,7 +37,7 @@ namespace ResxManagerExtended.Desktop.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("^(.+?)\\\\.(.+?)?\\\\.?resx$")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string ResourceRegex {
             get {
                 return ((string)(this["ResourceRegex"]));
