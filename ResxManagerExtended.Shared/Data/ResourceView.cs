@@ -17,5 +17,5 @@ public class ResourceView
 
     public string? DefaultValue { get; set; }
 
-    public Dictionary<CultureInfo, string?> AdditionalColumns { get; } = new();
+    public Dictionary<CultureInfo, string?> AdditionalColumns { get; } = [];
 }
