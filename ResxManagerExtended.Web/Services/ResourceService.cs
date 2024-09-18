@@ -34,6 +34,8 @@ internal class ResourceService(
                 Id = handle.Name,
                 Text = handle.Name,
                 Items = await GetTreeItems(handle.Name, handle),
+                IconCollapsed = new Icons.Regular.Size20.Folder(),
+                IconExpanded = new Icons.Filled.Size20.Folder(),
                 Expanded = true
             };
         }
@@ -71,8 +73,14 @@ internal class ResourceService(
                 case FileSystemHandleKind.Directory:
                     await using (var directory = await handle.GetDirectoryHandleAsync(entry.Name))
                     {
-                        items.Add(new TreeViewItem(currentPath, entry.Name,
-                            await GetTreeItems(currentPath, directory)));
+                        items.Add(new TreeViewItem
+                        {
+                            Id = currentPath,
+                            Text = entry.Name,
+                            Items = await GetTreeItems(currentPath, directory),
+                            IconCollapsed = new Icons.Regular.Size20.Folder(),
+                            IconExpanded = new Icons.Filled.Size20.Folder()
+                        });
                     }
 
                     break;
@@ -83,7 +91,12 @@ internal class ResourceService(
 
         foreach (var resource in resources)
         {
-            items.Add(new TreeViewItem(directoryPath, resource.Key));
+            items.Add(new TreeViewItem
+            {
+                Id = directoryPath + Path.DirectorySeparatorChar + resource.Key,
+                Text = resource.Key,
+                IconCollapsed = new Icons.Regular.Size20.BookLetter()
+            });
 
             dispatcher.Dispatch(new AddResourceAction(new ResxFile
             {

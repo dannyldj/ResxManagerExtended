@@ -4,6 +4,7 @@ using Fluxor.Blazor.Web.Components;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.FluentUI.AspNetCore.Components;
+using ResxManagerExtended.Shared.Comparer;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
 using ResxManagerExtended.Shared.Properties;
@@ -14,7 +15,7 @@ namespace ResxManagerExtended.Shared.Components.Pages;
 
 public partial class ResxManager : FluxorComponent
 {
-    private HashSet<CultureInfo> _cultures = [];
+    private SortedSet<CultureInfo> _cultures = [];
     private FluentDataGrid<ResourceView>? _grid;
     private IQueryable<ResourceView> _items = Enumerable.Empty<ResourceView>().AsQueryable();
 
@@ -40,12 +41,14 @@ public partial class ResxManager : FluxorComponent
     private async Task<IQueryable<ResourceView>> GetDataGrid(string? selectedPath = null)
     {
         var resources = new List<ResourceView>();
-        _cultures = [];
+        _cultures = new SortedSet<CultureInfo>(new CultureComparer());
 
         _grid?.SetLoadingState(true);
         foreach (var valueResource in ResxManagerState.Value.Resources ?? [])
         {
-            if (selectedPath is not null && valueResource.Path.IsUnderDirectory(selectedPath) is false) continue;
+            if (selectedPath is not null &&
+                $"{valueResource.Path}{Path.DirectorySeparatorChar}{valueResource.Name}".IsUnderDirectory(selectedPath)
+                    is false) continue;
 
             resources.AddRange(await valueResource.GetValues());
             foreach (var culture in valueResource.Cultures ?? [])

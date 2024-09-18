@@ -28,6 +28,8 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
             Id = dialog.FolderName,
             Text = Path.GetFileName(dialog.FolderName),
             Items = GetTreeItems(dialog.FolderName),
+            IconCollapsed = new Icons.Regular.Size20.Folder(),
+            IconExpanded = new Icons.Filled.Size20.Folder(),
             Expanded = true
         });
     }
@@ -39,7 +41,14 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
         var items = (from dir in Directory.GetDirectories(directoryPath)
                 let childNodes = GetTreeItems(dir)
                 where childNodes.Count > 0
-                select new TreeViewItem(dir, Path.GetFileName(dir), childNodes))
+                select new TreeViewItem
+                {
+                    Id = dir,
+                    Text = Path.GetFileName(dir),
+                    Items = childNodes,
+                    IconCollapsed = new Icons.Regular.Size20.Folder(),
+                    IconExpanded = new Icons.Filled.Size20.Folder()
+                })
             .Cast<ITreeViewItem>().ToList();
 
         Parallel.ForEach(Directory.GetFiles(directoryPath), file =>
@@ -55,7 +64,12 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
 
         foreach (var resource in resources)
         {
-            items.Add(new TreeViewItem(directoryPath, resource.Key));
+            items.Add(new TreeViewItem
+            {
+                Id = directoryPath + Path.DirectorySeparatorChar + resource.Key,
+                Text = resource.Key,
+                IconCollapsed = new Icons.Regular.Size20.BookLetter()
+            });
 
             dispatcher.Dispatch(new AddResourceAction(new ResxFile
             {
