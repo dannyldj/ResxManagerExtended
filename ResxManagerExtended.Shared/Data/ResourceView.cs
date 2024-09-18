@@ -4,18 +4,13 @@ namespace ResxManagerExtended.Shared.Data;
 
 public class ResourceView
 {
-    public ResourceView()
+    public ResourceView(string key, CultureInfo culture, string? value)
     {
+        Key = key;
+        Columns[culture] = value;
     }
 
-    public ResourceView(CultureInfo culture, string? value)
-    {
-        AdditionalColumns[culture] = value;
-    }
+    public string Key { get; set; }
 
-    public required string Key { get; set; }
-
-    public string? DefaultValue { get; set; }
-
-    public Dictionary<CultureInfo, string?> AdditionalColumns { get; } = [];
+    public Dictionary<CultureInfo, string?> Columns { get; } = [];
 }

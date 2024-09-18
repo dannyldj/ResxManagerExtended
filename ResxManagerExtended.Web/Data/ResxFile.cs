@@ -1,26 +1,32 @@
 ﻿using System.Globalization;
 using System.Xml.Linq;
+using KristofferStrube.Blazor.FileSystem;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
-using static System.IO.Path;
 
-namespace ResxManagerExtended.Desktop.Data;
+namespace ResxManagerExtended.Web.Data;
 
 public class ResxFile : IResourceFile
 {
+    public IReadOnlyDictionary<CultureInfo, FileSystemFileHandleInProcess>? Handles { get; init; }
     public required string Path { get; init; }
 
     public required string Name { get; init; }
 
     public IEnumerable<CultureInfo>? Cultures { get; init; }
 
-    public Task<IEnumerable<ResourceView>> GetValues(CancellationToken token)
+    public async Task<IEnumerable<ResourceView>> GetValues(CancellationToken token)
     {
         var resources = new Dictionary<string, ResourceView>();
 
         foreach (var culture in Cultures ?? [])
         {
-            var document = XDocument.Load(Path + DirectorySeparatorChar + culture.GetResxFileName(Name));
+            if (Handles?.TryGetValue(culture, out var handle) is not true) continue;
+
+            await using var file = await handle.GetFileAsync();
+            await using var stream = await file.StreamAsync();
+
+            var document = await XDocument.LoadAsync(stream, LoadOptions.None, token);
             foreach (var (key, value) in document.GetResources(culture))
             {
                 if (resources.TryGetValue(key, out var view))
@@ -30,6 +36,6 @@ public class ResxFile : IResourceFile
             }
         }
 
-        return Task.FromResult<IEnumerable<ResourceView>>(resources.Values);
+        return resources.Values;
     }
 }

@@ -4,11 +4,11 @@ namespace ResxManagerExtended.Shared.Data;
 
 public interface IResourceFile
 {
-    string Path { get; init; }
+    string Path { get; }
 
-    string Name { get; init; }
+    string Name { get; }
 
-    IEnumerable<CultureInfo>? Cultures { get; init; }
+    IEnumerable<CultureInfo>? Cultures { get; }
 
-    Task<IEnumerable<ResourceView>> GetValues();
+    Task<IEnumerable<ResourceView>> GetValues(CancellationToken token = default);
 }

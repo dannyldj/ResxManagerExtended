@@ -7,7 +7,6 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.Win32;
 using ResxManagerExtended.Desktop.Data;
 using ResxManagerExtended.Shared.Constants;
-using ResxManagerExtended.Shared.Extensions;
 using ResxManagerExtended.Shared.Services;
 using ResxManagerExtended.Shared.Store.ResxManager;
 using ResxManagerExtended.Shared.Store.Settings.UseCase;
@@ -19,31 +18,28 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
     public Task<ITreeViewItem?> SetTopNode()
     {
         var dialog = new OpenFolderDialog();
-        var directoryPath = string.Empty;
-        if (dialog.ShowDialog() is true) directoryPath = dialog.FolderName;
+        if (dialog.ShowDialog() is not true)
+            return Task.FromResult<ITreeViewItem?>(null);
 
         dispatcher.Dispatch(new SetResourcesAction(null));
 
-        var root = new TreeViewItem
+        return Task.FromResult<ITreeViewItem?>(new TreeViewItem
         {
-            Id = directoryPath,
-            Text = Path.GetFileName(directoryPath),
-            Items = GetTreeItems(directoryPath),
+            Id = dialog.FolderName,
+            Text = Path.GetFileName(dialog.FolderName),
+            Items = GetTreeItems(dialog.FolderName),
             Expanded = true
-        };
-
-        return Task.FromResult<ITreeViewItem?>(root);
+        });
     }
 
     private List<ITreeViewItem> GetTreeItems(string directoryPath)
     {
-        var resources = new ConcurrentDictionary<string, List<CultureInfo>>();
+        var resources = new ConcurrentDictionary<string, IEnumerable<CultureInfo>>();
         var regex = new Regex(settingState.Value.Regex ?? DefaultSettings.DefaultResxRegex);
         var items = (from dir in Directory.GetDirectories(directoryPath)
                 let childNodes = GetTreeItems(dir)
                 where childNodes.Count > 0
-                select new TreeViewItem
-                    { Id = dir, Text = Path.GetFileName(dir), Items = childNodes, Expanded = false })
+                select new TreeViewItem(dir, Path.GetFileName(dir), childNodes))
             .Cast<ITreeViewItem>().ToList();
 
         Parallel.ForEach(Directory.GetFiles(directoryPath), file =>
@@ -54,19 +50,12 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
             var name = match.Groups[DefaultSettings.ResourceResxName].Value;
             var code = match.Groups[DefaultSettings.ResourceResxCode].Value;
 
-            if (resources.TryGetValue(name, out var codes))
-                codes.Add(new CultureInfo(code));
-            else
-                resources.AddOrUpdate(name, _ => [new CultureInfo(code)], (_, list) => [..list, new CultureInfo(code)]);
+            resources.AddOrUpdate(name, [new CultureInfo(code)], (_, list) => [..list, new CultureInfo(code)]);
         });
 
         foreach (var resource in resources)
         {
-            items.Add(new TreeViewItem
-            {
-                Id = directoryPath + resource + ResxExtension.FileExtension,
-                Text = resource.Key
-            });
+            items.Add(new TreeViewItem(directoryPath, resource.Key));
 
             dispatcher.Dispatch(new AddResourceAction(new ResxFile
             {

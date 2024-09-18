@@ -4,7 +4,7 @@ namespace ResxManagerExtended.Shared.Extensions;
 
 public static class ResxExtension
 {
-    public const string FileExtension = ".resx";
+    private const string FileExtension = ".resx";
 
     public static string GetResxFileName(this CultureInfo culture, string name)
     {
@@ -13,9 +13,6 @@ public static class ResxExtension
 
     public static bool IsUnderDirectory(this string firstPath, string secondPath)
     {
-        if (File.Exists(secondPath))
-            return firstPath.Equals(secondPath);
-
         if (firstPath.EndsWith(Path.DirectorySeparatorChar.ToString()) is false)
             firstPath += Path.DirectorySeparatorChar;
 

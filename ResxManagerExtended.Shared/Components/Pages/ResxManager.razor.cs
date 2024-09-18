@@ -34,6 +34,7 @@ public partial class ResxManager : FluxorComponent
     {
         _items = await GetDataGrid(item?.Id);
         _grid?.SetLoadingState(false);
+        StateHasChanged();
     }
 
     private async Task<IQueryable<ResourceView>> GetDataGrid(string? selectedPath = null)
