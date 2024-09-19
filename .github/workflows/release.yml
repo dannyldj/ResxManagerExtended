@@ -8,9 +8,8 @@ on:
 
 jobs:
   build:
-    needs: get-tag
     runs-on: ubuntu-latest
-    if: startsWith(env.BRANCH_NAME, 'release/')
+    if: startsWith(github.head_ref || github.ref_name, 'release/')
     env:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
       TAG: ${BRANCH_NAME##*/}
