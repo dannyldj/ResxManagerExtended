@@ -27,8 +27,9 @@
                 <FluentTreeView Items="[SettingState.Value.TopNode]" SelectedItemChanged="OnSelectedItemChanged"/>
             </Panel1>
             <Panel2>
-                <FluentDataGrid @ref="_grid" Items="@_items" GenerateHeader="GenerateHeaderOption.Sticky"
-                                ShowHover="true" Virtualize="true" ResizableColumns="true">
+                <FluentDataGrid @ref="_grid" Items="@_items" Loading="@_isLoading"
+                                ShowHover="true" Virtualize="true" ResizableColumns="true"
+                                GenerateHeader="GenerateHeaderOption.Sticky">
                     <ChildContent>
                         <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true"/>
 
