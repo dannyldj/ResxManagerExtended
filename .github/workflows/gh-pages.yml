@@ -20,7 +20,7 @@ jobs:
 
       # Publish the site
       - name: Publish
-        run: dotnet publish ${{ github.event.repository.name }}.sln -c:Release -o:publish -p:GHPages=true
+        run: dotnet publish ResxManagerExtended.Web/ResxManagerExtended.Web.csproj -c:Release -o:publish -p:GHPages=true
 
       # Deploy the site
       - name: Deploy
