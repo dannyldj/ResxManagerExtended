@@ -18,7 +18,7 @@ public partial class ResxManager : FluxorComponent
     private SortedSet<CultureInfo> _cultures = [];
     private bool _isLoading = true;
     private IQueryable<ResourceView> _items = Enumerable.Empty<ResourceView>().AsQueryable();
-    private bool _showPath;
+    private bool _showPath, _showComment;
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
 

@@ -34,6 +34,7 @@
                     <FluentStack VerticalAlignment="VerticalAlignment.Center"
                                  HorizontalGap="2" Style="padding:4px">
                         <FluentCheckbox @bind-Value="@_showPath" Label="@Loc["Path"]"/>
+                        <FluentCheckbox @bind-Value="@_showComment" Label="@Loc["Comment"]"/>
                     </FluentStack>
 
                     <div Style="height:100%;overflow:auto">
@@ -46,6 +47,11 @@
                                 @if (_showPath)
                                 {
                                     <PropertyColumn Width="200px" Title="@Loc["Path"]" Property="@(c => c.Path)"/>
+                                }
+                                
+                                @if (_showComment)
+                                {
+                                    <PropertyColumn Width="200px" Title="@Loc["Comment"]" Property="@(c => c.Comment)" />
                                 }
 
                                 @foreach (var culture in _cultures)
