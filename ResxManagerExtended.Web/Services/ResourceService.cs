@@ -73,11 +73,14 @@ internal class ResourceService(
                 case FileSystemHandleKind.Directory:
                     await using (var directory = await handle.GetDirectoryHandleAsync(entry.Name))
                     {
+                        var childNodes = await GetTreeItems(currentPath, directory);
+                        if (childNodes.Count <= 0) return;
+
                         items.Add(new TreeViewItem
                         {
                             Id = currentPath,
                             Text = entry.Name,
-                            Items = await GetTreeItems(currentPath, directory),
+                            Items = childNodes,
                             IconCollapsed = new Icons.Regular.Size20.Folder(),
                             IconExpanded = new Icons.Filled.Size20.Folder()
                         });
