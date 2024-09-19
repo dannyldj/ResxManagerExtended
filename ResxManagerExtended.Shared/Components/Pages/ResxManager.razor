@@ -1,0 +1,54 @@
+﻿@page "/resx-manager"
+@inherits FluxorComponent
+
+<PageTitle>@Loc["ResxManager"]</PageTitle>
+
+<FluentLayout>
+    <FluentLabel Typo="Typography.PaneHeader" MarginBlock="0 20px">
+        @Loc["ResxManager"]
+    </FluentLabel>
+
+    @if (SettingState.Value.TopNode is null)
+    {
+        @if (SettingState.Value.IsResourceLoading)
+        {
+            <FluentProgressRing/>
+        }
+        else
+        {
+            <FluentLabel>@Loc["DirectorySetupGuide"]</FluentLabel>
+        }
+    }
+    else
+    {
+        <FluentSplitter Panel1MinSize="250px" Panel1Size="25%"
+                        Style="height:-webkit-fill-available;overflow-y:auto">
+            <Panel1>
+                <FluentTreeView Items="[SettingState.Value.TopNode]" SelectedItemChanged="OnSelectedItemChanged"/>
+            </Panel1>
+            <Panel2>
+                <FluentDataGrid @ref="_grid" Items="@_items" GenerateHeader="GenerateHeaderOption.Sticky"
+                                ShowHover="true" Virtualize="true" ResizableColumns="true">
+                    <ChildContent>
+                        <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true"/>
+
+                        @foreach (var culture in _cultures)
+                        {
+                            <PropertyColumn Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"
+                                            Width="250px" Property="@(c => c.Columns.GetValueOrDefault(culture))"/>
+                        }
+                    </ChildContent>
+                    <EmptyContent>
+                        <FluentIcon Value="@(new Icons.Filled.Size24.Crown())" Color="@Color.Accent"/>&nbsp; @Loc["NothingHere"]
+                    </EmptyContent>
+                    <LoadingContent>
+                        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                            Loading...<br/>
+                            <FluentProgress Width="240px"/>
+                        </FluentStack>
+                    </LoadingContent>
+                </FluentDataGrid>
+            </Panel2>
+        </FluentSplitter>
+    }
+</FluentLayout>

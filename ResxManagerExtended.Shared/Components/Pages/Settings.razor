@@ -1,0 +1,36 @@
+﻿@page "/settings"
+@using ResxManagerExtended.Shared.Constants
+@inherits FluxorComponent
+
+<PageTitle>@Loc["Settings"]</PageTitle>
+
+<FluentStack Orientation="Orientation.Vertical"
+             VerticalGap="10" Style="max-width:600px">
+    <FluentLabel Typo="Typography.PaneHeader" MarginBlock="0 20px">
+        @Loc["Settings"]
+    </FluentLabel>
+
+    <FluentLayout>
+        <FluentLabel>@Loc["Language"]</FluentLabel>
+        <FluentSelect @bind-SelectedOption="_selectedCulture"
+                      @bind-SelectedOption:after="CultureChanged"
+                      Items="DefaultSettings.AvailableCultures"
+                      OptionText="@(option => option is null ? string.Empty : Loc[option.Name])"/>
+    </FluentLayout>
+
+    <FluentLayout>
+        <FluentLabel>@Loc["RootDirectory"]</FluentLabel>
+        <FluentButton Loading="SettingState.Value.IsResourceLoading"
+                      OnClick="@GetRootDirectory">
+            @(SettingState.Value.TopNode?.Text ?? Loc["SelectDirectory"])
+        </FluentButton>
+    </FluentLayout>
+
+    <FluentLayout>
+        <FluentLabel>@Loc["ResourceRegex"]</FluentLabel>
+        <FluentTextField @bind-Value:get="SettingState.Value.Regex"
+                         @bind-Value:set="ResourceRegexChanged"
+                         @ondblclick="OnClickResourceRegex"
+                         ReadOnly="_isReadOnlyResourceRegex"/>
+    </FluentLayout>
+</FluentStack>
