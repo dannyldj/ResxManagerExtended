@@ -29,12 +29,15 @@ public class ResxFile : IResourceFile
             var xml = await file.TextAsync();
 
             var document = XDocument.Parse(xml);
-            foreach (var (key, value) in document.GetResources(culture))
+            foreach (var (key, comment, value) in document.GetResources())
             {
                 if (resources.TryGetValue(key, out var view))
                     view.Columns[culture] = value;
                 else
                     resources.Add(key, new ResourceView(Path + DirectorySeparatorChar + Name, key, culture, value));
+
+                if (string.IsNullOrEmpty(culture.Name))
+                    resources[key].Comment = comment;
             }
         }
 

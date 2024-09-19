@@ -15,5 +15,7 @@ public class ResourceView
 
     public string Key { get; set; }
 
+    public string? Comment { get; set; }
+
     public Dictionary<CultureInfo, string?> Columns { get; } = [];
 }

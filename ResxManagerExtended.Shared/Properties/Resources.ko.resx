@@ -62,4 +62,7 @@
 	<data name="Path" xml:space="preserve">
 		<value>경로</value>
 	</data>
+	<data name="Comment" xml:space="preserve">
+		<value>설명</value>
+	</data>
 </root>
