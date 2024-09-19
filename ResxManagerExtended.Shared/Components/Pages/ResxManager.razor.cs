@@ -17,8 +17,17 @@ public partial class ResxManager : FluxorComponent
 {
     private SortedSet<CultureInfo> _cultures = [];
     private bool _isLoading = true;
-    private IQueryable<ResourceView> _items = Enumerable.Empty<ResourceView>().AsQueryable();
+    private IEnumerable<ResourceView> _items = [];
+    private string? _searchValue;
     private bool _showPath, _showComment;
+
+    private IQueryable<ResourceView> SearchedItems => string.IsNullOrEmpty(_searchValue)
+        ? _items.AsQueryable()
+        : _items.Where(item =>
+                item.Key.Contains(_searchValue, StringComparison.OrdinalIgnoreCase) ||
+                item.Columns.Any(e =>
+                    e.Value != null && e.Value.Contains(_searchValue, StringComparison.OrdinalIgnoreCase)))
+            .AsQueryable();
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
 
@@ -47,7 +56,6 @@ public partial class ResxManager : FluxorComponent
 
     private async Task GetDataGrid(string? selectedPath = null)
     {
-        var resources = new List<ResourceView>();
         _cultures = new SortedSet<CultureInfo>(new CultureComparer());
         _isLoading = true;
 
@@ -57,14 +65,14 @@ public partial class ResxManager : FluxorComponent
                 $"{valueResource.Path}{Path.DirectorySeparatorChar}{valueResource.Name}".IsUnderDirectory(selectedPath)
                     is false) continue;
 
-            resources.AddRange(await valueResource.GetValues());
+            _items = [.._items, ..await valueResource.GetValues()];
             foreach (var culture in valueResource.Cultures ?? [])
             {
                 _cultures.Add(culture);
             }
         }
 
-        _items = resources.AsQueryable();
+        _searchValue = string.Empty;
         _isLoading = false;
     }
 }

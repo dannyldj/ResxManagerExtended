@@ -33,12 +33,16 @@
                 <FluentLayout>
                     <FluentStack VerticalAlignment="VerticalAlignment.Center"
                                  HorizontalGap="2" Style="padding:4px">
-                        <FluentCheckbox @bind-Value="@_showPath" Label="@Loc["Path"]"/>
-                        <FluentCheckbox @bind-Value="@_showComment" Label="@Loc["Comment"]"/>
+                        <FluentCheckbox @bind-Value="_showPath" Label="@Loc["Path"]"/>
+                        <FluentCheckbox @bind-Value="_showComment" Label="@Loc["Comment"]"/>
+                        <FluentSpacer/>
+                        <FluentSearch @bind-Value="_searchValue"
+                                      Immediate="true" ImmediateDelay="300"
+                                      Placeholder="@Loc["SearchPlaceholder"]"/>
                     </FluentStack>
 
                     <div Style="height:100%;overflow:auto">
-                        <FluentDataGrid TGridItem="ResourceView" Items="@_items" Loading="@_isLoading"
+                        <FluentDataGrid TGridItem="ResourceView" Items="@SearchedItems" Loading="@_isLoading"
                                         ShowHover="true" Virtualize="true" ResizableColumns="true"
                                         GenerateHeader="GenerateHeaderOption.Sticky" Style="min-width:max-content">
                             <ChildContent>
