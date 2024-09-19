@@ -4,11 +4,14 @@ namespace ResxManagerExtended.Shared.Data;
 
 public class ResourceView
 {
-    public ResourceView(string key, CultureInfo culture, string? value)
+    public ResourceView(string path, string key, CultureInfo culture, string? value)
     {
+        Path = path;
         Key = key;
         Columns[culture] = value;
     }
+
+    public string Path { get; set; }
 
     public string Key { get; set; }
 

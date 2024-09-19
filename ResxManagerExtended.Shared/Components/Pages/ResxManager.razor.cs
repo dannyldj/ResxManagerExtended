@@ -15,10 +15,10 @@ namespace ResxManagerExtended.Shared.Components.Pages;
 
 public partial class ResxManager : FluxorComponent
 {
-    private bool _isLoading = true;
     private SortedSet<CultureInfo> _cultures = [];
-    private FluentDataGrid<ResourceView>? _grid;
+    private bool _isLoading = true;
     private IQueryable<ResourceView> _items = Enumerable.Empty<ResourceView>().AsQueryable();
+    private bool _showPath;
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
 

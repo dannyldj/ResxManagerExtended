@@ -26,7 +26,7 @@ public class ResxFile : IResourceFile
                 if (resources.TryGetValue(key, out var view))
                     view.Columns[culture] = value;
                 else
-                    resources.Add(key, new ResourceView(key, culture, value));
+                    resources.Add(key, new ResourceView(Path + DirectorySeparatorChar + Name, key, culture, value));
             }
         }
 
