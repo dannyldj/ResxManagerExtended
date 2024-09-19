@@ -29,21 +29,27 @@ public partial class ResxManager : FluxorComponent
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _items = await GetDataGrid();
-        _isLoading = false;
+        await GetDataGrid();
+
+        SettingState.StateChanged += SettingStateOnStateChanged;
+    }
+
+    private async void SettingStateOnStateChanged(object? sender, EventArgs e)
+    {
+        await GetDataGrid();
+        StateHasChanged();
     }
 
     private async Task OnSelectedItemChanged(ITreeViewItem? item)
     {
-        _isLoading = true;
-        _items = await GetDataGrid(item?.Id);
-        _isLoading = false;
+        await GetDataGrid(item?.Id);
     }
 
-    private async Task<IQueryable<ResourceView>> GetDataGrid(string? selectedPath = null)
+    private async Task GetDataGrid(string? selectedPath = null)
     {
         var resources = new List<ResourceView>();
         _cultures = new SortedSet<CultureInfo>(new CultureComparer());
+        _isLoading = true;
 
         foreach (var valueResource in ResxManagerState.Value.Resources ?? [])
         {
@@ -58,6 +64,7 @@ public partial class ResxManager : FluxorComponent
             }
         }
 
-        return resources.AsQueryable();
+        _items = resources.AsQueryable();
+        _isLoading = false;
     }
 }
