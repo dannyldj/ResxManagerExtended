@@ -171,4 +171,7 @@
     <data name="NothingHere" xml:space="preserve">
 	    <value>Nothing to see here. Carry on!</value>
     </data>
+    <data name="Path" xml:space="preserve">
+	    <value>Path</value>
+    </data>
 </root>

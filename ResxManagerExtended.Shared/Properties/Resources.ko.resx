@@ -59,4 +59,7 @@
 	<data name="NothingHere" xml:space="preserve">
 		<value>아무것도 없습니다. 다른 것을 선택해보세요!</value>
 	</data>
+	<data name="Path" xml:space="preserve">
+		<value>경로</value>
+	</data>
 </root>

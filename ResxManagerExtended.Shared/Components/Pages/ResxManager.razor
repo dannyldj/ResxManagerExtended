@@ -1,4 +1,5 @@
 ﻿@page "/resx-manager"
+@using ResxManagerExtended.Shared.Data
 @inherits FluxorComponent
 
 <PageTitle>@Loc["ResxManager"]</PageTitle>
@@ -24,31 +25,49 @@
         <FluentSplitter Panel1MinSize="250px" Panel1Size="25%"
                         Style="height:-webkit-fill-available;overflow-y:auto">
             <Panel1>
-                <FluentTreeView Items="[SettingState.Value.TopNode]" SelectedItemChanged="OnSelectedItemChanged"/>
+                <FluentTreeView Items="[SettingState.Value.TopNode]"
+                                SelectedItemChanged="OnSelectedItemChanged"
+                                Style="overflow:auto"/>
             </Panel1>
             <Panel2>
-                <FluentDataGrid @ref="_grid" Items="@_items" Loading="@_isLoading"
-                                ShowHover="true" Virtualize="true" ResizableColumns="true"
-                                GenerateHeader="GenerateHeaderOption.Sticky">
-                    <ChildContent>
-                        <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true"/>
+                <FluentLayout>
+                    <FluentStack VerticalAlignment="VerticalAlignment.Center"
+                                 HorizontalGap="2" Style="padding:4px">
+                        <FluentCheckbox @bind-Value="@_showPath" Label="@Loc["Path"]"/>
+                    </FluentStack>
 
-                        @foreach (var culture in _cultures)
-                        {
-                            <PropertyColumn Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"
-                                            Width="250px" Property="@(c => c.Columns.GetValueOrDefault(culture))"/>
-                        }
-                    </ChildContent>
-                    <EmptyContent>
-                        <FluentIcon Value="@(new Icons.Filled.Size24.Crown())" Color="@Color.Accent"/>&nbsp; @Loc["NothingHere"]
-                    </EmptyContent>
-                    <LoadingContent>
-                        <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
-                            Loading...<br/>
-                            <FluentProgress Width="240px"/>
-                        </FluentStack>
-                    </LoadingContent>
-                </FluentDataGrid>
+                    <div Style="height:100%;overflow:auto">
+                        <FluentDataGrid TGridItem="ResourceView" Items="@_items" Loading="@_isLoading"
+                                        ShowHover="true" Virtualize="true" ResizableColumns="true"
+                                        GenerateHeader="GenerateHeaderOption.Sticky" Style="min-width:max-content">
+                            <ChildContent>
+                                <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true"/>
+
+                                @if (_showPath)
+                                {
+                                    <PropertyColumn Width="200px" Title="@Loc["Path"]" Property="@(c => c.Path)"/>
+                                }
+
+                                @foreach (var culture in _cultures)
+                                {
+                                    <PropertyColumn Width="300px"
+                                                    Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"
+                                                    Property="@(c => c.Columns.GetValueOrDefault(culture))"
+                                                    TooltipText="@(c => c.Columns.GetValueOrDefault(culture))"/>
+                                }
+                            </ChildContent>
+                            <EmptyContent>
+                                <FluentIcon Value="@(new Icons.Filled.Size24.Crown())" Color="@Color.Accent"/>&nbsp; @Loc["NothingHere"]
+                            </EmptyContent>
+                            <LoadingContent>
+                                <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">
+                                    Loading...<br/>
+                                    <FluentProgress Width="240px"/>
+                                </FluentStack>
+                            </LoadingContent>
+                        </FluentDataGrid>
+                    </div>
+                </FluentLayout>
             </Panel2>
         </FluentSplitter>
     }
