@@ -35,7 +35,7 @@ internal class ResourceService(
                 Text = handle.Name,
                 Items = await GetTreeItems(handle.Name, handle),
                 IconCollapsed = new Icons.Regular.Size20.Folder(),
-                IconExpanded = new Icons.Filled.Size20.Folder(),
+                IconExpanded = new Icons.Regular.Size20.FolderOpen(),
                 Expanded = true
             };
         }
@@ -82,7 +82,7 @@ internal class ResourceService(
                             Text = entry.Name,
                             Items = childNodes,
                             IconCollapsed = new Icons.Regular.Size20.Folder(),
-                            IconExpanded = new Icons.Filled.Size20.Folder()
+                            IconExpanded = new Icons.Regular.Size20.FolderOpen()
                         });
                     }
 
