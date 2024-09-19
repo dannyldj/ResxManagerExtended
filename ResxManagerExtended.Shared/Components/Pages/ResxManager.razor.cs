@@ -15,6 +15,7 @@ namespace ResxManagerExtended.Shared.Components.Pages;
 
 public partial class ResxManager : FluxorComponent
 {
+    private bool _isLoading = true;
     private SortedSet<CultureInfo> _cultures = [];
     private FluentDataGrid<ResourceView>? _grid;
     private IQueryable<ResourceView> _items = Enumerable.Empty<ResourceView>().AsQueryable();
@@ -29,13 +30,14 @@ public partial class ResxManager : FluxorComponent
     {
         await base.OnInitializedAsync();
         _items = await GetDataGrid();
+        _isLoading = false;
     }
 
-    private async void OnSelectedItemChanged(ITreeViewItem? item)
+    private async Task OnSelectedItemChanged(ITreeViewItem? item)
     {
+        _isLoading = true;
         _items = await GetDataGrid(item?.Id);
-        _grid?.SetLoadingState(false);
-        StateHasChanged();
+        _isLoading = false;
     }
 
     private async Task<IQueryable<ResourceView>> GetDataGrid(string? selectedPath = null)
@@ -43,7 +45,6 @@ public partial class ResxManager : FluxorComponent
         var resources = new List<ResourceView>();
         _cultures = new SortedSet<CultureInfo>(new CultureComparer());
 
-        _grid?.SetLoadingState(true);
         foreach (var valueResource in ResxManagerState.Value.Resources ?? [])
         {
             if (selectedPath is not null &&

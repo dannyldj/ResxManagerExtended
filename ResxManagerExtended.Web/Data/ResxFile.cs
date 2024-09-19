@@ -24,9 +24,9 @@ public class ResxFile : IResourceFile
             if (Handles?.TryGetValue(culture, out var handle) is not true) continue;
 
             await using var file = await handle.GetFileAsync();
-            await using var stream = await file.StreamAsync();
+            var xml = await file.TextAsync();
 
-            var document = await XDocument.LoadAsync(stream, LoadOptions.None, token);
+            var document = XDocument.Parse(xml);
             foreach (var (key, value) in document.GetResources(culture))
             {
                 if (resources.TryGetValue(key, out var view))
