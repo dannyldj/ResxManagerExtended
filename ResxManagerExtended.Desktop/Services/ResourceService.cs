@@ -29,7 +29,7 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
             Text = Path.GetFileName(dialog.FolderName),
             Items = GetTreeItems(dialog.FolderName),
             IconCollapsed = new Icons.Regular.Size20.Folder(),
-            IconExpanded = new Icons.Filled.Size20.Folder(),
+            IconExpanded = new Icons.Regular.Size20.FolderOpen(),
             Expanded = true
         });
     }
@@ -47,7 +47,7 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
                     Text = Path.GetFileName(dir),
                     Items = childNodes,
                     IconCollapsed = new Icons.Regular.Size20.Folder(),
-                    IconExpanded = new Icons.Filled.Size20.Folder()
+                    IconExpanded = new Icons.Regular.Size20.FolderOpen()
                 })
             .Cast<ITreeViewItem>().ToList();
 
