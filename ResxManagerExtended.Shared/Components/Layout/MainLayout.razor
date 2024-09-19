@@ -1,13 +1,15 @@
-﻿@inherits LayoutComponentBase
+﻿@using ResxManagerExtended.Shared.Constants
+@inherits LayoutComponentBase
 
 <FluentMainLayout>
     <Header>
-        Resx Manager Extended
+        ResxManager Extended
     </Header>
     <Body>
     <ErrorBoundary>
         <ChildContent>
             <div class="content">
+                <FluentMessageBarProvider Section="@MessageBarSection.SectionTop"/>
                 @Body
             </div>
         </ChildContent>

@@ -174,4 +174,19 @@
   <data name="SearchPlaceholder" xml:space="preserve">
 	  <value>Type to search</value>
   </data>
+  <data name="BrowserCompatibility" xml:space="preserve">
+	  <value>Browser Compatibility</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+	  <value>This tool was created to ease the burden of the suffering resource worker.</value>
+  </data>
+  <data name="NoticeWeb" xml:space="preserve">
+	  <value>The web experience is not recommended due to lack of compatibility and poor performance.</value>
+  </data>
+  <data name="LearnMore" xml:space="preserve">
+	  <value>Learn more</value>
+  </data>
+  <data name="HavingTrouble" xml:space="preserve">
+	  <value>Having trouble?</value>
+  </data>
 </root>

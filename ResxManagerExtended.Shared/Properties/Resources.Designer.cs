@@ -61,6 +61,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Browser Compatibility.
+        /// </summary>
+        public static string BrowserCompatibility {
+            get {
+                return ResourceManager.GetString("BrowserCompatibility", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string Comment {
@@ -79,6 +88,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This tool was created to ease the burden of the suffering resource worker..
+        /// </summary>
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No path specified, please specify a path..
         /// </summary>
         public static string DirectorySetupGuide {
@@ -93,6 +111,15 @@ namespace ResxManagerExtended.Shared.Properties {
         public static string en {
             get {
                 return ResourceManager.GetString("en", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Having trouble?.
+        /// </summary>
+        public static string HavingTrouble {
+            get {
+                return ResourceManager.GetString("HavingTrouble", resourceCulture);
             }
         }
         
@@ -124,6 +151,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Learn more.
+        /// </summary>
+        public static string LearnMore {
+            get {
+                return ResourceManager.GetString("LearnMore", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Neutural Value.
         /// </summary>
         public static string NeuturalValue {
@@ -147,6 +183,15 @@ namespace ResxManagerExtended.Shared.Properties {
         public static string NothingHere {
             get {
                 return ResourceManager.GetString("NothingHere", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to The web experience is not recommended due to lack of compatibility and poor performance..
+        /// </summary>
+        public static string NoticeWeb {
+            get {
+                return ResourceManager.GetString("NoticeWeb", resourceCulture);
             }
         }
         
