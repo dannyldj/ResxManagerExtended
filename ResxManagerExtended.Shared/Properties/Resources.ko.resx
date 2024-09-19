@@ -65,4 +65,7 @@
 	<data name="Comment" xml:space="preserve">
 		<value>설명</value>
 	</data>
+	<data name="SearchPlaceholder" xml:space="preserve">
+		<value>검색어를 입력해주세요</value>
+	</data>
 </root>

@@ -171,4 +171,7 @@
   <data name="Comment" xml:space="preserve">
 	  <value>Comment</value>
   </data>
+  <data name="SearchPlaceholder" xml:space="preserve">
+	  <value>Type to search</value>
+  </data>
 </root>

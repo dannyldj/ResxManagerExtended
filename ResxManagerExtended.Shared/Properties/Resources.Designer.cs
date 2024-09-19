@@ -187,6 +187,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Type to search.
+        /// </summary>
+        public static string SearchPlaceholder {
+            get {
+                return ResourceManager.GetString("SearchPlaceholder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select Directory.
         /// </summary>
         public static string SelectDirectory {
