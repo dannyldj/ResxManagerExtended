@@ -8,16 +8,14 @@ on:
 
 jobs:
   build:
+    needs: get-tag
     runs-on: ubuntu-latest
+    if: startsWith(env.BRANCH_NAME, 'release/')
+    env:
+      BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
+      TAG: ${BRANCH_NAME##*/}
     steps:
       - uses: actions/checkout@v4
-      
-      - name: Get branch names
-        id: branch-name
-        uses: tj-actions/branch-names@v8
-
-      - name: Extract version from branch
-        run: echo "TAG=$(echo '${{ steps.branch-name.outputs.current_branch }}' | rev | cut -d'/' -f1 | rev)" >> $GITHUB_ENV
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
