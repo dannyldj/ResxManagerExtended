@@ -25,7 +25,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Publish
-        run: dotnet publish ResxManagerExtended.Desktop/ResxManagerExtended.Desktop.csproj -r:win-x86 -c:Release -o:publish -p:PublishSingleFile=true
+        run: dotnet publish ResxManagerExtended.Desktop/ResxManagerExtended.Desktop.csproj -r:win-x86 -c:Release -o:publish -p:PublishSingleFile=true -p:EnableWindowsTargeting=true
 
       - name: Make compressed file from Publish
         run: tar -cvf publish.tar publish
