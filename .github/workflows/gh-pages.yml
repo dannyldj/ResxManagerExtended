@@ -33,14 +33,8 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - name: Change base-tag in index.html
-        run: sed -i 's/<base href="\/" \/>/<base href="\/${{ github.event.repository.name }}\/" \/>/g' ResxManagerExtended.Web/wwwroot/index.html
       - name: Publish
-        run: dotnet publish ResxManagerExtended.Web/ResxManagerExtended.Web.csproj -c:Release -o:_site
-      - name: Create .nojekyll file
-        run: touch _site/wwwroot/.nojekyll
-      - name: Copy index.html to 404.html
-        run: cp _site/wwwroot/index.html _site/wwwroot/404.html
+        run: dotnet publish ResxManagerExtended.Web/ResxManagerExtended.Web.csproj -c:Release -o:_site -p:GHPages=true
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
