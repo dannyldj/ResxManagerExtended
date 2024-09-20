@@ -51,19 +51,19 @@ public partial class ResxManager : FluxorComponent
 
     private async Task OnSelectedItemChanged(ITreeViewItem? item)
     {
-        await GetDataGrid(item?.Id);
+        await GetDataGrid(item);
     }
 
-    private async Task GetDataGrid(string? selectedPath = null)
+    private async Task GetDataGrid(ITreeViewItem? selectedNode = null)
     {
-        _cultures = new SortedSet<CultureInfo>(new CultureComparer());
         _isLoading = true;
+        _items = [];
+        _cultures = new SortedSet<CultureInfo>(new CultureComparer());
 
         foreach (var valueResource in ResxManagerState.Value.Resources ?? [])
         {
-            if (selectedPath is not null &&
-                $"{valueResource.Path}{Path.DirectorySeparatorChar}{valueResource.Name}".IsUnderDirectory(selectedPath)
-                    is false) continue;
+            if (selectedNode is not null &&
+                valueResource.GetFullPath().IsUnderDirectory(selectedNode.Text) is false) continue;
 
             _items = [.._items, ..await valueResource.GetValues()];
             foreach (var culture in valueResource.Cultures ?? [])

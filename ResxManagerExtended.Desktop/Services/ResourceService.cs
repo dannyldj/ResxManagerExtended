@@ -25,8 +25,7 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
 
         return Task.FromResult<ITreeViewItem?>(new TreeViewItem
         {
-            Id = dialog.FolderName,
-            Text = Path.GetFileName(dialog.FolderName),
+            Text = dialog.FolderName,
             Items = GetTreeItems(dialog.FolderName),
             IconCollapsed = new Icons.Regular.Size20.Folder(),
             IconExpanded = new Icons.Regular.Size20.FolderOpen(),
@@ -43,8 +42,7 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
                 where childNodes.Count > 0
                 select new TreeViewItem
                 {
-                    Id = dir,
-                    Text = Path.GetFileName(dir),
+                    Text = dir,
                     Items = childNodes,
                     IconCollapsed = new Icons.Regular.Size20.Folder(),
                     IconExpanded = new Icons.Regular.Size20.FolderOpen()
@@ -66,8 +64,7 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
         {
             items.Add(new TreeViewItem
             {
-                Id = directoryPath + Path.DirectorySeparatorChar + resource.Key,
-                Text = resource.Key,
+                Text = directoryPath + Path.DirectorySeparatorChar + resource.Key,
                 IconCollapsed = new Icons.Regular.Size20.BookLetter()
             });
 

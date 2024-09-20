@@ -27,7 +27,11 @@
             <Panel1>
                 <FluentTreeView Items="[SettingState.Value.TopNode]"
                                 SelectedItemChanged="OnSelectedItemChanged"
-                                Style="overflow:auto"/>
+                                LazyLoadItems="true" Style="overflow:auto">
+                    <ItemTemplate>
+                        @context.Text.Split(Path.DirectorySeparatorChar).Last()
+                    </ItemTemplate>
+                </FluentTreeView>
             </Panel1>
             <Panel2>
                 <FluentLayout>
@@ -67,7 +71,7 @@
                                 }
                             </ChildContent>
                             <EmptyContent>
-                                <FluentIcon Value="@(new Icons.Filled.Size24.Crown())" Color="@Color.Accent"/>&nbsp; @Loc["NothingHere"]
+                                <FluentIcon Value="new Icons.Filled.Size24.Snooze()" Color="@Color.Accent"/>&nbsp; @Loc["NothingHere"]
                             </EmptyContent>
                             <LoadingContent>
                                 <FluentStack Orientation="Orientation.Vertical" HorizontalAlignment="HorizontalAlignment.Center">

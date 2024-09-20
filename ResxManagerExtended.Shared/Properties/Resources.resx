@@ -121,7 +121,7 @@
     <value>Settings</value>
   </data>
   <data name="ResxManager" xml:space="preserve">
-	  <value>Resource Manager</value>
+    <value>Resource Manager</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
@@ -132,17 +132,17 @@
   <data name="DirectorySetupGuide" xml:space="preserve">
     <value>No path specified, please specify a path.</value>
   </data>
-  <data name="RootDirectory" xml:space="preserve">
-    <value>Root Directory</value>
+  <data name="ResourceDirectory" xml:space="preserve">
+    <value>Resource Directory</value>
   </data>
   <data name="ResourceRegex" xml:space="preserve">
     <value>Resource Regex</value>
   </data>
   <data name="ConfirmEditSettings" xml:space="preserve">
-	  <value>If you change that setting, Resource Manager might not work. Do you understand the features correctly?</value>
+    <value>If you change that setting, Resource Manager might not work. Do you understand the features correctly?</value>
   </data>
   <data name="Yes" xml:space="preserve">
-	  <value>Yes</value>
+    <value>Yes</value>
   </data>
   <data name="No" xml:space="preserve">
     <value>No</value>
@@ -169,24 +169,27 @@
     <value>Path</value>
   </data>
   <data name="Comment" xml:space="preserve">
-	  <value>Comment</value>
+    <value>Comment</value>
   </data>
   <data name="SearchPlaceholder" xml:space="preserve">
-	  <value>Type to search</value>
+    <value>Type to search</value>
   </data>
   <data name="BrowserCompatibility" xml:space="preserve">
-	  <value>Browser Compatibility</value>
+    <value>Browser Compatibility</value>
   </data>
   <data name="Description" xml:space="preserve">
-	  <value>This tool was created to ease the burden of the suffering resource worker.</value>
+    <value>This tool was created to ease the burden of the suffering resource worker.</value>
   </data>
   <data name="NoticeWeb" xml:space="preserve">
-	  <value>The web experience is not recommended due to lack of compatibility and poor performance.</value>
+    <value>The web experience is not recommended due to lack of compatibility and poor performance.</value>
   </data>
   <data name="LearnMore" xml:space="preserve">
-	  <value>Learn more</value>
+    <value>Learn more</value>
   </data>
   <data name="HavingTrouble" xml:space="preserve">
-	  <value>Having trouble?</value>
+    <value>Having trouble?</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Delete</value>
   </data>
 </root>
