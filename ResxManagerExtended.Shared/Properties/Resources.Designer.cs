@@ -79,11 +79,20 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you change that setting, Resx Manager might not work. Do you understand the features correctly?.
+        ///   Looks up a localized string similar to If you change that setting, Resource Manager might not work. Do you understand the features correctly?.
         /// </summary>
         public static string ConfirmEditSettings {
             get {
                 return ResourceManager.GetString("ConfirmEditSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete.
+        /// </summary>
+        public static string Delete {
+            get {
+                return ResourceManager.GetString("Delete", resourceCulture);
             }
         }
         
@@ -205,6 +214,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Resource Directory.
+        /// </summary>
+        public static string ResourceDirectory {
+            get {
+                return ResourceManager.GetString("ResourceDirectory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resource Regex.
         /// </summary>
         public static string ResourceRegex {
@@ -214,20 +232,11 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Resx Manager.
+        ///   Looks up a localized string similar to Resource Manager.
         /// </summary>
         public static string ResxManager {
             get {
                 return ResourceManager.GetString("ResxManager", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Root Directory.
-        /// </summary>
-        public static string RootDirectory {
-            get {
-                return ResourceManager.GetString("RootDirectory", resourceCulture);
             }
         }
         

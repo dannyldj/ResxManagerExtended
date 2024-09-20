@@ -5,13 +5,13 @@
 <PageTitle>@Loc["Settings"]</PageTitle>
 
 <FluentStack Orientation="Orientation.Vertical"
-             VerticalGap="10" Style="max-width:600px">
+             VerticalGap="16" Style="max-width:600px">
     <FluentLabel Typo="Typography.PaneHeader" MarginBlock="0 20px">
         @Loc["Settings"]
     </FluentLabel>
 
     <FluentLayout>
-        <FluentLabel>@Loc["Language"]</FluentLabel>
+        <FluentLabel Typo="Typography.Subject" MarginBlock="0 4px">@Loc["Language"]</FluentLabel>
         <FluentSelect @bind-SelectedOption="_selectedCulture"
                       @bind-SelectedOption:after="CultureChanged"
                       Items="DefaultSettings.AvailableCultures"
@@ -20,15 +20,29 @@
     </FluentLayout>
 
     <FluentLayout>
-        <FluentLabel>@Loc["RootDirectory"]</FluentLabel>
-        <FluentButton Loading="SettingState.Value.IsResourceLoading"
-                      OnClick="@GetRootDirectory">
-            @(SettingState.Value.TopNode?.Text ?? Loc["SelectDirectory"])
-        </FluentButton>
+        <FluentLabel Typo="Typography.Subject" MarginBlock="0 4px">@Loc["ResourceDirectory"]</FluentLabel>
+        <FluentCard>
+            <FluentStack HorizontalGap="4" VerticalAlignment="VerticalAlignment.Center">
+                @if (SettingState.Value.TopNode is null)
+                {
+                    <FluentIcon Value="new Icons.Filled.Size24.Snooze()" Style="margin-right:4px" />
+                    <FluentLabel>@Loc["NothingHere"]</FluentLabel>
+                }
+                else
+                {
+                    <FluentLabel>@SettingState.Value.TopNode.Text</FluentLabel>
+                }
+                <FluentSpacer/>
+                <FluentButton IconStart="new Icons.Filled.Size20.FolderOpen()"
+                              Title="@Loc["SelectDirectory"]"
+                              Loading="SettingState.Value.IsResourceLoading"
+                              OnClick="GetRootDirectory"/>
+            </FluentStack>
+        </FluentCard>
     </FluentLayout>
 
     <FluentLayout>
-        <FluentLabel>@Loc["ResourceRegex"]</FluentLabel>
+        <FluentLabel Typo="Typography.Subject" MarginBlock="0 4px">@Loc["ResourceRegex"]</FluentLabel>
         <FluentTextField @bind-Value:get="SettingState.Value.Regex"
                          @bind-Value:set="ResourceRegexChanged"
                          @ondblclick="OnClickResourceRegex"
