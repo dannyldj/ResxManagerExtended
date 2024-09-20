@@ -121,7 +121,7 @@
     <value>Settings</value>
   </data>
   <data name="ResxManager" xml:space="preserve">
-    <value>Resx Manager</value>
+	  <value>Resource Manager</value>
   </data>
   <data name="Home" xml:space="preserve">
     <value>Home</value>
@@ -139,7 +139,7 @@
     <value>Resource Regex</value>
   </data>
   <data name="ConfirmEditSettings" xml:space="preserve">
-    <value>If you change that setting, Resx Manager might not work. Do you understand the features correctly?</value>
+	  <value>If you change that setting, Resource Manager might not work. Do you understand the features correctly?</value>
   </data>
   <data name="Yes" xml:space="preserve">
 	  <value>Yes</value>
