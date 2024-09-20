@@ -33,7 +33,7 @@ public partial class Settings : FluxorComponent
     protected override void OnInitialized()
     {
         base.OnInitialized();
-        _selectedCulture = CultureInfo.CurrentCulture;
+        _selectedCulture = CultureInfo.GetCultureInfo(CultureInfo.CurrentCulture.TwoLetterISOLanguageName);
     }
 
     private async Task CultureChanged()

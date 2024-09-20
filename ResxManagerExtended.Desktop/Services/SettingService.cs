@@ -1,4 +1,5 @@
-﻿using ResxManagerExtended.Desktop.Properties;
+﻿using System.Configuration;
+using ResxManagerExtended.Desktop.Properties;
 using ResxManagerExtended.Shared.Services;
 
 namespace ResxManagerExtended.Desktop.Services;
@@ -13,12 +14,16 @@ internal class SettingService : ISettingService
 
     public Task SetOptionAsStringAsync(string key, string value)
     {
-        if (Settings.Default.SettingsKey.Contains(key) is false)
+        try
+        {
+            Settings.Default[key] = value;
+            Settings.Default.Save();
+            return Task.CompletedTask;
+        }
+        catch (SettingsPropertyNotFoundException ex)
+        {
             // Not support setting key
-            throw new ArgumentOutOfRangeException(nameof(key));
-
-        Settings.Default[key] = value;
-        Settings.Default.Save();
-        return Task.CompletedTask;
+            return Task.FromException(ex);
+        }
     }
 }

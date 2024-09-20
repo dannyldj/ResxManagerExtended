@@ -1,5 +1,7 @@
 ﻿using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
+using ResxManagerExtended.Desktop.Properties;
+using ResxManagerExtended.Shared.Constants;
 
 namespace ResxManagerExtended.Desktop;
 
@@ -18,5 +20,13 @@ public partial class App : Application
         serviceCollection.ConfigureServices(false);
 #endif
         Resources.Add("services", serviceCollection.BuildServiceProvider());
+
+        SetCulture();
+    }
+
+    private static void SetCulture()
+    {
+        Settings.Default.BlazorCulture = DefaultSettings.DefaultCulture.Name;
+        Settings.Default.Save();
     }
 }
