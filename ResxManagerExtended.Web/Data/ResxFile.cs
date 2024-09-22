@@ -3,12 +3,14 @@ using System.Xml.Linq;
 using KristofferStrube.Blazor.FileSystem;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
+using static System.IO.Path;
 
 namespace ResxManagerExtended.Web.Data;
 
 public class ResxFile : IResourceFile
 {
     public IReadOnlyDictionary<CultureInfo, FileSystemFileHandleInProcess>? Handles { get; init; }
+
     public required string Path { get; init; }
 
     public required string Name { get; init; }
@@ -27,12 +29,15 @@ public class ResxFile : IResourceFile
             var xml = await file.TextAsync();
 
             var document = XDocument.Parse(xml);
-            foreach (var (key, value) in document.GetResources(culture))
+            foreach (var (key, comment, value) in document.GetResources())
             {
                 if (resources.TryGetValue(key, out var view))
                     view.Columns[culture] = value;
                 else
-                    resources.Add(key, new ResourceView(key, culture, value));
+                    resources.Add(key, new ResourceView(Path + DirectorySeparatorChar + Name, key, culture, value));
+
+                if (string.IsNullOrEmpty(culture.Name))
+                    resources[key].Comment = comment;
             }
         }
 

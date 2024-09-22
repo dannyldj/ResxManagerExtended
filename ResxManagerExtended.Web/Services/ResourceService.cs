@@ -31,11 +31,10 @@ internal class ResourceService(
 
             return new TreeViewItem
             {
-                Id = handle.Name,
                 Text = handle.Name,
                 Items = await GetTreeItems(handle.Name, handle),
                 IconCollapsed = new Icons.Regular.Size20.Folder(),
-                IconExpanded = new Icons.Filled.Size20.Folder(),
+                IconExpanded = new Icons.Regular.Size20.FolderOpen(),
                 Expanded = true
             };
         }
@@ -78,11 +77,10 @@ internal class ResourceService(
 
                         items.Add(new TreeViewItem
                         {
-                            Id = currentPath,
-                            Text = entry.Name,
+                            Text = currentPath,
                             Items = childNodes,
                             IconCollapsed = new Icons.Regular.Size20.Folder(),
-                            IconExpanded = new Icons.Filled.Size20.Folder()
+                            IconExpanded = new Icons.Regular.Size20.FolderOpen()
                         });
                     }
 
@@ -96,8 +94,7 @@ internal class ResourceService(
         {
             items.Add(new TreeViewItem
             {
-                Id = directoryPath + Path.DirectorySeparatorChar + resource.Key,
-                Text = resource.Key,
+                Text = directoryPath + Path.DirectorySeparatorChar + resource.Key,
                 IconCollapsed = new Icons.Regular.Size20.BookLetter()
             });
 
