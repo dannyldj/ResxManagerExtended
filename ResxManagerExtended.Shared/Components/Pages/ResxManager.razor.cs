@@ -15,10 +15,19 @@ namespace ResxManagerExtended.Shared.Components.Pages;
 
 public partial class ResxManager : FluxorComponent
 {
-    private bool _isLoading = true;
     private SortedSet<CultureInfo> _cultures = [];
-    private FluentDataGrid<ResourceView>? _grid;
-    private IQueryable<ResourceView> _items = Enumerable.Empty<ResourceView>().AsQueryable();
+    private bool _isLoading = true;
+    private IEnumerable<ResourceView> _items = [];
+    private string? _searchValue;
+    private bool _showPath, _showComment;
+
+    private IQueryable<ResourceView> SearchedItems => string.IsNullOrEmpty(_searchValue)
+        ? _items.AsQueryable()
+        : _items.Where(item =>
+                item.Key.Contains(_searchValue, StringComparison.OrdinalIgnoreCase) ||
+                item.Columns.Any(e =>
+                    e.Value != null && e.Value.Contains(_searchValue, StringComparison.OrdinalIgnoreCase)))
+            .AsQueryable();
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
 
@@ -29,35 +38,41 @@ public partial class ResxManager : FluxorComponent
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
-        _items = await GetDataGrid();
-        _isLoading = false;
+        await GetDataGrid();
+
+        SettingState.StateChanged += SettingStateOnStateChanged;
+    }
+
+    private async void SettingStateOnStateChanged(object? sender, EventArgs e)
+    {
+        await GetDataGrid();
+        StateHasChanged();
     }
 
     private async Task OnSelectedItemChanged(ITreeViewItem? item)
     {
-        _isLoading = true;
-        _items = await GetDataGrid(item?.Id);
-        _isLoading = false;
+        await GetDataGrid(item);
     }
 
-    private async Task<IQueryable<ResourceView>> GetDataGrid(string? selectedPath = null)
+    private async Task GetDataGrid(ITreeViewItem? selectedNode = null)
     {
-        var resources = new List<ResourceView>();
+        _isLoading = true;
+        _items = [];
         _cultures = new SortedSet<CultureInfo>(new CultureComparer());
 
         foreach (var valueResource in ResxManagerState.Value.Resources ?? [])
         {
-            if (selectedPath is not null &&
-                $"{valueResource.Path}{Path.DirectorySeparatorChar}{valueResource.Name}".IsUnderDirectory(selectedPath)
-                    is false) continue;
+            if (selectedNode is not null &&
+                valueResource.GetFullPath().IsUnderDirectory(selectedNode.Text) is false) continue;
 
-            resources.AddRange(await valueResource.GetValues());
+            _items = [.._items, ..await valueResource.GetValues()];
             foreach (var culture in valueResource.Cultures ?? [])
             {
                 _cultures.Add(culture);
             }
         }
 
-        return resources.AsQueryable();
+        _searchValue = string.Empty;
+        _isLoading = false;
     }
 }
