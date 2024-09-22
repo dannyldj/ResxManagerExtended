@@ -12,7 +12,6 @@ jobs:
     if: startsWith(github.head_ref || github.ref_name, 'release/')
     env:
       BRANCH_NAME: ${{ github.head_ref || github.ref_name }}
-      TAG: ${BRANCH_NAME##*/}
     steps:
       - uses: actions/checkout@v4
 
@@ -34,8 +33,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ env.TAG }}
-          release_name: ${{ env.TAG }}
+          tag_name: ${BRANCH_NAME##*/}
+          release_name: ${BRANCH_NAME##*/}
 
       - name: Upload Release Asset
         id: upload-release-asset
@@ -45,5 +44,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
           asset_path: ./publish.tar
-          asset_name: rme.${{ env.TAG }}.portable.tar
+          asset_name: rme.${BRANCH_NAME##*/}.portable.tar
           asset_content_type: application/x-tar
