@@ -47,5 +47,5 @@ jobs:
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }} 
           asset_path: ./publish.tar
-          asset_name: rme.${{ env.TAG }}.portable.tar
+          asset_name: rmx.${{ env.TAG }}.portable.tar
           asset_content_type: application/x-tar
