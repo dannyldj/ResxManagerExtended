@@ -1,12 +1,16 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
+using CsvHelper;
 using Fluxor;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.Win32;
 using ResxManagerExtended.Desktop.Data;
 using ResxManagerExtended.Shared.Constants;
+using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
 using ResxManagerExtended.Shared.Services;
 using ResxManagerExtended.Shared.Store;
@@ -37,6 +41,22 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
         dispatcher.Dispatch(new SetResourcesAction(_resxFiles));
 
         return Task.FromResult<ITreeViewItem?>(root);
+    }
+
+    public Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
+        CancellationToken token)
+    {
+        var dialog = new SaveFileDialog
+        {
+            Filter = "CSV File|*.csv"
+        };
+        if (dialog.ShowDialog() is not true) return Task.FromCanceled(token);
+
+        using var writer = new StreamWriter(dialog.FileName, true, Encoding.UTF8);
+        using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+        csv.ExportCsv(cultures, resources);
+        return Task.CompletedTask;
     }
 
     private List<ITreeViewItem> GetTreeItems(string directoryPath)

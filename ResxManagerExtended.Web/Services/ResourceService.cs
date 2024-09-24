@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using System.Collections.Immutable;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Fluxor;
@@ -7,6 +8,7 @@ using KristofferStrube.Blazor.FileSystemAccess;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.JSInterop;
 using ResxManagerExtended.Shared.Constants;
+using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Services;
 using ResxManagerExtended.Shared.Store;
 using ResxManagerExtended.Shared.Store.UseCase;
@@ -19,8 +21,6 @@ internal class ResourceService(
     IDispatcher dispatcher,
     IState<ResourceState> resourceState) : IResourceService
 {
-    private record Resource(CultureInfo Culture, FileSystemFileHandleInProcess Handle);
-
     private readonly List<ResxFile> _resxFiles = [];
 
     public async Task<ITreeViewItem?> SetTopNode()
@@ -46,6 +46,12 @@ internal class ResourceService(
             // Closing the DirectoryPicker throws an exception.
             return null;
         }
+    }
+
+    public Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
+        CancellationToken token)
+    {
+        throw new NotImplementedException();
     }
 
     private async Task<List<ITreeViewItem>> GetTreeItems(string directoryPath,
@@ -112,4 +118,6 @@ internal class ResourceService(
 
         return items;
     }
+
+    private record Resource(CultureInfo Culture, FileSystemFileHandleInProcess Handle);
 }

@@ -28,4 +28,10 @@ public class Effects(IResourceService resourceService, ISettingService settingSe
         await settingService.SetOptionAsStringAsync(SettingKeys.ResourceRegexKey, action.Regex);
         dispatcher.Dispatch(new RegexResultAction(action.Regex));
     }
+
+    [EffectMethod]
+    public async Task HandleExportAction(ExportAction action, IDispatcher dispatcher)
+    {
+        await resourceService.ExportResources(action.Cultures, action.Resources);
+    }
 }

@@ -36,13 +36,38 @@
             <Panel2>
                 <FluentLayout>
                     <FluentStack VerticalAlignment="VerticalAlignment.Center"
-                                 HorizontalGap="2" Style="padding:0 0 4px 8px">
+                                 HorizontalGap="4" Style="padding:0 0 4px 8px">
                         <FluentCheckbox @bind-Value="_showPath" Label="@Loc["Path"]"/>
                         <FluentCheckbox @bind-Value="_showComment" Label="@Loc["Comment"]"/>
                         <FluentSpacer/>
                         <FluentSearch @bind-Value="_searchValue"
                                       Immediate="true" ImmediateDelay="300"
                                       Placeholder="@Loc["SearchPlaceholder"]"/>
+                        <FluentButton Id="importOrExport" Appearance="Appearance.Accent"
+                                      IconStart="new Icons.Regular.Size16.ArrowDownload()"
+                                      IconEnd="new Icons.Regular.Size16.ArrowExportUp()"
+                                      Title="@($"{Loc["Import"]} / {Loc["Export"]}")"
+                                      OnClick="() => _showPopover = !_showPopover">
+                            |
+                        </FluentButton>
+                        <FluentPopover VerticalThreshold="170" AnchorId="importOrExport" @bind-Open="_showPopover">
+                            <Body>
+                            <FluentStack>
+                                <FluentRadioGroup @bind-Value="_popoverType">
+                                    <FluentRadio Value="PopoverType.Import">@Loc["Import"]</FluentRadio>
+                                    <FluentRadio Value="PopoverType.Export">@Loc["Export"]</FluentRadio>
+                                </FluentRadioGroup>
+                            </FluentStack>
+                            </Body>
+                            <Footer>
+                                <FluentStack HorizontalAlignment="HorizontalAlignment.Right">
+                                    <FluentButton Appearance="Appearance.Accent"
+                                                  OnClick="OnConfirm">
+                                        @Loc["Confirm"]
+                                    </FluentButton>
+                                </FluentStack>
+                            </Footer>
+                        </FluentPopover>
                     </FluentStack>
 
                     <div Style="height:100%;overflow:auto">
