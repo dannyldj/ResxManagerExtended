@@ -1,12 +1,15 @@
 using Fluxor;
 using Microsoft.FluentUI.AspNetCore.Components;
+using ResxManagerExtended.Shared.Data;
 
-namespace ResxManagerExtended.Shared.Store.Settings.UseCase;
+namespace ResxManagerExtended.Shared.Store.UseCase;
 
 [FeatureState]
-public record SettingState
+public record ResourceState
 {
     public ITreeViewItem? TopNode { get; init; }
+
+    public IEnumerable<IResourceFile>? Resources { get; init; }
 
     public bool IsResourceLoading { get; init; }
 

@@ -7,36 +7,42 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.Win32;
 using ResxManagerExtended.Desktop.Data;
 using ResxManagerExtended.Shared.Constants;
+using ResxManagerExtended.Shared.Extensions;
 using ResxManagerExtended.Shared.Services;
-using ResxManagerExtended.Shared.Store.ResxManager;
-using ResxManagerExtended.Shared.Store.Settings.UseCase;
+using ResxManagerExtended.Shared.Store;
+using ResxManagerExtended.Shared.Store.UseCase;
 
 namespace ResxManagerExtended.Desktop.Services;
 
-internal class ResourceService(IDispatcher dispatcher, IState<SettingState> settingState) : IResourceService
+internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> resourceState) : IResourceService
 {
+    private readonly List<ResxFile> _resxFiles = [];
+
     public Task<ITreeViewItem?> SetTopNode()
     {
         var dialog = new OpenFolderDialog();
         if (dialog.ShowDialog() is not true)
             return Task.FromResult<ITreeViewItem?>(null);
 
-        dispatcher.Dispatch(new SetResourcesAction(null));
-
-        return Task.FromResult<ITreeViewItem?>(new TreeViewItem
+        var root = new TreeViewItem
         {
             Text = dialog.FolderName,
             Items = GetTreeItems(dialog.FolderName),
             IconCollapsed = new Icons.Regular.Size20.Folder(),
             IconExpanded = new Icons.Regular.Size20.FolderOpen(),
             Expanded = true
-        });
+        };
+        _resxFiles.ForEach(file => file.RelativePath = file.GetRelativePath(dialog.FolderName));
+
+        dispatcher.Dispatch(new SetResourcesAction(_resxFiles));
+
+        return Task.FromResult<ITreeViewItem?>(root);
     }
 
     private List<ITreeViewItem> GetTreeItems(string directoryPath)
     {
         var resources = new ConcurrentDictionary<string, IEnumerable<CultureInfo>>();
-        var regex = new Regex(settingState.Value.Regex ?? DefaultSettings.DefaultResxRegex);
+        var regex = new Regex(resourceState.Value.Regex ?? DefaultSettings.DefaultResxRegex);
         var items = (from dir in Directory.GetDirectories(directoryPath)
                 let childNodes = GetTreeItems(dir)
                 where childNodes.Count > 0
@@ -68,12 +74,12 @@ internal class ResourceService(IDispatcher dispatcher, IState<SettingState> sett
                 IconCollapsed = new Icons.Regular.Size20.BookLetter()
             });
 
-            dispatcher.Dispatch(new AddResourceAction(new ResxFile
+            _resxFiles.Add(new ResxFile
             {
                 Path = directoryPath,
                 Name = resource.Key,
                 Cultures = resource.Value
-            }));
+            });
         }
 
         return items;

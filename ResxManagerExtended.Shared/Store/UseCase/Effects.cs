@@ -2,7 +2,7 @@ using Fluxor;
 using ResxManagerExtended.Shared.Constants;
 using ResxManagerExtended.Shared.Services;
 
-namespace ResxManagerExtended.Shared.Store.Settings.UseCase;
+namespace ResxManagerExtended.Shared.Store.UseCase;
 
 public class Effects(IResourceService resourceService, ISettingService settingService)
 {

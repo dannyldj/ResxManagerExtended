@@ -1,5 +1,6 @@
 ﻿@page "/settings"
 @using ResxManagerExtended.Shared.Constants
+@using ResxManagerExtended.Shared.Store
 @inherits FluxorComponent
 
 <PageTitle>@Loc["Settings"]</PageTitle>
@@ -16,35 +17,35 @@
                       @bind-SelectedOption:after="CultureChanged"
                       Items="DefaultSettings.AvailableCultures"
                       Disabled="OperatingSystem.IsBrowser() is false"
-                      OptionText="@(option => Loc[option.Name])"/>
+                      OptionText="@(option => option is null ? string.Empty : Loc[option.Name])"/>
     </FluentLayout>
 
     <FluentLayout>
         <FluentLabel Typo="Typography.Subject" MarginBlock="0 4px">@Loc["ResourceDirectory"]</FluentLabel>
         <FluentCard>
             <FluentStack HorizontalGap="4" VerticalAlignment="VerticalAlignment.Center">
-                @if (SettingState.Value.TopNode is null)
+                @if (ResourceState.Value.TopNode is null)
                 {
-                    <FluentIcon Value="new Icons.Filled.Size24.Snooze()" Style="margin-right:4px" />
+                    <FluentIcon Value="new Icons.Filled.Size24.Snooze()" Style="margin-right:4px"/>
                     <FluentLabel>@Loc["NothingHere"]</FluentLabel>
                 }
                 else
                 {
-                    <FluentLabel>@SettingState.Value.TopNode.Text</FluentLabel>
+                    <FluentLabel>@ResourceState.Value.TopNode.Text</FluentLabel>
                 }
                 <FluentSpacer/>
                 <FluentButton IconStart="new Icons.Filled.Size20.FolderOpen()"
                               Title="@Loc["SelectDirectory"]"
-                              Loading="SettingState.Value.IsResourceLoading"
-                              OnClick="GetRootDirectory"/>
+                              Loading="ResourceState.Value.IsResourceLoading"
+                              OnClick="() => Dispatcher.Dispatch(new GetRootAction())"/>
             </FluentStack>
         </FluentCard>
     </FluentLayout>
 
     <FluentLayout>
         <FluentLabel Typo="Typography.Subject" MarginBlock="0 4px">@Loc["ResourceRegex"]</FluentLabel>
-        <FluentTextField @bind-Value:get="SettingState.Value.Regex"
-                         @bind-Value:set="ResourceRegexChanged"
+        <FluentTextField @bind-Value:get="ResourceState.Value.Regex"
+                         @bind-Value:set="value => Dispatcher.Dispatch(new SetRegexAction(value))"
                          @ondblclick="OnClickResourceRegex"
                          ReadOnly="_isReadOnlyResourceRegex"/>
     </FluentLayout>

@@ -8,8 +8,8 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.JSInterop;
 using ResxManagerExtended.Shared.Constants;
 using ResxManagerExtended.Shared.Services;
-using ResxManagerExtended.Shared.Store.ResxManager;
-using ResxManagerExtended.Shared.Store.Settings.UseCase;
+using ResxManagerExtended.Shared.Store;
+using ResxManagerExtended.Shared.Store.UseCase;
 using ResxManagerExtended.Web.Data;
 
 namespace ResxManagerExtended.Web.Services;
@@ -17,19 +17,18 @@ namespace ResxManagerExtended.Web.Services;
 internal class ResourceService(
     IFileSystemAccessServiceInProcess fileSystemAccessService,
     IDispatcher dispatcher,
-    IState<SettingState> settingState) : IResourceService
+    IState<ResourceState> resourceState) : IResourceService
 {
     private record Resource(CultureInfo Culture, FileSystemFileHandleInProcess Handle);
+
+    private readonly List<ResxFile> _resxFiles = [];
 
     public async Task<ITreeViewItem?> SetTopNode()
     {
         try
         {
             await using var handle = await fileSystemAccessService.ShowDirectoryPickerAsync();
-
-            dispatcher.Dispatch(new SetResourcesAction(null));
-
-            return new TreeViewItem
+            var root = new TreeViewItem
             {
                 Text = handle.Name,
                 Items = await GetTreeItems(handle.Name, handle),
@@ -37,6 +36,10 @@ internal class ResourceService(
                 IconExpanded = new Icons.Regular.Size20.FolderOpen(),
                 Expanded = true
             };
+
+            dispatcher.Dispatch(new SetResourcesAction(_resxFiles));
+
+            return root;
         }
         catch (JSException)
         {
@@ -50,7 +53,7 @@ internal class ResourceService(
     {
         var items = new List<ITreeViewItem>();
         var resources = new ConcurrentDictionary<string, IEnumerable<Resource>>();
-        var regex = new Regex(settingState.Value.Regex ?? DefaultSettings.DefaultResxRegex);
+        var regex = new Regex(resourceState.Value.Regex ?? DefaultSettings.DefaultResxRegex);
 
         await Parallel.ForEachAsync(await handle.ValuesAsync(), async (entry, token) =>
         {
@@ -98,13 +101,13 @@ internal class ResourceService(
                 IconCollapsed = new Icons.Regular.Size20.BookLetter()
             });
 
-            dispatcher.Dispatch(new AddResourceAction(new ResxFile
+            _resxFiles.Add(new ResxFile
             {
                 Path = directoryPath,
                 Name = resource.Key,
                 Cultures = resource.Value.Select(e => e.Culture),
                 Handles = resource.Value.ToDictionary(e => e.Culture, e => e.Handle)
-            }));
+            });
         }
 
         return items;

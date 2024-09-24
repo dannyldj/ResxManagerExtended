@@ -8,8 +8,7 @@ using ResxManagerExtended.Shared.Comparer;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
 using ResxManagerExtended.Shared.Properties;
-using ResxManagerExtended.Shared.Store.ResxManager.UseCase;
-using ResxManagerExtended.Shared.Store.Settings.UseCase;
+using ResxManagerExtended.Shared.Store.UseCase;
 
 namespace ResxManagerExtended.Shared.Components.Pages;
 
@@ -31,27 +30,20 @@ public partial class ResxManager : FluxorComponent
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
 
-    [Inject] public required IState<ResxManagerState> ResxManagerState { private get; init; }
-
-    [Inject] public required IState<SettingState> SettingState { private get; init; }
+    [Inject] public required IState<ResourceState> ResourceState { private get; init; }
 
     protected override async Task OnInitializedAsync()
     {
         await base.OnInitializedAsync();
         await GetDataGrid();
 
-        SettingState.StateChanged += SettingStateOnStateChanged;
+        ResourceState.StateChanged += ResourceStateOnStateChanged;
     }
 
-    private async void SettingStateOnStateChanged(object? sender, EventArgs e)
+    private async void ResourceStateOnStateChanged(object? sender, EventArgs e)
     {
         await GetDataGrid();
         StateHasChanged();
-    }
-
-    private async Task OnSelectedItemChanged(ITreeViewItem? item)
-    {
-        await GetDataGrid(item);
     }
 
     private async Task GetDataGrid(ITreeViewItem? selectedNode = null)
@@ -60,7 +52,7 @@ public partial class ResxManager : FluxorComponent
         _items = [];
         _cultures = new SortedSet<CultureInfo>(new CultureComparer());
 
-        foreach (var valueResource in ResxManagerState.Value.Resources ?? [])
+        foreach (var valueResource in ResourceState.Value.Resources ?? [])
         {
             if (selectedNode is not null &&
                 valueResource.GetFullPath().IsUnderDirectory(selectedNode.Text) is false) continue;
