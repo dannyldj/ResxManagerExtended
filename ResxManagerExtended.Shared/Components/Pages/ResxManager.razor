@@ -9,9 +9,9 @@
         @Loc["ResxManager"]
     </FluentLabel>
 
-    @if (SettingState.Value.TopNode is null)
+    @if (ResourceState.Value.TopNode is null)
     {
-        @if (SettingState.Value.IsResourceLoading)
+        @if (ResourceState.Value.IsResourceLoading)
         {
             <FluentProgressRing/>
         }
@@ -25,8 +25,8 @@
         <FluentSplitter Panel1MinSize="250px" Panel1Size="25%"
                         Style="height:-webkit-fill-available;overflow-y:auto">
             <Panel1>
-                <FluentTreeView Items="[SettingState.Value.TopNode]"
-                                SelectedItemChanged="OnSelectedItemChanged"
+                <FluentTreeView Items="[ResourceState.Value.TopNode]"
+                                SelectedItemChanged="async item => await GetDataGrid(item)"
                                 LazyLoadItems="true" Style="overflow:auto">
                     <ItemTemplate>
                         @context.Text.Split(Path.DirectorySeparatorChar).Last()
@@ -46,28 +46,28 @@
                     </FluentStack>
 
                     <div Style="height:100%;overflow:auto">
-                        <FluentDataGrid TGridItem="ResourceView" Items="@SearchedItems" Loading="@_isLoading"
-                                        ShowHover="true" Virtualize="true" ResizableColumns="true"
-                                        GenerateHeader="GenerateHeaderOption.Sticky" Style="min-width:max-content">
+                        <FluentDataGrid TGridItem="ResourceView"
+                                        Items="@SearchedItems" Loading="@_isLoading"
+                                        ShowHover="true" Virtualize="true"
+                                        GenerateHeader="GenerateHeaderOption.Sticky"
+                                        Style="min-width:max-content">
                             <ChildContent>
-                                <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true"/>
+                                <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true" Tooltip="true"/>
 
                                 @if (_showPath)
                                 {
-                                    <PropertyColumn Width="200px" Title="@Loc["Path"]" Property="@(c => c.Path)"/>
+                                    <PropertyColumn Width="200px" Title="@Loc["Path"]" Property="@(c => c.Path)" Tooltip="true"/>
                                 }
-                                
+
                                 @if (_showComment)
                                 {
-                                    <PropertyColumn Width="200px" Title="@Loc["Comment"]" Property="@(c => c.Comment)" />
+                                    <PropertyColumn Width="200px" Title="@Loc["Comment"]" Property="@(c => c.Comment)" Tooltip="true"/>
                                 }
 
                                 @foreach (var culture in _cultures)
                                 {
-                                    <PropertyColumn Width="300px"
-                                                    Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"
-                                                    Property="@(c => c.Columns.GetValueOrDefault(culture))"
-                                                    TooltipText="@(c => c.Columns.GetValueOrDefault(culture))"/>
+                                    <PropertyColumn Width="300px" Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"
+                                                    Property="@(c => c.Columns.GetValueOrDefault(culture))" Tooltip="true"/>
                                 }
                             </ChildContent>
                             <EmptyContent>
