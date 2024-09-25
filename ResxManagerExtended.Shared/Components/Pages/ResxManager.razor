@@ -52,21 +52,24 @@
                         </FluentButton>
                         <FluentPopover VerticalThreshold="170" AnchorId="importOrExport" @bind-Open="_showPopover">
                             <Body>
-                            <FluentStack>
-                                <FluentRadioGroup @bind-Value="_popoverType">
-                                    <FluentRadio Value="PopoverType.Import">@Loc["Import"]</FluentRadio>
-                                    <FluentRadio Value="PopoverType.Export">@Loc["Export"]</FluentRadio>
-                                </FluentRadioGroup>
-                            </FluentStack>
-                            </Body>
-                            <Footer>
+                                <FluentStack>
+                                    <FluentRadioGroup @bind-Value="_popoverType">
+                                        <FluentRadio Value="PopoverType.Import">@Loc["Import"]</FluentRadio>
+                                        <FluentRadio Value="PopoverType.Export">@Loc["Export"]</FluentRadio>
+                                    </FluentRadioGroup>
+                                </FluentStack>
+
                                 <FluentStack HorizontalAlignment="HorizontalAlignment.Right">
                                     <FluentButton Appearance="Appearance.Accent"
                                                   OnClick="OnConfirm">
                                         @Loc["Confirm"]
                                     </FluentButton>
                                 </FluentStack>
-                            </Footer>
+
+                                <FluentOverlay Visible="ResourceState.Value.IsResourceExporting" Opacity="0.4">
+                                    <FluentProgressRing/>
+                                </FluentOverlay>
+                            </Body>
                         </FluentPopover>
                     </FluentStack>
 

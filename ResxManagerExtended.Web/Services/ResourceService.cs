@@ -2,6 +2,7 @@
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using CsvHelper;
 using Fluxor;
 using KristofferStrube.Blazor.FileSystem;
 using KristofferStrube.Blazor.FileSystemAccess;
@@ -9,6 +10,7 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.JSInterop;
 using ResxManagerExtended.Shared.Constants;
 using ResxManagerExtended.Shared.Data;
+using ResxManagerExtended.Shared.Extensions;
 using ResxManagerExtended.Shared.Services;
 using ResxManagerExtended.Shared.Store;
 using ResxManagerExtended.Shared.Store.UseCase;
@@ -48,10 +50,36 @@ internal class ResourceService(
         }
     }
 
-    public Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
+    public async Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
         CancellationToken token)
     {
-        throw new NotImplementedException();
+        try
+        {
+            await using var writer = new StringWriter();
+            await using var handle = await fileSystemAccessService.ShowSaveFilePickerAsync(
+                new SaveFilePickerOptionsStartInFileSystemHandle
+                {
+                    Types =
+                    [
+                        new FilePickerAcceptType
+                        {
+                            Accept = new Dictionary<string, string[]> { { "text/csv", [".csv"] } },
+                            Description = "CSV File"
+                        }
+                    ]
+                });
+
+            var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.ExportCsv(cultures, resources);
+
+            await using var writable = await handle.CreateWritableAsync();
+            // TODO: Find a way to apply UTF8 BOM
+            await writable.WriteAsync(writer.GetStringBuilder().ToString());
+        }
+        catch (JSException)
+        {
+            // Closing the SaveFilePicker throws an exception.
+        }
     }
 
     private async Task<List<ITreeViewItem>> GetTreeItems(string directoryPath,

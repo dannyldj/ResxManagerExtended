@@ -9,6 +9,7 @@ using Fluxor;
 using Microsoft.FluentUI.AspNetCore.Components;
 using Microsoft.Win32;
 using ResxManagerExtended.Desktop.Data;
+using ResxManagerExtended.Desktop.Extensions;
 using ResxManagerExtended.Shared.Constants;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
@@ -22,11 +23,11 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
 {
     private readonly List<ResxFile> _resxFiles = [];
 
-    public Task<ITreeViewItem?> SetTopNode()
+    public async Task<ITreeViewItem?> SetTopNode()
     {
         var dialog = new OpenFolderDialog();
-        if (dialog.ShowDialog() is not true)
-            return Task.FromResult<ITreeViewItem?>(null);
+        if (await dialog.ShowDialogAsync() is not true)
+            return null;
 
         var root = new TreeViewItem
         {
@@ -40,23 +41,22 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
 
         dispatcher.Dispatch(new SetResourcesAction(_resxFiles));
 
-        return Task.FromResult<ITreeViewItem?>(root);
+        return root;
     }
 
-    public Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
+    public async Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
         CancellationToken token)
     {
         var dialog = new SaveFileDialog
         {
             Filter = "CSV File|*.csv"
         };
-        if (dialog.ShowDialog() is not true) return Task.FromCanceled(token);
+        if (await dialog.ShowDialogAsync() is not true) return;
 
-        using var writer = new StreamWriter(dialog.FileName, true, Encoding.UTF8);
-        using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+        await using var writer = new StreamWriter(dialog.FileName, true, Encoding.UTF8);
+        await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
         csv.ExportCsv(cultures, resources);
-        return Task.CompletedTask;
     }
 
     private List<ITreeViewItem> GetTreeItems(string directoryPath)

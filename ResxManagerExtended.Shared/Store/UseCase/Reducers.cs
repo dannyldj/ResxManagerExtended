@@ -27,4 +27,16 @@ public static class Reducers
     {
         return state with { Resources = action.Resources };
     }
+
+    [ReducerMethod(typeof(ExportAction))]
+    public static ResourceState ReduceExportAction(ResourceState state)
+    {
+        return state with { IsResourceExporting = true };
+    }
+
+    [ReducerMethod(typeof(ExportDoneAction))]
+    public static ResourceState ReduceExportDoneAction(ResourceState state)
+    {
+        return state with { IsResourceExporting = false };
+    }
 }

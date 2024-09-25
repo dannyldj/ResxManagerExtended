@@ -33,5 +33,6 @@ public class Effects(IResourceService resourceService, ISettingService settingSe
     public async Task HandleExportAction(ExportAction action, IDispatcher dispatcher)
     {
         await resourceService.ExportResources(action.Cultures, action.Resources);
+        dispatcher.Dispatch(new ExportDoneAction());
     }
 }

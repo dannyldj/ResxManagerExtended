@@ -14,4 +14,6 @@ public record ResourceState
     public bool IsResourceLoading { get; init; }
 
     public string? Regex { get; init; }
+
+    public bool IsResourceExporting { get; init; }
 }
