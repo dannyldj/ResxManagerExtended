@@ -8,8 +8,8 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using ResxManagerExtended.Shared.Constants;
 using ResxManagerExtended.Shared.Properties;
 using ResxManagerExtended.Shared.Services;
-using ResxManagerExtended.Shared.Store.Settings;
-using ResxManagerExtended.Shared.Store.Settings.UseCase;
+using ResxManagerExtended.Shared.Store;
+using ResxManagerExtended.Shared.Store.UseCase;
 
 namespace ResxManagerExtended.Shared.Components.Pages;
 
@@ -23,7 +23,7 @@ public partial class Settings : FluxorComponent
     [Inject] public required IDispatcher Dispatcher { private get; init; }
     [Inject] public required ISettingService SettingService { private get; init; }
     [Inject] public required NavigationManager NavigationManager { private get; init; }
-    [Inject] public required IState<SettingState> SettingState { private get; init; }
+    [Inject] public required IState<ResourceState> ResourceState { private get; init; }
 
     public static void InitializeSettings(IDispatcher dispatcher)
     {
@@ -42,16 +42,6 @@ public partial class Settings : FluxorComponent
 
         await SettingService.SetOptionAsStringAsync(SettingKeys.CultureKey, _selectedCulture.Name);
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
-    }
-
-    private void GetRootDirectory()
-    {
-        Dispatcher.Dispatch(new GetRootAction());
-    }
-
-    private void ResourceRegexChanged(string? value)
-    {
-        Dispatcher.Dispatch(new SetRegexAction(value));
     }
 
     private void OnClickResourceRegex(MouseEventArgs args)
