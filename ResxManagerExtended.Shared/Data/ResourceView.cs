@@ -13,7 +13,7 @@ public class ResourceView
 
     public string? Comment { get; set; }
 
-    public required Dictionary<CultureInfo, string?> Columns { get; init; }
+    public required IDictionary<CultureInfo, string?> Columns { get; init; }
 }
 
 public sealed class ResourceViewMap : ClassMap<ResourceView>
