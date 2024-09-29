@@ -1,5 +1,4 @@
 ﻿using System.Collections.Concurrent;
-using System.Collections.Immutable;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -44,7 +43,7 @@ internal class ResourceService(
             };
 
             dispatcher.Dispatch(new SetResourcesAction(
-                _resxFiles.ToImmutableDictionary<ResxFile, string, IResourceFile>(e => e.GetFullPath(), e => e)));
+                _resxFiles.ToDictionary<ResxFile, string, IResourceFile>(e => e.GetFullPath(), e => e)));
 
             return [root];
         }
@@ -84,7 +83,7 @@ internal class ResourceService(
         }
     }
 
-    public async Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
+    public async Task ExportResources(IReadOnlyList<CultureInfo> cultures, IEnumerable<ResourceView> resources,
         CancellationToken token)
     {
         try

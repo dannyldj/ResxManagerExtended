@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Globalization;
+﻿using System.Globalization;
 using CsvHelper;
 using ResxManagerExtended.Shared.Data;
 
@@ -7,7 +6,7 @@ namespace ResxManagerExtended.Shared.Extensions;
 
 public static class CsvExtension
 {
-    public static async Task ExportCsvAsync(this CsvWriter csv, ImmutableArray<CultureInfo> cultures,
+    public static async Task ExportCsvAsync(this CsvWriter csv, IReadOnlyList<CultureInfo> cultures,
         IEnumerable<ResourceView> resources)
     {
         csv.WriteHeader(typeof(ResourceView));

@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Fluxor;
 using Microsoft.FluentUI.AspNetCore.Components;
 using ResxManagerExtended.Shared.Data;
@@ -10,7 +9,7 @@ public record ResourceState
 {
     public IEnumerable<ITreeViewItem>? Nodes { get; init; }
 
-    public IImmutableDictionary<string, IResourceFile>? Resources { get; init; }
+    public IReadOnlyDictionary<string, IResourceFile>? Resources { get; init; }
 
     public bool IsResourceLoading { get; init; }
 
