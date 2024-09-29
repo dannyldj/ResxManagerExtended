@@ -2,4 +2,4 @@
 
 namespace ResxManagerExtended.Shared.Store;
 
-public record SetResourcesAction(IReadOnlyDictionary<string, IResourceFile>? Resources);
+public record SetResourcesAction(IEnumerable<IResourceFile>? Resources);

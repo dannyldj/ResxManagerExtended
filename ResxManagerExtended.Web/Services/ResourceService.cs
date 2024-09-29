@@ -26,24 +26,22 @@ internal class ResourceService(
     private readonly FilePickerAcceptType _csvAcceptType = new()
         { Accept = new Dictionary<string, string[]> { { "text/csv", [".csv"] } }, Description = "CSV File" };
 
-    private readonly List<ResxFile> _resxFiles = [];
-
     public async Task<IEnumerable<ITreeViewItem>?> SetNodes()
     {
         try
         {
             await using var handle = await fileSystemAccessService.ShowDirectoryPickerAsync();
+            var resxFiles = new List<ResxFile>();
             var root = new TreeViewItem
             {
                 Text = handle.Name,
-                Items = await GetTreeItems(handle.Name, handle),
+                Items = await GetTreeItems(handle.Name, resxFiles, handle),
                 IconCollapsed = new Icons.Regular.Size20.Folder(),
                 IconExpanded = new Icons.Regular.Size20.FolderOpen(),
                 Expanded = true
             };
 
-            dispatcher.Dispatch(new SetResourcesAction(
-                _resxFiles.ToDictionary<ResxFile, string, IResourceFile>(e => e.GetFullPath(), e => e)));
+            dispatcher.Dispatch(new SetResourcesAction(resxFiles));
 
             return [root];
         }
@@ -104,7 +102,7 @@ internal class ResourceService(
         }
     }
 
-    private async Task<List<ITreeViewItem>> GetTreeItems(string directoryPath,
+    private async Task<List<ITreeViewItem>> GetTreeItems(string directoryPath, List<ResxFile> resxFiles,
         FileSystemDirectoryHandleInProcess handle)
     {
         var items = new List<ITreeViewItem>();
@@ -131,7 +129,7 @@ internal class ResourceService(
                 case FileSystemHandleKind.Directory:
                     await using (var directory = await handle.GetDirectoryHandleAsync(entry.Name))
                     {
-                        var childNodes = await GetTreeItems(currentPath, directory);
+                        var childNodes = await GetTreeItems(currentPath, resxFiles, directory);
                         if (childNodes.Count <= 0) return;
 
                         items.Add(new TreeViewItem
@@ -157,7 +155,7 @@ internal class ResourceService(
                 IconCollapsed = new Icons.Regular.Size20.BookLetter()
             });
 
-            _resxFiles.Add(new ResxFile
+            resxFiles.Add(new ResxFile
             {
                 Path = directoryPath,
                 Name = resource.Key,

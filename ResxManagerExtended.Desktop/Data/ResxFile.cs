@@ -1,7 +1,10 @@
 ﻿using System.Globalization;
+using System.IO;
+using System.Text;
 using System.Xml.Linq;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
+using static System.IO.Path;
 
 namespace ResxManagerExtended.Desktop.Data;
 
@@ -17,15 +20,35 @@ public class ResxFile : IResourceFile
 
     public IEnumerable<CultureInfo>? Cultures { get; init; }
 
-    public Task SetValue(string key, IDictionary<CultureInfo, string?> cultures)
+    public string GetResourcePath()
     {
-        throw new NotImplementedException();
+        return $"{RelativePath}{DirectorySeparatorChar}{Name}";
     }
 
-    public Task<IEnumerable<ResourceView>> GetValues(CancellationToken token)
+    public async Task SetValue(string key, CultureInfo culture, string value, CancellationToken token)
+    {
+        if (Paths?.TryGetValue(culture, out var path) is not true) return;
+
+        var document = XDocument.Load(path, LoadOptions.PreserveWhitespace);
+        document.GetNode(key)?.SetValue(value);
+
+        await using var writer = new StreamWriter(path, false, new UTF8Encoding(IResourceFile.DetectUtf8Bom(path)));
+        await document.SaveAsync(writer, SaveOptions.None, token);
+    }
+
+    public async Task SetValue(string key, IDictionary<CultureInfo, string?> cultures, CancellationToken token)
+    {
+        foreach (var (culture, value) in cultures)
+        {
+            await SetValue(key, culture, value ?? string.Empty, token);
+        }
+    }
+
+    public async Task<IEnumerable<ResourceView>> GetValues(CancellationToken token)
     {
         var resources = new Dictionary<string, ResourceView>();
 
+        await Task.Yield();
         foreach (var culture in Cultures ?? [])
         {
             if (Paths?.TryGetValue(culture, out var path) is not true) continue;
@@ -38,9 +61,9 @@ public class ResxFile : IResourceFile
                 else
                     resources.Add(key, new ResourceView
                     {
-                        Path = this.GetFullPath(),
+                        Path = GetResourcePath(),
                         Key = key,
-                        Columns = new Dictionary<CultureInfo, string?> { { culture, key } }
+                        Columns = new Dictionary<CultureInfo, string?> { { culture, value } }
                     });
 
                 if (string.IsNullOrEmpty(culture.Name))
@@ -48,6 +71,6 @@ public class ResxFile : IResourceFile
             }
         }
 
-        return Task.FromResult<IEnumerable<ResourceView>>(resources.Values);
+        return resources.Values;
     }
 }

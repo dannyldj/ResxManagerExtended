@@ -21,7 +21,6 @@ namespace ResxManagerExtended.Desktop.Services;
 internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> resourceState) : IResourceService
 {
     private const string CsvFilter = "CSV File|*.csv";
-    private readonly List<ResxFile> _resxFiles = [];
 
     public async Task<IEnumerable<ITreeViewItem>?> SetNodes()
     {
@@ -29,18 +28,18 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
         if (await dialog.ShowDialogAsync() is not true)
             return null;
 
+        var resxFiles = new List<ResxFile>();
         var root = new TreeViewItem
         {
             Text = dialog.FolderName,
-            Items = GetTreeItems(dialog.FolderName),
+            Items = GetTreeItems(dialog.FolderName, resxFiles),
             IconCollapsed = new Icons.Regular.Size20.Folder(),
             IconExpanded = new Icons.Regular.Size20.FolderOpen(),
             Expanded = true
         };
-        _resxFiles.ForEach(file => file.RelativePath = file.GetRelativePath(dialog.FolderName));
+        resxFiles.ForEach(file => file.RelativePath = file.GetRelativePath(dialog.FolderName));
 
-        dispatcher.Dispatch(new SetResourcesAction(
-            _resxFiles.ToDictionary<ResxFile, string, IResourceFile>(e => e.GetFullPath(), e => e)));
+        dispatcher.Dispatch(new SetResourcesAction(resxFiles));
 
         return [root];
     }
@@ -72,12 +71,12 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
         await csv.ExportCsvAsync(cultures, resources);
     }
 
-    private List<ITreeViewItem> GetTreeItems(string directoryPath)
+    private List<ITreeViewItem> GetTreeItems(string directoryPath, List<ResxFile> resxFiles)
     {
         var resources = new ConcurrentDictionary<string, IEnumerable<Resource>>();
         var regex = new Regex(resourceState.Value.Regex ?? DefaultSettings.DefaultResxRegex);
         var items = (from dir in Directory.GetDirectories(directoryPath)
-                let childNodes = GetTreeItems(dir)
+                let childNodes = GetTreeItems(dir, resxFiles)
                 where childNodes.Count > 0
                 select new TreeViewItem
                 {
@@ -108,7 +107,7 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
                 IconCollapsed = new Icons.Regular.Size20.BookLetter()
             });
 
-            _resxFiles.Add(new ResxFile
+            resxFiles.Add(new ResxFile
             {
                 Path = directoryPath,
                 Name = resource.Key,

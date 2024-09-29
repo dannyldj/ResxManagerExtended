@@ -9,7 +9,7 @@ public record ResourceState
 {
     public IEnumerable<ITreeViewItem>? Nodes { get; init; }
 
-    public IReadOnlyDictionary<string, IResourceFile>? Resources { get; init; }
+    public IEnumerable<IResourceFile>? Resources { get; init; }
 
     public bool IsResourceLoading { get; init; }
 

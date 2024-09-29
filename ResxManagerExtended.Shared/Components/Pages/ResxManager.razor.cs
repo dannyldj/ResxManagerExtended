@@ -70,10 +70,10 @@ public partial class ResxManager : FluxorComponent
         _cultures = new SortedSet<CultureInfo>(new CultureComparer());
 
         if (ResourceState.Value.Resources is not null)
-            foreach (var (path, resource) in ResourceState.Value.Resources)
+            foreach (var resource in ResourceState.Value.Resources)
             {
                 if (selectedNode is not null &&
-                    path.IsUnderDirectory(selectedNode.Text) is false) continue;
+                    resource.GetFullPath().IsUnderDirectory(selectedNode.Text) is false) continue;
 
                 _items = [.._items, ..await resource.GetValues()];
                 foreach (var culture in resource.Cultures ?? [])

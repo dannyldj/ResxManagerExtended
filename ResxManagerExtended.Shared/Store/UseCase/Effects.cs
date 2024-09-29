@@ -36,11 +36,12 @@ public class Effects(
     public async Task HandleImportAction(IDispatcher dispatcher)
     {
         var imported = resourceService.ImportResources();
+        var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
 
         if (imported is not null)
             await foreach (var resource in imported)
             {
-                if (resourceState.Value.Resources?.TryGetValue(resource.Path, out var file) is true)
+                if (resources?.TryGetValue(resource.Path, out var file) is true)
                     await file.SetValue(resource.Key, resource.Columns);
             }
 
