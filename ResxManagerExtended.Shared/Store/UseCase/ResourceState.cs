@@ -7,11 +7,13 @@ namespace ResxManagerExtended.Shared.Store.UseCase;
 [FeatureState]
 public record ResourceState
 {
-    public ITreeViewItem? TopNode { get; init; }
+    public IEnumerable<ITreeViewItem>? Nodes { get; init; }
 
     public IEnumerable<IResourceFile>? Resources { get; init; }
 
     public bool IsResourceLoading { get; init; }
 
     public string? Regex { get; init; }
+
+    public bool IsResourceProcessing { get; init; }
 }

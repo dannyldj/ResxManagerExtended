@@ -24,14 +24,14 @@
         <FluentLabel Typo="Typography.Subject" MarginBlock="0 4px">@Loc["ResourceDirectory"]</FluentLabel>
         <FluentCard>
             <FluentStack HorizontalGap="4" VerticalAlignment="VerticalAlignment.Center">
-                @if (ResourceState.Value.TopNode is null)
+                @if (ResourceState.Value.Nodes is null)
                 {
                     <FluentIcon Value="new Icons.Filled.Size24.Snooze()" Style="margin-right:4px"/>
                     <FluentLabel>@Loc["NothingHere"]</FluentLabel>
                 }
                 else
                 {
-                    <FluentLabel>@ResourceState.Value.TopNode.Text</FluentLabel>
+                    <FluentLabel>@ResourceState.Value.Nodes.Single()?.Text</FluentLabel>
                 }
                 <FluentSpacer/>
                 <FluentButton IconStart="new Icons.Filled.Size20.FolderOpen()"
