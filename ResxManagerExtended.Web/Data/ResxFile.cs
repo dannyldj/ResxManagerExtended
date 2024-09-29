@@ -3,7 +3,6 @@ using System.Xml.Linq;
 using KristofferStrube.Blazor.FileSystem;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
-using static System.IO.Path;
 
 namespace ResxManagerExtended.Web.Data;
 
@@ -17,9 +16,9 @@ public class ResxFile : IResourceFile
 
     public IEnumerable<CultureInfo>? Cultures { get; init; }
 
-    public string GetResourcePath()
+    public Task SetValue(string key, IDictionary<CultureInfo, string?> cultures)
     {
-        return Path + DirectorySeparatorChar + Name;
+        throw new NotImplementedException();
     }
 
     public async Task<IEnumerable<ResourceView>> GetValues(CancellationToken token)
@@ -41,7 +40,7 @@ public class ResxFile : IResourceFile
                 else
                     resources.Add(key, new ResourceView
                     {
-                        Path = GetResourcePath(),
+                        Path = this.GetFullPath(),
                         Key = key,
                         Columns = new Dictionary<CultureInfo, string?> { { culture, value } }
                     });

@@ -4,7 +4,10 @@ using ResxManagerExtended.Shared.Services;
 
 namespace ResxManagerExtended.Shared.Store.UseCase;
 
-public class Effects(IResourceService resourceService, ISettingService settingService)
+public class Effects(
+    IResourceService resourceService,
+    ISettingService settingService,
+    IState<ResourceState> resourceState)
 {
     [EffectMethod(typeof(GetRootAction))]
     public async Task HandleGetRootAction(IDispatcher dispatcher)
@@ -29,12 +32,17 @@ public class Effects(IResourceService resourceService, ISettingService settingSe
         dispatcher.Dispatch(new RegexResultAction(action.Regex));
     }
 
-    [EffectMethod]
-    public async Task HandleImportAction(ImportAction action, IDispatcher dispatcher)
+    [EffectMethod(typeof(ImportAction))]
+    public async Task HandleImportAction(IDispatcher dispatcher)
     {
         var imported = resourceService.ImportResources();
 
-        // Todo: Import resources
+        if (imported is not null)
+            await foreach (var resource in imported)
+            {
+                if (resourceState.Value.Resources?.TryGetValue(resource.Path, out var file) is true)
+                    await file.SetValue(resource.Key, resource.Columns);
+            }
 
         dispatcher.Dispatch(new ProcessDoneAction());
     }

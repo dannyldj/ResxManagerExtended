@@ -2,12 +2,13 @@
 using System.Xml.Linq;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
-using static System.IO.Path;
 
 namespace ResxManagerExtended.Desktop.Data;
 
 public class ResxFile : IResourceFile
 {
+    public IReadOnlyDictionary<CultureInfo, string>? Paths { get; init; }
+
     public string? RelativePath { get; set; }
 
     public required string Path { get; init; }
@@ -16,9 +17,9 @@ public class ResxFile : IResourceFile
 
     public IEnumerable<CultureInfo>? Cultures { get; init; }
 
-    public string GetResourcePath()
+    public Task SetValue(string key, IDictionary<CultureInfo, string?> cultures)
     {
-        return RelativePath + DirectorySeparatorChar + Name;
+        throw new NotImplementedException();
     }
 
     public Task<IEnumerable<ResourceView>> GetValues(CancellationToken token)
@@ -27,7 +28,9 @@ public class ResxFile : IResourceFile
 
         foreach (var culture in Cultures ?? [])
         {
-            var document = XDocument.Load(Path + DirectorySeparatorChar + culture.GetResxFileName(Name));
+            if (Paths?.TryGetValue(culture, out var path) is not true) continue;
+
+            var document = XDocument.Load(path);
             foreach (var (key, comment, value) in document.GetResources())
             {
                 if (resources.TryGetValue(key, out var view))
@@ -35,7 +38,7 @@ public class ResxFile : IResourceFile
                 else
                     resources.Add(key, new ResourceView
                     {
-                        Path = GetResourcePath(),
+                        Path = this.GetFullPath(),
                         Key = key,
                         Columns = new Dictionary<CultureInfo, string?> { { culture, key } }
                     });

@@ -1,5 +1,6 @@
-﻿using ResxManagerExtended.Shared.Data;
+﻿using System.Collections.Immutable;
+using ResxManagerExtended.Shared.Data;
 
 namespace ResxManagerExtended.Shared.Store;
 
-public record SetResourcesAction(IEnumerable<IResourceFile>? Resources);
+public record SetResourcesAction(ImmutableDictionary<string, IResourceFile>? Resources);

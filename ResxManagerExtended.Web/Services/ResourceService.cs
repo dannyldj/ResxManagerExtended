@@ -43,7 +43,8 @@ internal class ResourceService(
                 Expanded = true
             };
 
-            dispatcher.Dispatch(new SetResourcesAction(_resxFiles));
+            dispatcher.Dispatch(new SetResourcesAction(
+                _resxFiles.ToImmutableDictionary<ResxFile, string, IResourceFile>(e => e.GetFullPath(), e => e)));
 
             return [root];
         }

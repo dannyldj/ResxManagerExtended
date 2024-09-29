@@ -10,7 +10,7 @@ public interface IResourceFile
 
     IEnumerable<CultureInfo>? Cultures { get; }
 
-    string GetResourcePath();
+    Task SetValue(string key, IDictionary<CultureInfo, string?> cultures);
 
     Task<IEnumerable<ResourceView>> GetValues(CancellationToken token = default);
 }

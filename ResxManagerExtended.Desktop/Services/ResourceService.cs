@@ -40,7 +40,8 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
         };
         _resxFiles.ForEach(file => file.RelativePath = file.GetRelativePath(dialog.FolderName));
 
-        dispatcher.Dispatch(new SetResourcesAction(_resxFiles));
+        dispatcher.Dispatch(new SetResourcesAction(
+            _resxFiles.ToImmutableDictionary<ResxFile, string, IResourceFile>(e => e.GetFullPath(), e => e)));
 
         return [root];
     }
@@ -74,7 +75,7 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
 
     private List<ITreeViewItem> GetTreeItems(string directoryPath)
     {
-        var resources = new ConcurrentDictionary<string, IEnumerable<CultureInfo>>();
+        var resources = new ConcurrentDictionary<string, IEnumerable<Resource>>();
         var regex = new Regex(resourceState.Value.Regex ?? DefaultSettings.DefaultResxRegex);
         var items = (from dir in Directory.GetDirectories(directoryPath)
                 let childNodes = GetTreeItems(dir)
@@ -96,7 +97,8 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
             var name = match.Groups[DefaultSettings.ResourceResxName].Value;
             var code = match.Groups[DefaultSettings.ResourceResxCode].Value;
 
-            resources.AddOrUpdate(name, [new CultureInfo(code)], (_, list) => [..list, new CultureInfo(code)]);
+            resources.AddOrUpdate(name, [new Resource(new CultureInfo(code), file)],
+                (_, list) => [..list, new Resource(new CultureInfo(code), file)]);
         });
 
         foreach (var resource in resources)
@@ -111,10 +113,13 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
             {
                 Path = directoryPath,
                 Name = resource.Key,
-                Cultures = resource.Value
+                Cultures = resource.Value.Select(e => e.Culture),
+                Paths = resource.Value.ToDictionary(e => e.Culture, e => e.Path)
             });
         }
 
         return items;
     }
+
+    private record Resource(CultureInfo Culture, string Path);
 }
