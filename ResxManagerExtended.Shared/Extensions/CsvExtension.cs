@@ -7,7 +7,7 @@ namespace ResxManagerExtended.Shared.Extensions;
 
 public static class CsvExtension
 {
-    public static void ExportCsv(this CsvWriter csv, ImmutableArray<CultureInfo> cultures,
+    public static async Task ExportCsvAsync(this CsvWriter csv, ImmutableArray<CultureInfo> cultures,
         IEnumerable<ResourceView> resources)
     {
         csv.WriteHeader(typeof(ResourceView));
@@ -16,7 +16,7 @@ public static class CsvExtension
             csv.WriteField(culture.Name);
         }
 
-        csv.NextRecord();
+        await csv.NextRecordAsync();
 
         foreach (var resource in resources)
         {
@@ -27,7 +27,9 @@ public static class CsvExtension
                 csv.WriteField(resource.Columns.GetValueOrDefault(culture));
             }
 
-            csv.NextRecord();
+            await csv.NextRecordAsync();
         }
+
+        await csv.FlushAsync();
     }
 }

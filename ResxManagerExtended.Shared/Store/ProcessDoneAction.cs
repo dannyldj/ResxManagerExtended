@@ -1,3 +1,3 @@
 ﻿namespace ResxManagerExtended.Shared.Store;
 
-public record ExportDoneAction;
+public record ProcessDoneAction;

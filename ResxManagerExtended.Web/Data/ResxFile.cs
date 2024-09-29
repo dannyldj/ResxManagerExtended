@@ -17,6 +17,11 @@ public class ResxFile : IResourceFile
 
     public IEnumerable<CultureInfo>? Cultures { get; init; }
 
+    public string GetResourcePath()
+    {
+        return Path + DirectorySeparatorChar + Name;
+    }
+
     public async Task<IEnumerable<ResourceView>> GetValues(CancellationToken token)
     {
         var resources = new Dictionary<string, ResourceView>();
@@ -34,7 +39,12 @@ public class ResxFile : IResourceFile
                 if (resources.TryGetValue(key, out var view))
                     view.Columns[culture] = value;
                 else
-                    resources.Add(key, new ResourceView(Path + DirectorySeparatorChar + Name, key, culture, value));
+                    resources.Add(key, new ResourceView
+                    {
+                        Path = GetResourcePath(),
+                        Key = key,
+                        Columns = new Dictionary<CultureInfo, string?> { { culture, value } }
+                    });
 
                 if (string.IsNullOrEmpty(culture.Name))
                     resources[key].Comment = comment;

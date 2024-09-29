@@ -9,7 +9,7 @@
         @Loc["ResxManager"]
     </FluentLabel>
 
-    @if (ResourceState.Value.TopNode is null)
+    @if (ResourceState.Value.Nodes is null)
     {
         @if (ResourceState.Value.IsResourceLoading)
         {
@@ -25,7 +25,7 @@
         <FluentSplitter Panel1MinSize="250px" Panel1Size="25%"
                         Style="height:-webkit-fill-available;overflow-y:auto">
             <Panel1>
-                <FluentTreeView Items="[ResourceState.Value.TopNode]"
+                <FluentTreeView Items="ResourceState.Value.Nodes"
                                 SelectedItemChanged="async item => await GetDataGrid(item)"
                                 LazyLoadItems="true" Style="overflow:auto">
                     <ItemTemplate>
@@ -66,7 +66,7 @@
                                     </FluentButton>
                                 </FluentStack>
 
-                                <FluentOverlay Visible="ResourceState.Value.IsResourceExporting" Opacity="0.4">
+                                <FluentOverlay Visible="ResourceState.Value.IsResourceProcessing" Opacity="0.4">
                                     <FluentProgressRing/>
                                 </FluentOverlay>
                             </Body>

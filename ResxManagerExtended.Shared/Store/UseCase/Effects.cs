@@ -9,8 +9,8 @@ public class Effects(IResourceService resourceService, ISettingService settingSe
     [EffectMethod(typeof(GetRootAction))]
     public async Task HandleGetRootAction(IDispatcher dispatcher)
     {
-        var topNode = await resourceService.SetTopNode();
-        dispatcher.Dispatch(new RootResultAction(topNode));
+        var nodes = await resourceService.SetNodes();
+        dispatcher.Dispatch(new RootResultAction(nodes));
     }
 
     [EffectMethod(typeof(GetRegexAction))]
@@ -30,9 +30,19 @@ public class Effects(IResourceService resourceService, ISettingService settingSe
     }
 
     [EffectMethod]
+    public async Task HandleImportAction(ImportAction action, IDispatcher dispatcher)
+    {
+        var imported = resourceService.ImportResources();
+
+        // Todo: Import resources
+
+        dispatcher.Dispatch(new ProcessDoneAction());
+    }
+
+    [EffectMethod]
     public async Task HandleExportAction(ExportAction action, IDispatcher dispatcher)
     {
         await resourceService.ExportResources(action.Cultures, action.Resources);
-        dispatcher.Dispatch(new ExportDoneAction());
+        dispatcher.Dispatch(new ProcessDoneAction());
     }
 }

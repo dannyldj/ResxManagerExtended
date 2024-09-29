@@ -8,13 +8,18 @@ namespace ResxManagerExtended.Desktop.Data;
 
 public class ResxFile : IResourceFile
 {
+    public string? RelativePath { get; set; }
+
     public required string Path { get; init; }
 
     public required string Name { get; init; }
 
     public IEnumerable<CultureInfo>? Cultures { get; init; }
 
-    public string? RelativePath { get; set; }
+    public string GetResourcePath()
+    {
+        return RelativePath + DirectorySeparatorChar + Name;
+    }
 
     public Task<IEnumerable<ResourceView>> GetValues(CancellationToken token)
     {
@@ -28,8 +33,12 @@ public class ResxFile : IResourceFile
                 if (resources.TryGetValue(key, out var view))
                     view.Columns[culture] = value;
                 else
-                    resources.Add(key,
-                        new ResourceView(RelativePath + DirectorySeparatorChar + Name, key, culture, value));
+                    resources.Add(key, new ResourceView
+                    {
+                        Path = GetResourcePath(),
+                        Key = key,
+                        Columns = new Dictionary<CultureInfo, string?> { { culture, key } }
+                    });
 
                 if (string.IsNullOrEmpty(culture.Name))
                     resources[key].Comment = comment;

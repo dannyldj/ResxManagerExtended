@@ -7,7 +7,9 @@ namespace ResxManagerExtended.Shared.Services;
 
 public interface IResourceService
 {
-    Task<ITreeViewItem?> SetTopNode();
+    Task<IEnumerable<ITreeViewItem>?> SetNodes();
+
+    IAsyncEnumerable<ResourceView>? ImportResources();
 
     Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
         CancellationToken token = default);

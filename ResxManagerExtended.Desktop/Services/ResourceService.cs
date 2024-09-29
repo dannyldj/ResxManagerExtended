@@ -21,9 +21,10 @@ namespace ResxManagerExtended.Desktop.Services;
 
 internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> resourceState) : IResourceService
 {
+    private const string CsvFilter = "CSV File|*.csv";
     private readonly List<ResxFile> _resxFiles = [];
 
-    public async Task<ITreeViewItem?> SetTopNode()
+    public async Task<IEnumerable<ITreeViewItem>?> SetNodes()
     {
         var dialog = new OpenFolderDialog();
         if (await dialog.ShowDialogAsync() is not true)
@@ -41,22 +42,34 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
 
         dispatcher.Dispatch(new SetResourcesAction(_resxFiles));
 
-        return root;
+        return [root];
+    }
+
+    public async IAsyncEnumerable<ResourceView>? ImportResources()
+    {
+        var dialog = new OpenFileDialog { Filter = CsvFilter };
+        if (await dialog.ShowDialogAsync() is not true) yield break;
+
+        using var reader = new StreamReader(dialog.FileName);
+        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+        csv.Context.RegisterClassMap<ResourceViewMap>();
+        await foreach (var resource in csv.GetRecordsAsync<ResourceView>())
+        {
+            yield return resource;
+        }
     }
 
     public async Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
         CancellationToken token)
     {
-        var dialog = new SaveFileDialog
-        {
-            Filter = "CSV File|*.csv"
-        };
+        var dialog = new SaveFileDialog { Filter = CsvFilter };
         if (await dialog.ShowDialogAsync() is not true) return;
 
-        await using var writer = new StreamWriter(dialog.FileName, true, Encoding.UTF8);
+        await using var writer = new StreamWriter(dialog.FileName, false, Encoding.UTF8);
         await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
 
-        csv.ExportCsv(cultures, resources);
+        await csv.ExportCsvAsync(cultures, resources);
     }
 
     private List<ITreeViewItem> GetTreeItems(string directoryPath)

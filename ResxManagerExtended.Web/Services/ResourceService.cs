@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Immutable;
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 using CsvHelper;
 using Fluxor;
@@ -23,9 +24,12 @@ internal class ResourceService(
     IDispatcher dispatcher,
     IState<ResourceState> resourceState) : IResourceService
 {
+    private readonly FilePickerAcceptType _csvAcceptType = new()
+        { Accept = new Dictionary<string, string[]> { { "text/csv", [".csv"] } }, Description = "CSV File" };
+
     private readonly List<ResxFile> _resxFiles = [];
 
-    public async Task<ITreeViewItem?> SetTopNode()
+    public async Task<IEnumerable<ITreeViewItem>?> SetNodes()
     {
         try
         {
@@ -41,7 +45,7 @@ internal class ResourceService(
 
             dispatcher.Dispatch(new SetResourcesAction(_resxFiles));
 
-            return root;
+            return [root];
         }
         catch (JSException)
         {
@@ -50,31 +54,49 @@ internal class ResourceService(
         }
     }
 
+    public async IAsyncEnumerable<ResourceView>? ImportResources()
+    {
+        FileSystemFileHandleInProcess handle;
+
+        try
+        {
+            var selectedFiles =
+                await fileSystemAccessService.ShowOpenFilePickerAsync(new OpenFilePickerOptionsStartInFileSystemHandle
+                    { Types = [_csvAcceptType] });
+
+            handle = selectedFiles.Single();
+        }
+        catch (JSException)
+        {
+            // Closing the OpenFilePicker throws an exception.
+            yield break;
+        }
+
+        await using var file = await handle.GetFileAsync();
+        using var reader = new StringReader(await file.TextAsync());
+        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+
+        csv.Context.RegisterClassMap<ResourceViewMap>();
+        await foreach (var resource in csv.GetRecordsAsync<ResourceView>())
+        {
+            yield return resource;
+        }
+    }
+
     public async Task ExportResources(ImmutableArray<CultureInfo> cultures, IEnumerable<ResourceView> resources,
         CancellationToken token)
     {
         try
         {
-            await using var writer = new StringWriter();
-            await using var handle = await fileSystemAccessService.ShowSaveFilePickerAsync(
-                new SaveFilePickerOptionsStartInFileSystemHandle
-                {
-                    Types =
-                    [
-                        new FilePickerAcceptType
-                        {
-                            Accept = new Dictionary<string, string[]> { { "text/csv", [".csv"] } },
-                            Description = "CSV File"
-                        }
-                    ]
-                });
-
-            var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
-            csv.ExportCsv(cultures, resources);
+            await using var handle =
+                await fileSystemAccessService.ShowSaveFilePickerAsync(new SaveFilePickerOptionsStartInFileSystemHandle
+                    { Types = [_csvAcceptType] });
 
             await using var writable = await handle.CreateWritableAsync();
-            // TODO: Find a way to apply UTF8 BOM
-            await writable.WriteAsync(writer.GetStringBuilder().ToString());
+            await using var writer = new StreamWriter(writable, Encoding.UTF8);
+            await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+
+            await csv.ExportCsvAsync(cultures, resources);
         }
         catch (JSException)
         {
