@@ -79,6 +79,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you change that setting, Resource Manager might not work. Do you understand the features correctly?.
         /// </summary>
         public static string ConfirmEditSettings {
@@ -124,6 +133,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string Export {
+            get {
+                return ResourceManager.GetString("Export", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Having trouble?.
         /// </summary>
         public static string HavingTrouble {
@@ -138,6 +156,15 @@ namespace ResxManagerExtended.Shared.Properties {
         public static string Home {
             get {
                 return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
             }
         }
         
@@ -228,6 +255,15 @@ namespace ResxManagerExtended.Shared.Properties {
         public static string ResourceRegex {
             get {
                 return ResourceManager.GetString("ResourceRegex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you want to restart the program for the changes to take effect?.
+        /// </summary>
+        public static string RestartConfirm {
+            get {
+                return ResourceManager.GetString("RestartConfirm", resourceCulture);
             }
         }
         

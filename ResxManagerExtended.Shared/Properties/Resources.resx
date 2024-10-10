@@ -201,4 +201,7 @@
   <data name="Confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
+  <data name="RestartConfirm" xml:space="preserve">
+    <value>Do you want to restart the program for the changes to take effect?</value>
+  </data>
 </root>
