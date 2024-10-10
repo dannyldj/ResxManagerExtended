@@ -16,7 +16,6 @@
         <FluentSelect @bind-SelectedOption="_selectedCulture"
                       @bind-SelectedOption:after="CultureChanged"
                       Items="DefaultSettings.AvailableCultures"
-                      Disabled="OperatingSystem.IsBrowser() is false"
                       OptionText="@(option => option is null ? string.Empty : Loc[option.Name])"/>
     </FluentLayout>
 
