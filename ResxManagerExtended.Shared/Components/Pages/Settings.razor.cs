@@ -23,7 +23,6 @@ public partial class Settings : FluxorComponent
     [Inject] public required IDialogService DialogService { private get; init; }
     [Inject] public required IDispatcher Dispatcher { private get; init; }
     [Inject] public required ISettingService SettingService { private get; init; }
-    [Inject] public required NavigationManager NavigationManager { private get; init; }
     [Inject] public required IState<ResourceState> ResourceState { private get; init; }
 
     public static void InitializeSettings(IDispatcher dispatcher)
@@ -45,7 +44,7 @@ public partial class Settings : FluxorComponent
         }
 
         await SettingService.SetOptionAsStringAsync(SettingKeys.CultureKey, _selectedCulture.Name);
-        NavigationManager.NavigateTo(NavigationManager.Uri, true);
+        SettingService.ReloadApp();
     }
 
     private void OnClickResourceRegex(MouseEventArgs args)
