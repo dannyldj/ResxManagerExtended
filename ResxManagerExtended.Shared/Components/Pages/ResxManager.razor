@@ -52,23 +52,23 @@
                         </FluentButton>
                         <FluentPopover VerticalThreshold="170" AnchorId="importOrExport" @bind-Open="_showPopover">
                             <Body>
-                                <FluentStack>
-                                    <FluentRadioGroup @bind-Value="_popoverType">
-                                        <FluentRadio Value="PopoverType.Import">@Loc["Import"]</FluentRadio>
-                                        <FluentRadio Value="PopoverType.Export">@Loc["Export"]</FluentRadio>
-                                    </FluentRadioGroup>
-                                </FluentStack>
+                            <FluentStack>
+                                <FluentRadioGroup @bind-Value="_popoverType">
+                                    <FluentRadio Value="PopoverType.Import">@Loc["Import"]</FluentRadio>
+                                    <FluentRadio Value="PopoverType.Export">@Loc["Export"]</FluentRadio>
+                                </FluentRadioGroup>
+                            </FluentStack>
 
-                                <FluentStack HorizontalAlignment="HorizontalAlignment.Right">
-                                    <FluentButton Appearance="Appearance.Accent"
-                                                  OnClick="OnConfirm">
-                                        @Loc["Confirm"]
-                                    </FluentButton>
-                                </FluentStack>
+                            <FluentStack HorizontalAlignment="HorizontalAlignment.Right">
+                                <FluentButton Appearance="Appearance.Accent"
+                                              OnClick="OnConfirm">
+                                    @Loc["Confirm"]
+                                </FluentButton>
+                            </FluentStack>
 
-                                <FluentOverlay Visible="ResourceState.Value.IsResourceProcessing" Opacity="0.4">
-                                    <FluentProgressRing/>
-                                </FluentOverlay>
+                            <FluentOverlay Visible="ResourceState.Value.IsResourceProcessing" Opacity="0.4">
+                                <FluentProgressRing/>
+                            </FluentOverlay>
                             </Body>
                         </FluentPopover>
                     </FluentStack>
@@ -84,18 +84,18 @@
 
                                 @if (_showPath)
                                 {
-                                    <PropertyColumn Width="200px" Title="@Loc["Path"]" Property="@(c => c.Path)" Tooltip="true"/>
+                                    <PropertyColumn Width="200px" Title="@Loc["Path"]" Property="@(c => c.Path)" Sortable="true" Tooltip="true"/>
                                 }
 
                                 @if (_showComment)
                                 {
-                                    <PropertyColumn Width="200px" Title="@Loc["Comment"]" Property="@(c => c.Comment)" Tooltip="true"/>
+                                    <PropertyColumn Width="200px" Title="@Loc["Comment"]" Property="@(c => c.Comment)" Sortable="true" Tooltip="true"/>
                                 }
 
                                 @foreach (var culture in _cultures)
                                 {
                                     <PropertyColumn Width="300px" Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"
-                                                    Property="@(c => c.Columns.GetValueOrDefault(culture))" Tooltip="true"/>
+                                                    Property="@(c => c.Columns.GetValueOrDefault(culture))" Sortable="true" Tooltip="true"/>
                                 }
                             </ChildContent>
                             <EmptyContent>
