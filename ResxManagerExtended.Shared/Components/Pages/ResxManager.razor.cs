@@ -8,7 +8,6 @@ using ResxManagerExtended.Shared.Comparer;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
 using ResxManagerExtended.Shared.Properties;
-using ResxManagerExtended.Shared.Store;
 using ResxManagerExtended.Shared.Store.UseCase;
 
 namespace ResxManagerExtended.Shared.Components.Pages;
@@ -18,9 +17,8 @@ public partial class ResxManager : FluxorComponent
     private SortedSet<CultureInfo> _cultures = [];
     private bool _isLoading = true;
     private IEnumerable<ResourceView> _items = [];
-    private PopoverType _popoverType;
     private string? _searchValue;
-    private bool _showPath, _showComment, _showPopover;
+    private bool _showPath, _showComment;
 
     private IQueryable<ResourceView> SearchedItems => string.IsNullOrEmpty(_searchValue)
         ? _items.AsQueryable()
@@ -48,21 +46,6 @@ public partial class ResxManager : FluxorComponent
         StateHasChanged();
     }
 
-    private void OnConfirm()
-    {
-        switch (_popoverType)
-        {
-            case PopoverType.Import:
-                Dispatcher.Dispatch(new ImportAction());
-                break;
-            case PopoverType.Export:
-                Dispatcher.Dispatch(new ExportAction([.._cultures], _items));
-                break;
-            default:
-                throw new ArgumentOutOfRangeException();
-        }
-    }
-
     private async Task GetDataGrid(ITreeViewItem? selectedNode = null)
     {
         _isLoading = true;
@@ -84,11 +67,5 @@ public partial class ResxManager : FluxorComponent
 
         _searchValue = string.Empty;
         _isLoading = false;
-    }
-
-    private enum PopoverType
-    {
-        Import,
-        Export
     }
 }
