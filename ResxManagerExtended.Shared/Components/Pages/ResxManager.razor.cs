@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Localization;
 using Microsoft.FluentUI.AspNetCore.Components;
 using ResxManagerExtended.Shared.Comparer;
+using ResxManagerExtended.Shared.Components.Dialogs;
 using ResxManagerExtended.Shared.Data;
 using ResxManagerExtended.Shared.Extensions;
 using ResxManagerExtended.Shared.Properties;
@@ -30,6 +31,7 @@ public partial class ResxManager : FluxorComponent
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
     [Inject] public required IDispatcher Dispatcher { private get; init; }
+    [Inject] public required IDialogService DialogService { private get; init; }
     [Inject] public required IState<ResourceState> ResourceState { private get; init; }
 
     protected override async Task OnInitializedAsync()
@@ -44,6 +46,12 @@ public partial class ResxManager : FluxorComponent
     {
         await GetDataGrid();
         StateHasChanged();
+    }
+
+    private async Task OnRowDoubleClick(FluentDataGridRow<ResourceView> obj)
+    {
+        await DialogService.ShowDialogAsync<EditResourceDialog>(obj.Item!,
+            new DialogParameters { PreventDismissOnOverlayClick = true, PreventScroll = true });
     }
 
     private async Task GetDataGrid(ITreeViewItem? selectedNode = null)

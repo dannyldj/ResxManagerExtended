@@ -70,6 +70,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string Comment {
@@ -120,6 +129,15 @@ namespace ResxManagerExtended.Shared.Properties {
         public static string DirectorySetupGuide {
             get {
                 return ResourceManager.GetString("DirectorySetupGuide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Modify resource.
+        /// </summary>
+        public static string EditResource {
+            get {
+                return ResourceManager.GetString("EditResource", resourceCulture);
             }
         }
         
@@ -273,6 +291,15 @@ namespace ResxManagerExtended.Shared.Properties {
         public static string ResxManager {
             get {
                 return ResourceManager.GetString("ResxManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         

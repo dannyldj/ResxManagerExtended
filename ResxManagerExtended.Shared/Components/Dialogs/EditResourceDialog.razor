@@ -1,0 +1,32 @@
+﻿@implements IDialogContentComponent<ResxManagerExtended.Shared.Data.ResourceView>
+
+<FluentDialogHeader>
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="new Icons.Regular.Size24.Edit()"/>
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Loc["EditResource"]
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<FluentDialogBody>
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentSelect @bind-SelectedOption="@_selectedCulture" Items="@Content.Columns.Keys"
+                      OptionText="@(culture => string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"/>
+        <FluentTextField @bind-Value="@_inputValue" Placeholder="@Content.Columns.GetValueOrDefault(_selectedCulture)"/>
+    </FluentStack>
+</FluentDialogBody>
+
+<FluentDialogFooter>
+    <FluentButton BackgroundColor="var(--error)">
+        @Loc["Delete"]
+    </FluentButton>
+    <FluentSpacer/>
+    <FluentButton Appearance="Appearance.Accent" OnClick="SaveAsync"
+                  Disabled="@string.IsNullOrEmpty(_inputValue)">
+        @Loc["Save"]
+    </FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="CancelAsync">
+        @Loc["Cancel"]
+    </FluentButton>
+</FluentDialogFooter>

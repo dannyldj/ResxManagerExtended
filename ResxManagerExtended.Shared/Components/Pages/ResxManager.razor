@@ -56,6 +56,7 @@
 
                     <div Style="height:100%;overflow:auto">
                         <FluentDataGrid TGridItem="ResourceView"
+                                        OnRowDoubleClick="OnRowDoubleClick"
                                         Items="@SearchedItems" Loading="@_isLoading"
                                         ShowHover="true" Virtualize="true"
                                         GenerateHeader="GenerateHeaderOption.Sticky"

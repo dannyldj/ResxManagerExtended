@@ -204,4 +204,13 @@
   <data name="RestartConfirm" xml:space="preserve">
     <value>Do you want to restart the program for the changes to take effect?</value>
   </data>
+  <data name="EditResource" xml:space="preserve">
+    <value>Modify resource</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>
