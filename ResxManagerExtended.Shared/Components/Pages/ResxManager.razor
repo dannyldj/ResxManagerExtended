@@ -1,4 +1,4 @@
-﻿@page "/resx-manager"
+@page "/resx-manager"
 @using ResxManagerExtended.Shared.Data
 @inherits FluxorComponent
 
@@ -78,7 +78,7 @@
                                         Items="@SearchedItems" Loading="@_isLoading"
                                         ShowHover="true" Virtualize="true"
                                         GenerateHeader="GenerateHeaderOption.Sticky"
-                                        Style="min-width:max-content">
+                                        DisplayMode="DataGridDisplayMode.Table">
                             <ChildContent>
                                 <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true" Tooltip="true"/>
 

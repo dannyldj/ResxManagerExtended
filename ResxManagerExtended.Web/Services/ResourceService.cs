@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -6,7 +6,9 @@ using CsvHelper;
 using Fluxor;
 using KristofferStrube.Blazor.FileSystem;
 using KristofferStrube.Blazor.FileSystemAccess;
+using KristofferStrube.Blazor.WebIDL;
 using Microsoft.FluentUI.AspNetCore.Components;
+using Microsoft.FluentUI.AspNetCore.Components.Icons.Regular;
 using Microsoft.JSInterop;
 using ResxManagerExtended.Shared.Constants;
 using ResxManagerExtended.Shared.Data;
@@ -36,8 +38,8 @@ internal class ResourceService(
             {
                 Text = handle.Name,
                 Items = await GetTreeItems(handle.Name, resxFiles, handle),
-                IconCollapsed = new Icons.Regular.Size20.Folder(),
-                IconExpanded = new Icons.Regular.Size20.FolderOpen(),
+                IconCollapsed = new Size20.Folder(),
+                IconExpanded = new Size20.FolderOpen(),
                 Expanded = true
             };
 
@@ -59,7 +61,7 @@ internal class ResourceService(
         try
         {
             var selectedFiles =
-                await fileSystemAccessService.ShowOpenFilePickerAsync(new OpenFilePickerOptionsStartInFileSystemHandle
+                await fileSystemAccessService.ShowOpenFilePickerAsync(new OpenFilePickerOptions
                     { Types = [_csvAcceptType] });
 
             handle = selectedFiles.Single();
@@ -87,7 +89,7 @@ internal class ResourceService(
         try
         {
             await using var handle =
-                await fileSystemAccessService.ShowSaveFilePickerAsync(new SaveFilePickerOptionsStartInFileSystemHandle
+                await fileSystemAccessService.ShowSaveFilePickerAsync(new SaveFilePickerOptions
                     { Types = [_csvAcceptType] });
 
             await using var writable = await handle.CreateWritableAsync();
@@ -108,10 +110,24 @@ internal class ResourceService(
         var items = new List<ITreeViewItem>();
         var resources = new ConcurrentDictionary<string, IEnumerable<Resource>>();
         var regex = new Regex(resourceState.Value.Regex ?? DefaultSettings.DefaultResxRegex);
+        var entries = new List<(string Name, FileSystemHandleKind Kind)>();
 
-        await Parallel.ForEachAsync(await handle.ValuesAsync(), async (entry, token) =>
+        // The iterator disposes the previous handle when moving on, so only read the metadata here
+        // and re-acquire the handles by name below.
+        await using (var iterator = await handle.EntriesAsync())
         {
-            if (token.IsCancellationRequested) return;
+            await foreach (var (entryName, entryHandle) in iterator)
+            {
+                entries.Add((entryName, await entryHandle.GetKindAsync()));
+            }
+        }
+
+        await Parallel.ForEachAsync(entries, async (entry, token) =>
+        {
+            if (token.IsCancellationRequested)
+            {
+                return;
+            }
 
             var match = regex.Match(entry.Name);
             var currentPath = directoryPath + Path.DirectorySeparatorChar + entry.Name;
@@ -121,7 +137,7 @@ internal class ResourceService(
                     var name = match.Groups[DefaultSettings.ResourceResxName].Value;
                     var code = match.Groups[DefaultSettings.ResourceResxCode].Value;
                     var resource = new Resource(new CultureInfo(code), await handle.GetFileHandleAsync(entry.Name));
-                    resources.AddOrUpdate(name, [resource], (_, list) => [..list, resource]);
+                    resources.AddOrUpdate(name, [resource], (_, list) => [.. list, resource]);
                     break;
                 case FileSystemHandleKind.File:
                     // Non-resource file
@@ -130,14 +146,17 @@ internal class ResourceService(
                     await using (var directory = await handle.GetDirectoryHandleAsync(entry.Name))
                     {
                         var childNodes = await GetTreeItems(currentPath, resxFiles, directory);
-                        if (childNodes.Count <= 0) return;
+                        if (childNodes.Count <= 0)
+                        {
+                            return;
+                        }
 
                         items.Add(new TreeViewItem
                         {
                             Text = currentPath,
                             Items = childNodes,
-                            IconCollapsed = new Icons.Regular.Size20.Folder(),
-                            IconExpanded = new Icons.Regular.Size20.FolderOpen()
+                            IconCollapsed = new Size20.Folder(),
+                            IconExpanded = new Size20.FolderOpen()
                         });
                     }
 
@@ -152,7 +171,7 @@ internal class ResourceService(
             items.Add(new TreeViewItem
             {
                 Text = directoryPath + Path.DirectorySeparatorChar + resource.Key,
-                IconCollapsed = new Icons.Regular.Size20.BookLetter()
+                IconCollapsed = new Size20.BookLetter()
             });
 
             resxFiles.Add(new ResxFile

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.Extensions.Localization;
 using Microsoft.FluentUI.AspNetCore.Components;
+using Microsoft.FluentUI.AspNetCore.Components.Icons.Filled;
 using ResxManagerExtended.Shared.Constants;
 using ResxManagerExtended.Shared.Properties;
 using ResxManagerExtended.Shared.Services;
@@ -38,7 +39,10 @@ public partial class Settings : FluxorComponent
 
     private async Task CultureChanged()
     {
-        if (_selectedCulture is null || Equals(CultureInfo.CurrentCulture, _selectedCulture)) return;
+        if (_selectedCulture is null || Equals(CultureInfo.CurrentCulture, _selectedCulture))
+        {
+            return;
+        }
 
         await SettingService.SetOptionAsStringAsync(SettingKeys.CultureKey, _selectedCulture.Name);
         NavigationManager.NavigateTo(NavigationManager.Uri, true);
@@ -46,7 +50,10 @@ public partial class Settings : FluxorComponent
 
     private void OnClickResourceRegex(MouseEventArgs args)
     {
-        if (_isReadOnlyResourceRegex == false) return;
+        if (!_isReadOnlyResourceRegex)
+        {
+            return;
+        }
 
         DialogService.ShowMessageBox(new DialogParameters<MessageBoxContent>
         {
@@ -54,9 +61,9 @@ public partial class Settings : FluxorComponent
             {
                 Title = Loc["Warning"],
                 Intent = MessageBoxIntent.Warning,
-                Icon = new Icons.Filled.Size24.Warning(),
+                Icon = new Size24.Warning(),
                 IconColor = Color.Warning,
-                Message = Loc["ConfirmEditSettings"]
+                MarkupMessage = new MarkupString(Loc["ConfirmEditSettings"])
             },
             PrimaryAction = Loc["Yes"],
             SecondaryAction = Loc["No"],
