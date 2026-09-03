@@ -16,6 +16,8 @@ public interface IResourceFile
 
     Task SetValue(string key, IDictionary<CultureInfo, string?> cultures, CancellationToken token = default);
 
+    Task DeleteValue(string key, CancellationToken token = default);
+
     Task<IEnumerable<ResourceView>> GetValues(CancellationToken token = default);
 
     public static bool DetectUtf8Bom(byte[] byteArray)

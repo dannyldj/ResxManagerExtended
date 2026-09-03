@@ -16,10 +16,12 @@ namespace ResxManagerExtended.Shared.Components.Pages;
 
 public partial class ResxManager : FluxorComponent
 {
+    private readonly HashSet<ResourceView> _selectedItems = [];
     private SortedSet<CultureInfo> _cultures = [];
     private bool _isLoading = true;
     private IEnumerable<ResourceView> _items = [];
     private string? _searchValue;
+    private bool? _selectAll = false;
     private ITreeViewItem? _selectedNode;
     private bool _showPath, _showComment;
 
@@ -82,6 +84,67 @@ public partial class ResxManager : FluxorComponent
         Dispatcher.Dispatch(new EditResourceAction(obj.Item, edit.Culture, edit.Value));
     }
 
+    private void ToggleSelection(ResourceView item, bool selected)
+    {
+        if (selected)
+        {
+            _selectedItems.Add(item);
+        }
+        else
+        {
+            _selectedItems.Remove(item);
+        }
+
+        RefreshSelectAllState();
+    }
+
+    private void SelectAllChanged(bool? selected)
+    {
+        // 전체 선택은 현재 검색 필터가 적용된 목록만 대상으로 한다.
+        _selectedItems.Clear();
+
+        if (selected is true)
+        {
+            foreach (var item in SearchedItems)
+            {
+                _selectedItems.Add(item);
+            }
+        }
+
+        RefreshSelectAllState();
+    }
+
+    private void RefreshSelectAllState()
+    {
+        if (_selectedItems.Count == 0)
+        {
+            _selectAll = false;
+            return;
+        }
+
+        var filtered = SearchedItems.ToList();
+        _selectAll = filtered.Count > 0 && filtered.TrueForAll(_selectedItems.Contains) ? true : null;
+    }
+
+    private async Task DeleteSelectedAsync()
+    {
+        if (_selectedItems.Count == 0)
+        {
+            return;
+        }
+
+        var dialog = await DialogService.ShowConfirmationAsync(
+            Loc["ConfirmDeleteResources", _selectedItems.Count], Loc["Yes"], Loc["No"], Loc["Warning"]);
+        var result = await dialog.Result;
+
+        if (result.Cancelled)
+        {
+            return;
+        }
+
+        Dispatcher.Dispatch(new DeleteResourcesAction([.._selectedItems]));
+    }
+
     private async Task SelectNode(ITreeViewItem? selectedNode)
     {
         _selectedNode = selectedNode;
@@ -95,6 +158,10 @@ public partial class ResxManager : FluxorComponent
         _isLoading = true;
         _items = [];
         _cultures = new SortedSet<CultureInfo>(new CultureComparer());
+
+        // 항목을 다시 읽으면 이전 인스턴스를 가리키던 선택은 의미가 없다.
+        _selectedItems.Clear();
+        _selectAll = false;
 
         try
         {

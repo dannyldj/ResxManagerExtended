@@ -47,6 +47,21 @@ public class ResxFile : IResourceFile
         }
     }
 
+    public async Task DeleteValue(string key, CancellationToken token)
+    {
+        foreach (var path in Paths?.Values ?? [])
+        {
+            var document = XDocument.Load(path, LoadOptions.PreserveWhitespace);
+            if (!document.RemoveResource(key))
+            {
+                continue;
+            }
+
+            await using var writer = new StreamWriter(path, false, new UTF8Encoding(IResourceFile.DetectUtf8Bom(path)));
+            await document.SaveAsync(writer, SaveOptions.None, token);
+        }
+    }
+
     public async Task<IEnumerable<ResourceView>> GetValues(CancellationToken token)
     {
         var resources = new Dictionary<string, ResourceView>();

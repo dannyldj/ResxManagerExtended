@@ -97,6 +97,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete {0} selected item(s)? The keys will be removed from every language file..
+        /// </summary>
+        public static string ConfirmDeleteResources {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteResources", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to If you change that setting, Resource Manager might not work. Do you understand the features correctly?.
         /// </summary>
         public static string ConfirmEditSettings {

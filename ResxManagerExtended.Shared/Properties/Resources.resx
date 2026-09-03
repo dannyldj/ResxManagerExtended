@@ -141,6 +141,9 @@
   <data name="ConfirmEditSettings" xml:space="preserve">
     <value>If you change that setting, Resource Manager might not work. Do you understand the features correctly?</value>
   </data>
+  <data name="ConfirmDeleteResources" xml:space="preserve">
+    <value>Delete {0} selected item(s)? The keys will be removed from every language file.</value>
+  </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>

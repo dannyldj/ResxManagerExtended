@@ -69,6 +69,27 @@ public class Effects(
     }
 
     [EffectMethod]
+    public async Task HandleDeleteResourcesAction(DeleteResourcesAction action, IDispatcher dispatcher)
+    {
+        var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
+
+        foreach (var group in action.Resources.GroupBy(e => e.Path))
+        {
+            if (resources?.TryGetValue(group.Key, out var file) is not true)
+            {
+                continue;
+            }
+
+            foreach (var resource in group)
+            {
+                await file.DeleteValue(resource.Key);
+            }
+        }
+
+        dispatcher.Dispatch(new ProcessDoneAction());
+    }
+
+    [EffectMethod]
     public async Task HandleExportAction(ExportAction action, IDispatcher dispatcher)
     {
         await resourceService.ExportResources(action.Cultures, action.Resources);

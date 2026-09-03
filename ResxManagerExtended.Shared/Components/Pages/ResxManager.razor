@@ -41,9 +41,14 @@
                         <FluentCheckbox @bind-Value="_showPath" Label="@Loc["Path"]"/>
                         <FluentCheckbox @bind-Value="_showComment" Label="@Loc["Comment"]"/>
                         <FluentSpacer/>
-                        <FluentSearch @bind-Value="_searchValue"
+                        <FluentSearch @bind-Value="_searchValue" @bind-Value:after="RefreshSelectAllState"
                                       Immediate="true" ImmediateDelay="300"
                                       Placeholder="@Loc["SearchPlaceholder"]"/>
+                        <FluentButton Appearance="Appearance.Outline"
+                                      IconStart="new Icons.Regular.Size16.Delete()"
+                                      Title="@Loc["Delete"]"
+                                      Disabled="@(_selectedItems.Count == 0)"
+                                      OnClick="DeleteSelectedAsync"/>
                         <FluentButton Appearance="Appearance.Outline"
                                       IconStart="new Icons.Regular.Size16.ArrowExportUp()"
                                       Title="@Loc["Export"]"
@@ -63,6 +68,13 @@
                                         DisplayMode="DataGridDisplayMode.Table"
                                         Style="table-layout:fixed">
                             <ChildContent>
+                                <SelectColumn TGridItem="ResourceView" Width="50px"
+                                              SelectMode="DataGridSelectMode.Multiple"
+                                              SelectFromEntireRow="false"
+                                              Property="@(item => _selectedItems.Contains(item))"
+                                              OnSelect="@(item => ToggleSelection(item.Item, item.Selected))"
+                                              SelectAll="@_selectAll" SelectAllChanged="SelectAllChanged"/>
+
                                 <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true" Tooltip="true"/>
 
                                 @if (_showPath)

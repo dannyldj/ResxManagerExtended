@@ -42,6 +42,25 @@ public static class XDocumentExtension
             }
         }
 
+        public bool RemoveResource(string name)
+        {
+            var data = document.GetDataNode(name);
+            if (data is null)
+            {
+                return false;
+            }
+
+            // 노드 앞 들여쓰기 공백까지 지워야 빈 줄이 남지 않는다.
+            if (data.PreviousNode is XText indent)
+            {
+                indent.Remove();
+            }
+
+            data.Remove();
+
+            return true;
+        }
+
         private void AddDataNode(string name, string value)
         {
             var data = new XElement("data",
