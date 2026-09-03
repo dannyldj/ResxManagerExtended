@@ -1,8 +1,9 @@
-﻿@implements IDialogContentComponent<ResxManagerExtended.Shared.Data.ResourceView>
+@using System.Globalization
+@implements IDialogContentComponent<ResxManagerExtended.Shared.Data.ResourceView>
 
 <FluentDialogHeader>
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
-        <FluentIcon Value="new Icons.Regular.Size24.Edit()"/>
+        <FluentIcon Value="new Icons.Filled.Size24.Edit()"/>
         <FluentLabel Typo="Typography.PaneHeader">
             @Loc["EditResource"]
         </FluentLabel>
@@ -11,9 +12,10 @@
 
 <FluentDialogBody>
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
-        <FluentSelect @bind-SelectedOption="@_selectedCulture" Items="@Content.Columns.Keys"
-                      OptionText="@(culture => string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"/>
-        <FluentTextField @bind-Value="@_inputValue" Placeholder="@Content.Columns.GetValueOrDefault(_selectedCulture)"/>
+        <FluentSelect TOption="CultureInfo" SelectedOption="@_selectedCulture"
+                      SelectedOptionChanged="OnCultureChanged" Items="@Content.Columns.Keys"
+                      OptionText="@(culture => string.IsNullOrEmpty(culture.Name) ? Loc["NeutralValue"] : culture.Name)"/>
+        <FluentTextField @bind-Value="@_inputValue" Immediate="true" Placeholder="@NeutralValue" Style="width:100%"/>
     </FluentStack>
 </FluentDialogBody>
 
@@ -23,7 +25,7 @@
     </FluentButton>
     <FluentSpacer/>
     <FluentButton Appearance="Appearance.Accent" OnClick="SaveAsync"
-                  Disabled="@string.IsNullOrEmpty(_inputValue)">
+                  Disabled="@IsUnchanged">
         @Loc["Save"]
     </FluentButton>
     <FluentButton Appearance="Appearance.Neutral" OnClick="CancelAsync">

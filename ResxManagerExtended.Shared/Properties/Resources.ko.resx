@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -159,7 +159,7 @@
   <data name="ko" xml:space="preserve">
     <value>한국어</value>
   </data>
-  <data name="NeuturalValue" xml:space="preserve">
+  <data name="NeutralValue" xml:space="preserve">
     <value>기본값</value>
   </data>
   <data name="NothingHere" xml:space="preserve">

@@ -31,7 +31,7 @@ public class ResxFile : IResourceFile
         var xml = await file.TextAsync();
 
         var document = XDocument.Parse(xml);
-        document.GetNode(key)?.SetValue(value);
+        document.SetResourceValue(key, value);
 
         await using var writable = await handle.CreateWritableAsync();
         await using var writer = new StreamWriter(writable,
@@ -61,18 +61,16 @@ public class ResxFile : IResourceFile
             var document = XDocument.Parse(xml);
             foreach (var (key, comment, value) in document.GetResources())
             {
-                if (resources.TryGetValue(key, out var view))
-                    view.Columns[culture] = value;
-                else
-                    resources.Add(key, new ResourceView
-                    {
-                        Path = GetResourcePath(),
-                        Key = key,
-                        Columns = new Dictionary<CultureInfo, string?> { { culture, value } }
-                    });
+                if (resources.TryGetValue(key, out var view) is false)
+                {
+                    view = this.CreateResourceView(key);
+                    resources.Add(key, view);
+                }
+
+                view.Columns[culture] = value;
 
                 if (string.IsNullOrEmpty(culture.Name))
-                    resources[key].Comment = comment;
+                    view.Comment = comment;
             }
         }
 

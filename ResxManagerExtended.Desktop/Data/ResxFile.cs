@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Xml.Linq;
@@ -27,10 +27,13 @@ public class ResxFile : IResourceFile
 
     public async Task SetValue(string key, CultureInfo culture, string value, CancellationToken token)
     {
-        if (Paths?.TryGetValue(culture, out var path) is not true) return;
+        if (Paths?.TryGetValue(culture, out var path) is not true)
+        {
+            return;
+        }
 
         var document = XDocument.Load(path, LoadOptions.PreserveWhitespace);
-        document.GetNode(key)?.SetValue(value);
+        document.SetResourceValue(key, value);
 
         await using var writer = new StreamWriter(path, false, new UTF8Encoding(IResourceFile.DetectUtf8Bom(path)));
         await document.SaveAsync(writer, SaveOptions.None, token);
@@ -51,23 +54,26 @@ public class ResxFile : IResourceFile
         await Task.Yield();
         foreach (var culture in Cultures ?? [])
         {
-            if (Paths?.TryGetValue(culture, out var path) is not true) continue;
+            if (Paths?.TryGetValue(culture, out var path) is not true)
+            {
+                continue;
+            }
 
             var document = XDocument.Load(path);
             foreach (var (key, comment, value) in document.GetResources())
             {
-                if (resources.TryGetValue(key, out var view))
-                    view.Columns[culture] = value;
-                else
-                    resources.Add(key, new ResourceView
-                    {
-                        Path = GetResourcePath(),
-                        Key = key,
-                        Columns = new Dictionary<CultureInfo, string?> { { culture, value } }
-                    });
+                if (!resources.TryGetValue(key, out var view))
+                {
+                    view = this.CreateResourceView(key);
+                    resources.Add(key, view);
+                }
+
+                view.Columns[culture] = value;
 
                 if (string.IsNullOrEmpty(culture.Name))
-                    resources[key].Comment = comment;
+                {
+                    view.Comment = comment;
+                }
             }
         }
 

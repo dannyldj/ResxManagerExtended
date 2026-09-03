@@ -26,7 +26,10 @@ public class Effects(
     [EffectMethod]
     public async Task HandleSetRegexAction(SetRegexAction action, IDispatcher dispatcher)
     {
-        if (action.Regex is null) return;
+        if (action.Regex is null)
+        {
+            return;
+        }
 
         await settingService.SetOptionAsStringAsync(SettingKeys.ResourceRegexKey, action.Regex);
         dispatcher.Dispatch(new RegexResultAction(action.Regex));
@@ -39,11 +42,28 @@ public class Effects(
         var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
 
         if (imported is not null)
+        {
             await foreach (var resource in imported)
             {
                 if (resources?.TryGetValue(resource.Path, out var file) is true)
+                {
                     await file.SetValue(resource.Key, resource.Columns);
+                }
             }
+        }
+
+        dispatcher.Dispatch(new ProcessDoneAction());
+    }
+
+    [EffectMethod]
+    public async Task HandleEditResourceAction(EditResourceAction action, IDispatcher dispatcher)
+    {
+        var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
+
+        if (resources?.TryGetValue(action.Resource.Path, out var file) is true)
+        {
+            await file.SetValue(action.Resource.Key, action.Culture, action.Value);
+        }
 
         dispatcher.Dispatch(new ProcessDoneAction());
     }

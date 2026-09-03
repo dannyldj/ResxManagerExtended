@@ -27,7 +27,7 @@
                         Style="height:-webkit-fill-available;overflow-y:auto">
             <Panel1>
                 <FluentTreeView Items="ResourceState.Value.Nodes"
-                                SelectedItemChanged="async item => await GetDataGrid(item)"
+                                SelectedItemChanged="async item => await SelectNode(item)"
                                 LazyLoadItems="true" Style="overflow:auto">
                     <ItemTemplate>
                         @context.Text.Split(Path.DirectorySeparatorChar).Last()
