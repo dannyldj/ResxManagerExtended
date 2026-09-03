@@ -78,7 +78,8 @@
                                         Items="@SearchedItems" Loading="@_isLoading"
                                         ShowHover="true" Virtualize="true"
                                         GenerateHeader="GenerateHeaderOption.Sticky"
-                                        DisplayMode="DataGridDisplayMode.Table">
+                                        DisplayMode="DataGridDisplayMode.Table"
+                                        Style="table-layout:fixed">
                             <ChildContent>
                                 <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true" Tooltip="true"/>
 
