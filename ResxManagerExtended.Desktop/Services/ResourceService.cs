@@ -1,4 +1,4 @@
-﻿using System.Collections.Concurrent;
+using System.Collections.Concurrent;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using CsvHelper;
 using Fluxor;
 using Microsoft.FluentUI.AspNetCore.Components;
+using Microsoft.FluentUI.AspNetCore.Components.Icons.Regular;
 using Microsoft.Win32;
 using ResxManagerExtended.Desktop.Data;
 using ResxManagerExtended.Desktop.Extensions;
@@ -26,15 +27,17 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
     {
         var dialog = new OpenFolderDialog();
         if (await dialog.ShowDialogAsync() is not true)
+        {
             return null;
+        }
 
         var resxFiles = new List<ResxFile>();
         var root = new TreeViewItem
         {
             Text = dialog.FolderName,
             Items = GetTreeItems(dialog.FolderName, resxFiles),
-            IconCollapsed = new Icons.Regular.Size20.Folder(),
-            IconExpanded = new Icons.Regular.Size20.FolderOpen(),
+            IconCollapsed = new Size20.Folder(),
+            IconExpanded = new Size20.FolderOpen(),
             Expanded = true
         };
         resxFiles.ForEach(file => file.RelativePath = file.GetRelativePath(dialog.FolderName));
@@ -47,7 +50,10 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
     public async IAsyncEnumerable<ResourceView>? ImportResources()
     {
         var dialog = new OpenFileDialog { Filter = CsvFilter };
-        if (await dialog.ShowDialogAsync() is not true) yield break;
+        if (await dialog.ShowDialogAsync() is not true)
+        {
+            yield break;
+        }
 
         using var reader = new StreamReader(dialog.FileName);
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
@@ -63,7 +69,10 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
         CancellationToken token)
     {
         var dialog = new SaveFileDialog { Filter = CsvFilter };
-        if (await dialog.ShowDialogAsync() is not true) return;
+        if (await dialog.ShowDialogAsync() is not true)
+        {
+            return;
+        }
 
         await using var writer = new StreamWriter(dialog.FileName, false, Encoding.UTF8);
         await using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
@@ -82,21 +91,24 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
                 {
                     Text = dir,
                     Items = childNodes,
-                    IconCollapsed = new Icons.Regular.Size20.Folder(),
-                    IconExpanded = new Icons.Regular.Size20.FolderOpen()
+                    IconCollapsed = new Size20.Folder(),
+                    IconExpanded = new Size20.FolderOpen()
                 })
             .Cast<ITreeViewItem>().ToList();
 
         Parallel.ForEach(Directory.GetFiles(directoryPath), file =>
         {
             var match = regex.Match(Path.GetFileName(file));
-            if (match.Success is false) return;
+            if (!match.Success)
+            {
+                return;
+            }
 
             var name = match.Groups[DefaultSettings.ResourceResxName].Value;
             var code = match.Groups[DefaultSettings.ResourceResxCode].Value;
 
             resources.AddOrUpdate(name, [new Resource(new CultureInfo(code), file)],
-                (_, list) => [..list, new Resource(new CultureInfo(code), file)]);
+                (_, list) => [.. list, new Resource(new CultureInfo(code), file)]);
         });
 
         foreach (var resource in resources)
@@ -104,7 +116,7 @@ internal class ResourceService(IDispatcher dispatcher, IState<ResourceState> res
             items.Add(new TreeViewItem
             {
                 Text = directoryPath + Path.DirectorySeparatorChar + resource.Key,
-                IconCollapsed = new Icons.Regular.Size20.BookLetter()
+                IconCollapsed = new Size20.BookLetter()
             });
 
             resxFiles.Add(new ResxFile
