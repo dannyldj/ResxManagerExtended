@@ -89,7 +89,7 @@
 
                                 @foreach (var culture in _cultures)
                                 {
-                                    <PropertyColumn Width="300px" Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"
+                                    <PropertyColumn Width="300px" Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeutralValue"] : culture.Name)"
                                                     Property="@(c => c.Columns.GetValueOrDefault(culture))" Sortable="true" Tooltip="true"/>
                                 }
                             </ChildContent>
