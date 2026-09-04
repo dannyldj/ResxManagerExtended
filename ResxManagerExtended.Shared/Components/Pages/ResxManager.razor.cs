@@ -24,14 +24,7 @@ public partial class ResxManager : FluxorComponent
     private bool? _selectAll = false;
     private ITreeViewItem? _selectedNode;
     private bool _showPath, _showComment;
-
-    private IQueryable<ResourceView> SearchedItems => string.IsNullOrEmpty(_searchValue)
-        ? _items.AsQueryable()
-        : _items.Where(item =>
-                item.Key.Contains(_searchValue, StringComparison.OrdinalIgnoreCase) ||
-                item.Columns.Any(e =>
-                    e.Value != null && e.Value.Contains(_searchValue, StringComparison.OrdinalIgnoreCase)))
-            .AsQueryable();
+    private IQueryable<ResourceView> SearchedItems { get; set; } = Array.Empty<ResourceView>().AsQueryable();
 
     [Inject] public required IStringLocalizer<Resources> Loc { private get; init; }
     [Inject] public required IDispatcher Dispatcher { private get; init; }
@@ -114,6 +107,20 @@ public partial class ResxManager : FluxorComponent
         RefreshSelectAllState();
     }
 
+    private void RefreshSearchedItems()
+    {
+        var filtered = string.IsNullOrEmpty(_searchValue)
+            ? _items
+            : _items.Where(item =>
+                item.Key.Contains(_searchValue, StringComparison.OrdinalIgnoreCase) ||
+                item.Columns.Any(e =>
+                    e.Value != null && e.Value.Contains(_searchValue, StringComparison.OrdinalIgnoreCase)));
+
+        SearchedItems = filtered.ToArray().AsQueryable();
+
+        RefreshSelectAllState();
+    }
+
     private void RefreshSelectAllState()
     {
         if (_selectedItems.Count == 0)
@@ -122,8 +129,7 @@ public partial class ResxManager : FluxorComponent
             return;
         }
 
-        var filtered = SearchedItems.ToList();
-        _selectAll = filtered.Count > 0 && filtered.TrueForAll(_selectedItems.Contains) ? true : null;
+        _selectAll = SearchedItems.Any() && SearchedItems.AsEnumerable().All(_selectedItems.Contains) ? true : null;
     }
 
     private async Task DeleteSelectedAsync()
@@ -142,7 +148,7 @@ public partial class ResxManager : FluxorComponent
             return;
         }
 
-        Dispatcher.Dispatch(new DeleteResourcesAction([.._selectedItems]));
+        Dispatcher.Dispatch(new DeleteResourcesAction([.. _selectedItems]));
     }
 
     private async Task SelectNode(ITreeViewItem? selectedNode)
@@ -184,6 +190,7 @@ public partial class ResxManager : FluxorComponent
         }
         finally
         {
+            RefreshSearchedItems();
             _isLoading = false;
         }
     }

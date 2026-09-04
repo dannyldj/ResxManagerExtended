@@ -41,7 +41,7 @@
                         <FluentCheckbox @bind-Value="_showPath" Label="@Loc["Path"]"/>
                         <FluentCheckbox @bind-Value="_showComment" Label="@Loc["Comment"]"/>
                         <FluentSpacer/>
-                        <FluentSearch @bind-Value="_searchValue" @bind-Value:after="RefreshSelectAllState"
+                        <FluentSearch @bind-Value="_searchValue" @bind-Value:after="RefreshSearchedItems"
                                       Immediate="true" ImmediateDelay="300"
                                       Placeholder="@Loc["SearchPlaceholder"]"/>
                         <FluentButton Appearance="Appearance.Outline"
@@ -63,7 +63,7 @@
                         <FluentDataGrid TGridItem="ResourceView"
                                         OnRowDoubleClick="OnRowDoubleClick"
                                         Items="@SearchedItems" Loading="@_isLoading"
-                                        ShowHover="true" Virtualize="true"
+                                        ShowHover="true" Virtualize="true" ItemSize="40"
                                         GenerateHeader="GenerateHeaderOption.Sticky"
                                         DisplayMode="DataGridDisplayMode.Table"
                                         Style="table-layout:fixed">
