@@ -97,6 +97,15 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Delete &apos;{0}&apos;? The key will be removed from every language file..
+        /// </summary>
+        public static string ConfirmDeleteResource {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Delete {0} selected item(s)? The keys will be removed from every language file..
         /// </summary>
         public static string ConfirmDeleteResources {

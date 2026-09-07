@@ -20,6 +20,9 @@
 </FluentDialogBody>
 
 <FluentDialogFooter>
+    <FluentButton BackgroundColor="var(--error)" OnClick="DeleteAsync">
+        @Loc["Delete"]
+    </FluentButton>
     <FluentSpacer/>
     <FluentButton Appearance="Appearance.Accent" OnClick="SaveAsync"
                   Disabled="@IsUnchanged">

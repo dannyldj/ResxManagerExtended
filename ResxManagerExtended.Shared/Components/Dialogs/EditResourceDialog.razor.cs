@@ -58,6 +58,11 @@ public partial class EditResourceDialog
         await Dialog.CloseAsync(new EditResourceResult(_selectedCulture, _inputValue ?? string.Empty));
     }
 
+    private async Task DeleteAsync()
+    {
+        await Dialog.CloseAsync(new DeleteResourceResult(Content));
+    }
+
     private async Task CancelAsync()
     {
         await Dialog.CancelAsync();

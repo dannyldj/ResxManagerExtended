@@ -69,12 +69,34 @@ public partial class ResxManager : FluxorComponent
             new DialogParameters { PreventDismissOnOverlayClick = true, PreventScroll = true });
         var result = await dialog.Result;
 
-        if (result.Cancelled || result.Data is not EditResourceResult edit)
+        if (result.Cancelled)
         {
             return;
         }
 
-        Dispatcher.Dispatch(new EditResourceAction(obj.Item, edit.Culture, edit.Value));
+        switch (result.Data)
+        {
+            case EditResourceResult edit:
+                Dispatcher.Dispatch(new EditResourceAction(obj.Item, edit.Culture, edit.Value));
+                break;
+            case DeleteResourceResult delete:
+                await DeleteResourceAsync(delete.Resource);
+                break;
+        }
+    }
+
+    private async Task DeleteResourceAsync(ResourceView resource)
+    {
+        var dialog = await DialogService.ShowConfirmationAsync(
+            Loc["ConfirmDeleteResource", resource.Key], Loc["Yes"], Loc["No"], Loc["Warning"]);
+        var result = await dialog.Result;
+
+        if (result.Cancelled)
+        {
+            return;
+        }
+
+        Dispatcher.Dispatch(new DeleteResourcesAction([resource]));
     }
 
     private void ToggleSelection(ResourceView item, bool selected)
