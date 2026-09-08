@@ -27,7 +27,7 @@
                         Style="height:-webkit-fill-available;overflow-y:auto">
             <Panel1>
                 <FluentTreeView Items="ResourceState.Value.Nodes"
-                                SelectedItemChanged="async item => await GetDataGrid(item)"
+                                SelectedItemChanged="async item => await SelectNode(item)"
                                 LazyLoadItems="true" Style="overflow:auto">
                     <ItemTemplate>
                         @context.Text.Split(Path.DirectorySeparatorChar).Last()
@@ -41,9 +41,14 @@
                         <FluentCheckbox @bind-Value="_showPath" Label="@Loc["Path"]"/>
                         <FluentCheckbox @bind-Value="_showComment" Label="@Loc["Comment"]"/>
                         <FluentSpacer/>
-                        <FluentSearch @bind-Value="_searchValue"
+                        <FluentSearch @bind-Value="_searchValue" @bind-Value:after="RefreshSearchedItems"
                                       Immediate="true" ImmediateDelay="300"
                                       Placeholder="@Loc["SearchPlaceholder"]"/>
+                        <FluentButton Appearance="Appearance.Outline"
+                                      IconStart="new Icons.Regular.Size16.Delete()"
+                                      Title="@Loc["Delete"]"
+                                      Disabled="@(_selectedItems.Count == 0)"
+                                      OnClick="DeleteSelectedAsync"/>
                         <FluentButton Appearance="Appearance.Outline"
                                       IconStart="new Icons.Regular.Size16.ArrowExportUp()"
                                       Title="@Loc["Export"]"
@@ -56,12 +61,20 @@
 
                     <div Style="height:100%;overflow:auto">
                         <FluentDataGrid TGridItem="ResourceView"
+                                        OnRowDoubleClick="OnRowDoubleClick"
                                         Items="@SearchedItems" Loading="@_isLoading"
-                                        ShowHover="true" Virtualize="true"
+                                        ShowHover="true" Virtualize="true" ItemSize="40"
                                         GenerateHeader="GenerateHeaderOption.Sticky"
                                         DisplayMode="DataGridDisplayMode.Table"
                                         Style="table-layout:fixed">
                             <ChildContent>
+                                <SelectColumn TGridItem="ResourceView" Width="50px"
+                                              SelectMode="DataGridSelectMode.Multiple"
+                                              SelectFromEntireRow="false"
+                                              Property="@(item => _selectedItems.Contains(item))"
+                                              OnSelect="@(item => ToggleSelection(item.Item, item.Selected))"
+                                              SelectAll="@_selectAll" SelectAllChanged="SelectAllChanged"/>
+
                                 <PropertyColumn Width="200px" Property="@(c => c.Key)" Sortable="true" Tooltip="true"/>
 
                                 @if (_showPath)
@@ -76,7 +89,7 @@
 
                                 @foreach (var culture in _cultures)
                                 {
-                                    <PropertyColumn Width="300px" Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeuturalValue"] : culture.Name)"
+                                    <PropertyColumn Width="300px" Title="@(string.IsNullOrEmpty(culture.Name) ? Loc["NeutralValue"] : culture.Name)"
                                                     Property="@(c => c.Columns.GetValueOrDefault(culture))" Sortable="true" Tooltip="true"/>
                                 }
                             </ChildContent>

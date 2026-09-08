@@ -40,6 +40,18 @@ public static class Reducers
         return state with { IsResourceProcessing = true };
     }
 
+    [ReducerMethod(typeof(EditResourceAction))]
+    public static ResourceState ReduceEditResourceAction(ResourceState state)
+    {
+        return state with { IsResourceProcessing = true };
+    }
+
+    [ReducerMethod(typeof(DeleteResourcesAction))]
+    public static ResourceState ReduceDeleteResourcesAction(ResourceState state)
+    {
+        return state with { IsResourceProcessing = true };
+    }
+
     [ReducerMethod(typeof(ProcessDoneAction))]
     public static ResourceState ReduceExportDoneAction(ResourceState state)
     {

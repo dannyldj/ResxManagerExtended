@@ -141,6 +141,12 @@
   <data name="ConfirmEditSettings" xml:space="preserve">
     <value>If you change that setting, Resource Manager might not work. Do you understand the features correctly?</value>
   </data>
+  <data name="ConfirmDeleteResource" xml:space="preserve">
+    <value>Delete '{0}'? The key will be removed from every language file.</value>
+  </data>
+  <data name="ConfirmDeleteResources" xml:space="preserve">
+    <value>Delete {0} selected item(s)? The keys will be removed from every language file.</value>
+  </data>
   <data name="Yes" xml:space="preserve">
     <value>Yes</value>
   </data>
@@ -159,8 +165,8 @@
   <data name="ko" xml:space="preserve">
     <value>Korean</value>
   </data>
-  <data name="NeuturalValue" xml:space="preserve">
-    <value>Neutural Value</value>
+  <data name="NeutralValue" xml:space="preserve">
+    <value>Neutral Value</value>
   </data>
   <data name="NothingHere" xml:space="preserve">
     <value>Nothing to see here. Carry on!</value>
@@ -203,5 +209,14 @@
   </data>
   <data name="RestartConfirm" xml:space="preserve">
     <value>Do you want to restart the program for the changes to take effect?</value>
+  </data>
+  <data name="EditResource" xml:space="preserve">
+    <value>Modify resource</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
   </data>
 </root>

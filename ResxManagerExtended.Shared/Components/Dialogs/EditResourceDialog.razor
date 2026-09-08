@@ -1,0 +1,34 @@
+@using System.Globalization
+@implements IDialogContentComponent<ResxManagerExtended.Shared.Data.ResourceView>
+
+<FluentDialogHeader>
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="new Icons.Filled.Size24.Edit()"/>
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Loc["EditResource"]
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<FluentDialogBody>
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentSelect TOption="CultureInfo" SelectedOption="@_selectedCulture"
+                      SelectedOptionChanged="OnCultureChanged" Items="@Content.Columns.Keys"
+                      OptionText="@(culture => string.IsNullOrEmpty(culture.Name) ? Loc["NeutralValue"] : culture.Name)"/>
+        <FluentTextField @bind-Value="@_inputValue" Immediate="true" Placeholder="@NeutralValue" Style="width:100%"/>
+    </FluentStack>
+</FluentDialogBody>
+
+<FluentDialogFooter>
+    <FluentButton BackgroundColor="var(--error)" OnClick="DeleteAsync">
+        @Loc["Delete"]
+    </FluentButton>
+    <FluentSpacer/>
+    <FluentButton Appearance="Appearance.Accent" OnClick="SaveAsync"
+                  Disabled="@IsUnchanged">
+        @Loc["Save"]
+    </FluentButton>
+    <FluentButton Appearance="Appearance.Neutral" OnClick="CancelAsync">
+        @Loc["Cancel"]
+    </FluentButton>
+</FluentDialogFooter>
