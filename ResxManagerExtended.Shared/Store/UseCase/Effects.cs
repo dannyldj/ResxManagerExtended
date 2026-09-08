@@ -80,10 +80,7 @@ public class Effects(
                 continue;
             }
 
-            foreach (var resource in group)
-            {
-                await file.DeleteValue(resource.Key);
-            }
+            await file.DeleteValues([..group.Select(e => e.Key).Distinct()]);
         }
 
         dispatcher.Dispatch(new ProcessDoneAction());

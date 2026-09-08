@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
 using KristofferStrube.Blazor.FileSystem;
@@ -47,15 +47,21 @@ public class ResxFile : IResourceFile
         }
     }
 
-    public async Task DeleteValue(string key, CancellationToken token)
+    public async Task DeleteValues(IEnumerable<string> keys, CancellationToken token)
     {
+        var targets = keys as IReadOnlyCollection<string> ?? [.. keys];
+        if (targets.Count == 0)
+        {
+            return;
+        }
+
         foreach (var handle in Handles?.Values ?? [])
         {
             await using var file = await handle.GetFileAsync();
             var xml = await file.TextAsync();
-
             var document = XDocument.Parse(xml);
-            if (!document.RemoveResource(key))
+            var removed = targets.Aggregate(false, (current, key) => current | document.RemoveResource(key));
+            if (!removed)
             {
                 continue;
             }

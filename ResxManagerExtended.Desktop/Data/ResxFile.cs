@@ -47,12 +47,19 @@ public class ResxFile : IResourceFile
         }
     }
 
-    public async Task DeleteValue(string key, CancellationToken token)
+    public async Task DeleteValues(IEnumerable<string> keys, CancellationToken token)
     {
+        var targets = keys as IReadOnlyCollection<string> ?? [.. keys];
+        if (targets.Count == 0)
+        {
+            return;
+        }
+
         foreach (var path in Paths?.Values ?? [])
         {
             var document = XDocument.Load(path, LoadOptions.PreserveWhitespace);
-            if (!document.RemoveResource(key))
+            var removed = targets.Aggregate(false, (current, key) => current | document.RemoveResource(key));
+            if (!removed)
             {
                 continue;
             }
