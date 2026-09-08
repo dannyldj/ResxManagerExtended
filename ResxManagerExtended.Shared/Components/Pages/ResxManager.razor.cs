@@ -143,16 +143,18 @@ public partial class ResxManager : FluxorComponent
         RefreshSelectAllState();
     }
 
-    private void RefreshSelectAllState()
+private void RefreshSelectAllState()
+{
+    var searched = SearchedItems.AsEnumerable().ToArray();
+    if (searched.Length == 0)
     {
-        if (_selectedItems.Count == 0)
-        {
-            _selectAll = false;
-            return;
-        }
-
-        _selectAll = SearchedItems.Any() && SearchedItems.AsEnumerable().All(_selectedItems.Contains) ? true : null;
+        _selectAll = false;
+        return;
     }
+
+    var selectedVisibleCount = searched.Count(_selectedItems.Contains);
+    _selectAll = selectedVisibleCount == 0 ? false : selectedVisibleCount == searched.Length ? true : null;
+}
 
     private async Task DeleteSelectedAsync()
     {
