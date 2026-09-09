@@ -38,58 +38,81 @@ public class Effects(
     [EffectMethod(typeof(ImportAction))]
     public async Task HandleImportAction(IDispatcher dispatcher)
     {
-        var imported = resourceService.ImportResources();
-        var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
-
-        if (imported is not null)
+        // 리소스 파일 접근이 실패해도 처리 상태는 반드시 해제한다.
+        // 해제되지 않으면 오버레이가 남고 이후 상태 변경에서 그리드가 갱신되지 않는다.
+        try
         {
-            await foreach (var resource in imported)
+            var imported = resourceService.ImportResources();
+            var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
+
+            if (imported is not null)
             {
-                if (resources?.TryGetValue(resource.Path, out var file) is true)
+                await foreach (var resource in imported)
                 {
-                    await file.SetValue(resource.Key, resource.Columns);
+                    if (resources?.TryGetValue(resource.Path, out var file) is true)
+                    {
+                        await file.SetValue(resource.Key, resource.Columns);
+                    }
                 }
             }
         }
-
-        dispatcher.Dispatch(new ProcessDoneAction());
+        finally
+        {
+            dispatcher.Dispatch(new ProcessDoneAction());
+        }
     }
 
     [EffectMethod]
     public async Task HandleEditResourceAction(EditResourceAction action, IDispatcher dispatcher)
     {
-        var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
-
-        if (resources?.TryGetValue(action.Resource.Path, out var file) is true)
+        try
         {
-            await file.SetValue(action.Resource.Key, action.Culture, action.Value);
-        }
+            var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
 
-        dispatcher.Dispatch(new ProcessDoneAction());
+            if (resources?.TryGetValue(action.Resource.Path, out var file) is true)
+            {
+                await file.SetValue(action.Resource.Key, action.Culture, action.Value);
+            }
+        }
+        finally
+        {
+            dispatcher.Dispatch(new ProcessDoneAction());
+        }
     }
 
     [EffectMethod]
     public async Task HandleDeleteResourcesAction(DeleteResourcesAction action, IDispatcher dispatcher)
     {
-        var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
-
-        foreach (var group in action.Resources.GroupBy(e => e.Path))
+        try
         {
-            if (resources?.TryGetValue(group.Key, out var file) is not true)
+            var resources = resourceState.Value.Resources?.ToDictionary(e => e.GetResourcePath(), e => e);
+
+            foreach (var group in action.Resources.GroupBy(e => e.Path))
             {
-                continue;
+                if (resources?.TryGetValue(group.Key, out var file) is not true)
+                {
+                    continue;
+                }
+
+                await file.DeleteValues([..group.Select(e => e.Key).Distinct()]);
             }
-
-            await file.DeleteValues([..group.Select(e => e.Key).Distinct()]);
         }
-
-        dispatcher.Dispatch(new ProcessDoneAction());
+        finally
+        {
+            dispatcher.Dispatch(new ProcessDoneAction());
+        }
     }
 
     [EffectMethod]
     public async Task HandleExportAction(ExportAction action, IDispatcher dispatcher)
     {
-        await resourceService.ExportResources(action.Cultures, action.Resources);
-        dispatcher.Dispatch(new ProcessDoneAction());
+        try
+        {
+            await resourceService.ExportResources(action.Cultures, action.Resources);
+        }
+        finally
+        {
+            dispatcher.Dispatch(new ProcessDoneAction());
+        }
     }
 }
