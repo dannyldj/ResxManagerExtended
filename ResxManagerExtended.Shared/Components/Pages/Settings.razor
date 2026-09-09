@@ -1,4 +1,4 @@
-﻿@page "/settings"
+@page "/settings"
 @using ResxManagerExtended.Shared.Constants
 @using ResxManagerExtended.Shared.Store
 @inherits FluxorComponent
@@ -16,7 +16,7 @@
         <FluentSelect @bind-SelectedOption="_selectedCulture"
                       @bind-SelectedOption:after="CultureChanged"
                       Items="DefaultSettings.AvailableCultures"
-                      OptionText="@(option => option is null ? string.Empty : Loc[option.Name])"/>
+                      OptionText="@(option => Loc[option.Name])"/>
     </FluentLayout>
 
     <FluentLayout>
@@ -30,7 +30,7 @@
                 }
                 else
                 {
-                    <FluentLabel>@ResourceState.Value.Nodes.Single()?.Text</FluentLabel>
+                    <FluentLabel>@ResourceState.Value.Nodes.Single().Text</FluentLabel>
                 }
                 <FluentSpacer/>
                 <FluentButton IconStart="new Icons.Filled.Size20.FolderOpen()"
