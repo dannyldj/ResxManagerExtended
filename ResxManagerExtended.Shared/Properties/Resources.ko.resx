@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -141,6 +141,12 @@
   <data name="ConfirmEditSettings" xml:space="preserve">
     <value>해당 설정을 변경하면 다국어 관리자가 작동하지 않을 수 있습니다. 기능을 정확히 이해하셨습니까?</value>
   </data>
+  <data name="ConfirmDeleteResource" xml:space="preserve">
+    <value>'{0}' 항목을 삭제하시겠습니까? 모든 언어 파일에서 해당 키가 제거됩니다.</value>
+  </data>
+  <data name="ConfirmDeleteResources" xml:space="preserve">
+    <value>선택한 {0}개 항목을 삭제하시겠습니까? 모든 언어 파일에서 해당 키가 제거됩니다.</value>
+  </data>
   <data name="Yes" xml:space="preserve">
     <value>네</value>
   </data>
@@ -159,7 +165,7 @@
   <data name="ko" xml:space="preserve">
     <value>한국어</value>
   </data>
-  <data name="NeuturalValue" xml:space="preserve">
+  <data name="NeutralValue" xml:space="preserve">
     <value>기본값</value>
   </data>
   <data name="NothingHere" xml:space="preserve">
@@ -200,5 +206,17 @@
   </data>
   <data name="Confirm" xml:space="preserve">
     <value>확인</value>
+  </data>
+  <data name="RestartConfirm" xml:space="preserve">
+    <value>변경 사항을 적용하기 위해 프로그램을 재시작하시겠습니까?</value>
+  </data>
+  <data name="EditResource" xml:space="preserve">
+    <value>리소스 수정</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>저장</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>취소</value>
   </data>
 </root>

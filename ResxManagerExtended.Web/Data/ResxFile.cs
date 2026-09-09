@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
 using KristofferStrube.Blazor.FileSystem;
@@ -31,7 +31,7 @@ public class ResxFile : IResourceFile
         var xml = await file.TextAsync();
 
         var document = XDocument.Parse(xml);
-        document.GetNode(key)?.SetValue(value);
+        document.SetResourceValue(key, value);
 
         await using var writable = await handle.CreateWritableAsync();
         await using var writer = new StreamWriter(writable,
@@ -44,6 +44,32 @@ public class ResxFile : IResourceFile
         foreach (var (culture, value) in cultures)
         {
             await SetValue(key, culture, value ?? string.Empty, token);
+        }
+    }
+
+    public async Task DeleteValues(IEnumerable<string> keys, CancellationToken token)
+    {
+        var targets = keys as IReadOnlyCollection<string> ?? [.. keys];
+        if (targets.Count == 0)
+        {
+            return;
+        }
+
+        foreach (var handle in Handles?.Values ?? [])
+        {
+            await using var file = await handle.GetFileAsync();
+            var xml = await file.TextAsync();
+            var document = XDocument.Parse(xml);
+            var removed = targets.Aggregate(false, (current, key) => current | document.RemoveResource(key));
+            if (!removed)
+            {
+                continue;
+            }
+
+            await using var writable = await handle.CreateWritableAsync();
+            await using var writer = new StreamWriter(writable,
+                new UTF8Encoding(IResourceFile.DetectUtf8Bom(await file.ArrayBufferAsync())));
+            await document.SaveAsync(writer, SaveOptions.None, token);
         }
     }
 
@@ -61,18 +87,16 @@ public class ResxFile : IResourceFile
             var document = XDocument.Parse(xml);
             foreach (var (key, comment, value) in document.GetResources())
             {
-                if (resources.TryGetValue(key, out var view))
-                    view.Columns[culture] = value;
-                else
-                    resources.Add(key, new ResourceView
-                    {
-                        Path = GetResourcePath(),
-                        Key = key,
-                        Columns = new Dictionary<CultureInfo, string?> { { culture, value } }
-                    });
+                if (resources.TryGetValue(key, out var view) is false)
+                {
+                    view = this.CreateResourceView(key);
+                    resources.Add(key, view);
+                }
+
+                view.Columns[culture] = value;
 
                 if (string.IsNullOrEmpty(culture.Name))
-                    resources[key].Comment = comment;
+                    view.Comment = comment;
             }
         }
 

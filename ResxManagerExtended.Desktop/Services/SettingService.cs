@@ -1,10 +1,14 @@
 ﻿using System.Configuration;
+using System.Diagnostics;
+using System.Windows;
+using Microsoft.FluentUI.AspNetCore.Components;
 using ResxManagerExtended.Desktop.Properties;
+using ResxManagerExtended.Shared.Properties;
 using ResxManagerExtended.Shared.Services;
 
 namespace ResxManagerExtended.Desktop.Services;
 
-internal class SettingService : ISettingService
+internal class SettingService(IDialogService dialogService) : ISettingService
 {
     public Task<string?> GetOptionAsStringAsync(string key)
     {
@@ -25,5 +29,17 @@ internal class SettingService : ISettingService
             // Not support setting key
             return Task.FromException(ex);
         }
+    }
+
+    public void ReloadApp()
+    {
+        dialogService.ShowConfirmation(this, async result =>
+        {
+            if (result.Cancelled) return;
+
+            await Task.Yield();
+            Process.Start(Process.GetCurrentProcess().MainModule?.FileName ?? string.Empty);
+            Application.Current.Shutdown();
+        }, Resources.RestartConfirm, Resources.Yes, Resources.No);
     }
 }

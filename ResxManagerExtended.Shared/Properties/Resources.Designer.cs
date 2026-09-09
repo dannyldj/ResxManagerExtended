@@ -19,7 +19,7 @@ namespace ResxManagerExtended.Shared.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -70,11 +70,47 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string Cancel {
+            get {
+                return ResourceManager.GetString("Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Comment.
         /// </summary>
         public static string Comment {
             get {
                 return ResourceManager.GetString("Comment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Confirm.
+        /// </summary>
+        public static string Confirm {
+            get {
+                return ResourceManager.GetString("Confirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete &apos;{0}&apos;? The key will be removed from every language file..
+        /// </summary>
+        public static string ConfirmDeleteResource {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Delete {0} selected item(s)? The keys will be removed from every language file..
+        /// </summary>
+        public static string ConfirmDeleteResources {
+            get {
+                return ResourceManager.GetString("ConfirmDeleteResources", resourceCulture);
             }
         }
         
@@ -115,11 +151,29 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Modify resource.
+        /// </summary>
+        public static string EditResource {
+            get {
+                return ResourceManager.GetString("EditResource", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to English.
         /// </summary>
         public static string en {
             get {
                 return ResourceManager.GetString("en", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string Export {
+            get {
+                return ResourceManager.GetString("Export", resourceCulture);
             }
         }
         
@@ -138,6 +192,15 @@ namespace ResxManagerExtended.Shared.Properties {
         public static string Home {
             get {
                 return ResourceManager.GetString("Home", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Import.
+        /// </summary>
+        public static string Import {
+            get {
+                return ResourceManager.GetString("Import", resourceCulture);
             }
         }
         
@@ -171,9 +234,9 @@ namespace ResxManagerExtended.Shared.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Neutural Value.
         /// </summary>
-        public static string NeuturalValue {
+        public static string NeutralValue {
             get {
-                return ResourceManager.GetString("NeuturalValue", resourceCulture);
+                return ResourceManager.GetString("NeutralValue", resourceCulture);
             }
         }
         
@@ -232,11 +295,29 @@ namespace ResxManagerExtended.Shared.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Do you want to restart the program for the changes to take effect?.
+        /// </summary>
+        public static string RestartConfirm {
+            get {
+                return ResourceManager.GetString("RestartConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resource Manager.
         /// </summary>
         public static string ResxManager {
             get {
                 return ResourceManager.GetString("ResxManager", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Save.
+        /// </summary>
+        public static string Save {
+            get {
+                return ResourceManager.GetString("Save", resourceCulture);
             }
         }
         

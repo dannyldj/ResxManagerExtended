@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Windows;
 using Microsoft.Extensions.DependencyInjection;
 using ResxManagerExtended.Desktop.Properties;
 using ResxManagerExtended.Shared.Constants;
@@ -26,7 +27,14 @@ public partial class App : Application
 
     private static void SetCulture()
     {
-        Settings.Default.BlazorCulture = DefaultSettings.DefaultCulture.Name;
-        Settings.Default.Save();
+        var culture = string.IsNullOrEmpty(Settings.Default.BlazorCulture)
+            ? DefaultSettings.DefaultCulture
+            : CultureInfo.GetCultureInfo(Settings.Default.BlazorCulture);
+
+        if (string.IsNullOrEmpty(Settings.Default.BlazorCulture))
+            Settings.Default.BlazorCulture = DefaultSettings.DefaultCulture.Name;
+
+        CultureInfo.DefaultThreadCurrentCulture = culture;
+        CultureInfo.DefaultThreadCurrentUICulture = culture;
     }
 }

@@ -1,9 +1,12 @@
 ﻿using Blazored.LocalStorage;
+using Microsoft.AspNetCore.Components;
 using ResxManagerExtended.Shared.Services;
 
 namespace ResxManagerExtended.Web.Services;
 
-internal class SettingService(ILocalStorageService localStorageService) : ISettingService
+internal class SettingService(
+    ILocalStorageService localStorageService,
+    NavigationManager navigationManager) : ISettingService
 {
     public async Task<string?> GetOptionAsStringAsync(string key)
     {
@@ -13,5 +16,10 @@ internal class SettingService(ILocalStorageService localStorageService) : ISetti
     public async Task SetOptionAsStringAsync(string key, string value)
     {
         await localStorageService.SetItemAsStringAsync(key, value);
+    }
+
+    public void ReloadApp()
+    {
+        navigationManager.NavigateTo(navigationManager.Uri, true);
     }
 }

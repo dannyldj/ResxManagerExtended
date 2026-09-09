@@ -1,4 +1,4 @@
-﻿using System.Windows;
+using System.Windows;
 using Microsoft.AspNetCore.Components.WebView;
 using Microsoft.AspNetCore.Components.WebView.Wpf;
 
@@ -17,9 +17,16 @@ public partial class MainWindow : Window
     // https://github.com/dotnet/aspnetcore/issues/52119
     private async void BlazorWebView_Initialized(object? sender, BlazorWebViewInitializedEventArgs e)
     {
-        if (sender is not BlazorWebView blazorWebView) return;
+        try
+        {
+            if (sender is not BlazorWebView blazorWebView) return;
 
-        await blazorWebView.WebView.EnsureCoreWebView2Async();
-        blazorWebView.WebView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
+            await blazorWebView.WebView.EnsureCoreWebView2Async();
+            blazorWebView.WebView.CoreWebView2.Settings.AreBrowserAcceleratorKeysEnabled = false;
+        }
+        catch (Exception)
+        {
+            // TODO: Logger 구성 후 예외 기록 및 사용자 알림 추가
+        }
     }
 }
